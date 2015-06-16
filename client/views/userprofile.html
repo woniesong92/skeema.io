@@ -1,0 +1,76 @@
+<template name="UserProfile">
+
+{{> Nav}}
+
+<div class="container-fluid coursedetail-container">
+  <div class="row-fluid">
+    <div class="col-md-6 col-md-offset-3 user-profile-container">
+      
+      <div class="container-fluid profile-items">
+      <h3 class='user-profile-label'>Basic Info</h3>
+      <div class="profile-item">
+      <p><span class="profile-label">Username</span>
+      <span class="profile-data">{{username}}</span></p>
+      </div>
+      {{ #if isMyProfile }}
+        <div class="profile-item">
+        <p><span class="profile-label">NetID</span>
+        <span class="profile-data">{{netId}}</span></p>
+        </div>
+        <div class="profile-item">
+        <p><span class="profile-label">Email</span>
+        <span class="profile-data">{{email}}</span></p>
+        </div>
+      {{ /if }}
+      <div class="profile-item">
+      <p><span class="profile-label">Score</span>
+      <span class="profile-data">{{score}}</span></p>
+      </div>
+      {{ #if isMyProfile }}
+        <button class="btn btn-primary edit-account-btn">Edit Account</button>
+      {{ /if }}
+    </div>
+      
+    <div class="container-fluid all-reviews">
+      <h3 class='user-profile-label'>Course Reviews</h3>
+      {{#each reviews}}
+        <div class="review-item">
+          <p class="review-item-head"><span class="catalog-no link-to-detail">{{courseCatalog}}</span>
+          <span class="num-votes">{{ votes }} &nbsp;<span class="glyphicon glyphicon-thumbs-up thumb" aria-hidden="true"></span></span></p>
+          <p class="review-text">{{ text }}</p>
+        </div>
+      {{/each}}
+
+    </div>
+    </div>
+  </div>
+</div>
+
+</template>
+
+<template name="EditProfile">
+
+{{> Nav}}
+
+<div class="container-fluid coursedetail-container">
+  <div class="row-fluid">
+    <div class="col-md-6 col-md-offset-3 edit-profile-container">
+        <p class="error_message update-account-error"></p>
+      <p class="success_message update-account-success"></p>
+      <form id="username-change-form">
+
+        <div class="user-profile-headline">Change Username</div>
+
+        <div class="change-explain red-msg">{{ welcomeMessage }}</div>
+
+        <div class="form-group">
+          <label for="username-update">New Username</label>
+          <input type="text" class="form-control" id="username-update" value="{{username}}" minlength="3" maxlength="12">
+        </div>
+        <button type="submit" class="btn btn-primary username-submit-btn">Update username</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+</template>

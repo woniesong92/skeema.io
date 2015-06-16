@@ -1,0 +1,97 @@
+<template name="Nav">
+
+{{>Signin}}
+
+
+<nav class="navbar navbar-default navbar-fixed-top constant-nav container-fluid">
+  <div class="navbar-header row">
+    <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2 cornell-title-nav-container">
+      <div id="cornell-title-nav" class="mobile"><a href='/'>CCR</a></div>
+      <div class="desktop logo">
+        <table class="logo-inside"><tr><td>
+          <a href="/"><span id="cornell-title-nav">CORNELL</span><br>COURSE REVIEW</a>
+        </td></tr></table>
+      </div>
+    </div>
+    <div id="search-in-nav" class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+      {{#unless isMainPage}}
+        <div class="input-group search-input-container">
+          <i class="glyphicon glyphicon-search search-input-icon"></i>
+          <input type="text" class="form-control course-nav-search" autocomplete="off" spellcheck="off"
+          placeholder="Search for classes" name="course" />
+          <!-- change class name -->
+          {{#if getCourses}}
+            <div class="search-results-nav">
+              {{#each getCourses}}
+                <div class="search-result-item">
+                  <span class="catalog-no">{{{catalog}}}</span>&nbsp;&nbsp;
+                  {{{titleLong}}}
+                </div>
+              {{/each}}
+            </div>
+          {{/if}}
+          <!-- search result -->
+        </div>
+      {{/unless}}
+    </div>
+    <div class="col-sm-2 col-xs-2 col-md-2 col-lg-2 nav-right-menus">
+      {{#if currentUser}}
+        <a href="#" class="user-dropdown btn-lg btn-primary navbar-right nav-btn dropdown-toggle">
+         
+          <span class="user-in-nav desktop">
+            <span class="user-score">score: {{currentUser.score}}</span>
+            <span class="user-name">{{currentUser.username}} <i class="glyphicon glyphicon-chevron-down"></i></span>
+          </span>
+
+          <span class="menu-in-nav mobile"><i class="fa fa-bars"></i></span>
+
+          <ul class="user-dropdown-menus dropdown-menu">
+            <!-- <li role="presentation" class="user-info"><a href='#' role="menuitem"></a></li> -->
+            <li role="presentation" class="user-profile"><a href='#' role="menuitem">{{currentUser.username}} ({{currentUser.score}})</a></li>
+            <li role="presentation" class="edit-account"><a href='#' role="menuitem">Edit Account</a></li>
+            {{#if isAdmin}}
+              <li role="presentation"><a href='/secret/admin' role="menuitem">Admin Page</a></li>
+            {{/if}}
+            <li role="presentation" class="logout"><a href='#' role="menuitem">Logout</a></li>
+          </ul>
+        </a>
+      {{else}}
+        <a href="#SigninModal" class="btn btn-lg btn-primary navbar-right nav-btn" data-toggle="modal">SIGN IN</a>
+      {{/if}}
+    </div>
+  </div>
+</nav>
+
+</template>
+
+
+<!-- <template name="Nav">
+
+{{>Signin}}
+
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header navbar-header-home">
+      {{#if currentUser}}
+        <a href="#" class="user-dropdown user-dropdown-home btn-lg btn-primary navbar-right nav-btn dropdown-toggle">
+          <span class="user-in-nav">
+            <span class="user-score">score: {{currentUser.score}}</span>
+            <span class="user-name"><i class="fa fa-bars"></i></span>
+          </span>
+          <ul class="user-dropdown-menus user-dropdown-menus-home dropdown-menu">
+            <li role="presentation" class="user-profile"><a href='#' role="menuitem">Profile</a></li>
+            <li role="presentation" class="edit-account"><a href='#' role="menuitem">Edit Account</a></li>
+            {{#if isAdmin}}
+              <li role="presentation"><a href='/secret/admin' role="menuitem">Admin Page</a></li>
+            {{/if}}
+            <li role="presentation" class="logout"><a href='#' role="menuitem">Logout</a></li>
+          </ul>
+        </a>
+      {{else}}
+        <a href="#SigninModal" class="btn btn-lg btn-primary navbar-right nav-btn" data-toggle="modal">SIGN IN</a>
+      {{/if}}
+    </div>
+  </div>
+</nav>
+
+</template> -->
