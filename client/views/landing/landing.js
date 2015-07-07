@@ -1,3 +1,16 @@
+if (Meteor.isClient) {
+	Template.Landing.rendered = function() {
+
+	}
+
+	Template.Landing.events({
+		'click .signin-btn': function(e, template) {
+			Router.go('/projects');
+		}
+	});
+}
+
+
 // if (Meteor.isClient) {
 
 //   Template.Main.rendered = function() {
