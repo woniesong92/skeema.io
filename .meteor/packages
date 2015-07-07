@@ -8,3 +8,4 @@ meteor-platform
 nemo64:bootstrap
 less
 iron:router
+meteorhacks:flow-router
