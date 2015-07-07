@@ -1,25 +1,47 @@
+// Replacing with Flow Router
+
+FlowRouter.route('/blog/:postId', {
+    // an array of middlewares (we'll discuss about this later on)
+    middlewares: [],
+
+    // define your subscriptions
+    subscriptions: function(params, queryParams) {
+
+    },
+
+    // do some action for this route
+    action: function(params, queryParams) {
+        console.log("Params:", params);
+        console.log("Query Params:", queryParams);
+    },
+
+    name: "<name for the route>" // optional
+});
+
+
+
 // Router.configure({
 //   // this will be the default controller
 //   controller: 'ApplicationController'
 // });
 
 
-Router.configure({
-  layoutTemplate: 'Layout',
-  waitOn: function() {
-    // return Meteor.subscribe('userData');
-  },
-  onAfterAction: function() {
-    // Clear previous search results
-    // CourseSearch.store.remove({});
-  }
-});
+// Router.configure({
+//   layoutTemplate: 'Layout',
+//   waitOn: function() {
+//     // return Meteor.subscribe('userData');
+//   },
+//   onAfterAction: function() {
+//     // Clear previous search results
+//     // CourseSearch.store.remove({});
+//   }
+// });
 
-Router.route('/', function () {
-  this.render('Main', {
-    to: 'content'
-  }); // Yield Main template to where {{> yield "content"}} is in layout.html
-});
+// Router.route('/', function () {
+//   this.render('Main', {
+//     to: 'content'
+//   }); // Yield Main template to where {{> yield "content"}} is in layout.html
+// });
 
 
 // Router.configure({
