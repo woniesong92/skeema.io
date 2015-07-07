@@ -1,0 +1,26 @@
+<template name="Projects">
+{{> Header}}
+<div class="projects-container container">
+  <div class="row">
+    <div class="col m12">
+      <h4>
+        My Projects
+      </h4>
+      {{#if projects}}
+        {{#each projects}}
+          <div class="project-item">
+            <div class="project-name">
+              {{name}}
+            </div>
+            <div class="project-settings">
+              <span class="rename">Rename</span>
+              <span class="edit">Edit</span>
+              <span class="delete">Delete</span>
+            </div>
+          </div>
+        {{/each}}
+      {{/if}}
+    </div>
+  </div>
+</div>
+</template>

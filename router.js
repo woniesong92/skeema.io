@@ -21,6 +21,12 @@ Router.route('/', function () {
   }); // Yield Main template to where {{> yield "content"}} is in layout.html
 });
 
+Router.route('/projects', function () {
+  this.render('Projects', {
+    to: 'content'
+  }); // Yield Main template to where {{> yield "content"}} is in layout.html
+});
+
 
 
 
