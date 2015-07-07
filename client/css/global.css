@@ -1,6 +1,119 @@
-/*.content-block .row,
-.content-block .container-fluid, {
-  padding: 0;
-  margin: 0;
+/* FONTS
+1. Lato
+2. PierSans
+3. Bukhari
+4. Kirvy
+5. Roboto
+ */
+
+
+@font-face {
+	font-family: Lato;
+	src: url("../fonts/Lato/Lato-Regular.ttf") format("opentype");
+	font-weight: normal;
 }
-*/
+
+@font-face {
+	font-family: Lato;
+	src: url("../fonts/Lato/LatoLight.otf") format("opentype");
+	font-weight: normal;
+}
+
+@font-face {
+	font-family: Lato;
+	src: url("../fonts/Lato/LatoBold.ttf") format("opentype");
+	font-weight: bold;
+}
+
+
+@font-face {
+	font-family: PierSans;
+	src: url("../fonts/PierSans/pier-regular.otf") format("opentype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: PierSans;
+	src: url("../fonts/PierSans/pier-italic.otf") format("opentype");
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: PierSans;
+	src: url("../fonts/PierSans/pier-bold.otf") format("opentype");
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: PierSans;
+	src: url("../fonts/PierSans/pier-bold-italic.otf") format("opentype");
+	font-weight: bold;
+	font-style: italic;
+}
+
+
+@font-face {
+	font-family: Bukhari;
+	src: url("../fonts/BukhariScript.otf") format("opentype");
+}
+
+@font-face {
+	font-family: Kirvy;
+	src: url("../fonts/Kirvy/Kirvy-Regular.otf") format("opentype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: Kirvy;
+	src: url("../fonts/Kirvy/Kirvy-Light.otf") format("opentype");
+	font-weight: 200;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: Kirvy;
+	src: url("../fonts/Kirvy/Kirvy-Thin.otf") format("opentype");
+	font-weight: 100;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: Kirvy;
+	src: url("../fonts/Kirvy/Kirvy-Bold.otf") format("opentype");
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: Roboto;
+	src: url("../fonts/Roboto/Roboto-Thin.ttf") format("opentype");
+	font-weight: 100;
+}
+
+@font-face {
+	font-family: Roboto;
+	src: url("../fonts/Roboto/Roboto-Light.ttf") format("opentype");
+	font-weight: 300;
+}
+
+@font-face {
+	font-family: Roboto;
+	src: url("../fonts/Roboto/Roboto-Medium.ttf") format("opentype");
+	font-weight: 500;
+}
+
+@font-face {
+	font-family: Roboto;
+	src: url("../fonts/Roboto/Roboto-Regular.ttf") format("opentype");
+	font-weight: normal;
+}
+
+@font-face {
+	font-family: Roboto;
+	src: url("../fonts/Roboto/Roboto-Bold.ttf") format("opentype");
+	font-weight: bold;
+}
