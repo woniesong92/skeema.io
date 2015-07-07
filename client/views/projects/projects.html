@@ -6,6 +6,11 @@
       <h4>
         My Projects
       </h4>
+      <div class="add-project-container">
+        <button class="add-project waves-effect waves-light btn">
+          <i class="material-icons add"></i> New Project
+        </button>
+      </div>
       {{#if projects}}
         {{#each projects}}
           <div class="project-item">
@@ -19,6 +24,10 @@
             </div>
           </div>
         {{/each}}
+      {{else}}
+        <div class="no-projects">
+          You have no projects yet.
+        </div>
       {{/if}}
     </div>
   </div>

@@ -23,6 +23,7 @@ Router.route('/', function () {
 
 Router.route('/projects', function () {
   this.render('Projects', {
+    data: Projects.find(),
     to: 'content'
   }); // Yield Main template to where {{> yield "content"}} is in layout.html
 });

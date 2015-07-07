@@ -1,15 +1,14 @@
 Projects = new Mongo.Collection("projects");
 
 Meteor.methods({
-  addProject: function (data, callback) {
+  addProject: function (name) {
     var project = {
-      "name": data["name"],
+      "name": name,
       "createdAt": Date.now()
     };
 
     Projects.insert(project);
-  },
-
+  }
 });
 
 

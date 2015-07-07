@@ -2,11 +2,18 @@ if (Meteor.isClient) {
 
   Template.Projects.helpers({
     projects: function() {
-      return Projects.find();
+      return UI.getData();
     }
   });
 
-  Template.Main.events({
+  Template.Projects.events({
+    "click .add-project": function (e) {
+      e.preventDefault();
+      var numProjects = UI.getData().fetch().length;
+      var name = "Project " + numProjects;
+      Meteor.call('addProject', name);
+    },
+
     "click .project-item .rename": function (e, template) {
       // NOT implemented
     },
