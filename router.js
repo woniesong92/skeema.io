@@ -3,7 +3,6 @@
 //   controller: 'ApplicationController'
 // });
 
-
 Router.configure({
   layoutTemplate: 'Layout',
   waitOn: function() {
@@ -21,14 +20,42 @@ Router.route('/', function () {
   }); // Yield Main template to where {{> yield "content"}} is in layout.html
 });
 
-Router.route('/projects', function () {
-  this.render('Projects', {
-    data: Projects.find(),
-    to: 'content'
-  }); // Yield Main template to where {{> yield "content"}} is in layout.html
+Router.route('/projects', {
+  waitOn: function() {
+    return Meteor.subscribe("projects");
+  },
+
+  action: function() {
+    this.render('Projects', {
+      data: Projects.find(),
+      to: 'content'
+    });
+  }
 });
 
+Router.route('/projects/:_id', {
+  // FIXME: probably something wrong here
+  waitOn: function() {
+    var projectId = this.params._id;
+    return Meteor.subscribe("project", projectId);
+  },
 
+  action: function() {
+    var projectId = this.params._id;
+    this.render('ProjectEdit', {
+      data: Projects.find({_id: projectId}),
+      to: 'content'
+    });
+  }
+});
+
+// HOWON: should I have a router for each action
+// or should I just call Meteor method directly from
+// client?
+// Router.route('/projects/delete/:_id', function() {
+//   var projectId = this.params._id;
+//   Meteor.call("deleteProject", projectId);
+// });
 
 
 

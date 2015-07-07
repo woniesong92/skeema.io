@@ -2,12 +2,12 @@ if (Meteor.isClient) {
 
   Template.Projects.helpers({
     projects: function() {
-      return UI.getData();
+      return UI.getData(); // is UI.getData() the right choice?
     }
   });
 
   Template.Projects.events({
-    "click .add-project": function (e) {
+    "click .add-project": function (e, template) {
       e.preventDefault();
       var numProjects = UI.getData().fetch().length;
       var name = "Project " + numProjects;
@@ -23,7 +23,13 @@ if (Meteor.isClient) {
     },
 
     "click .project-item .delete": function (e, template) {
-      // NOT implemented
+      Meteor.call('deleteProject', this._id, function (err, data) {
+        if (err) {
+          console.log("delete err");
+          return
+        }
+        console.log("delete success");
+      });
     }
   });
 }

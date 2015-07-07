@@ -8,12 +8,16 @@ Meteor.methods({
     };
 
     Projects.insert(project);
+  },
+
+  deleteProject: function (projectId) {
+    var project = Projects.find({_id: projectId});
+    Projects.remove({_id: projectId});
   }
 });
 
 
 // Courses = new Mongo.Collection("courses");
-
 // Meteor.methods({
 //   addCourse: function (data, callback) {
 //     var course = {

@@ -1,11 +1,13 @@
 if (Meteor.isServer) {
-  // Meteor.publish("courses", function() {
-  //   return Courses.find({}, {fields: {'catalog':1, 'titleLong':1}});
-  // });
+  Meteor.publish("projects", function() {
+    // FIXME: filter to return only MY projects
+    // so other users' projects are private
+    return Projects.find();
+  });
 
-  // Meteor.publish("courseCatalog", function(catalog) {
-  //   return Courses.find({"catalog": catalog});
-  // });
+  Meteor.publish("project", function (projectId) {
+    return Projects.find({_id: projectId});
+  });
 
   // Meteor.publish("comments", function(courseCatalog) {
   //   var comments = Comments.find({courseCatalog: courseCatalog});
