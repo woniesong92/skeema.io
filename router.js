@@ -22,30 +22,8 @@ Router.route('/', function () {
 });
 
 
-// Router.configure({
-//   // this will be the default controller
-//   controller: 'ApplicationController'
-// });
 
 
-// Router.configure({
-//   layoutTemplate: 'Layout',
-//   waitOn: function() {
-//     // return Meteor.subscribe('userData');
-//   },
-//   onAfterAction: function() {
-//     // Clear previous search results
-//     // CourseSearch.store.remove({});
-//   }
-// });
-
-// // Router.route('/', function () {
-// //   GARecordPage('/');
-// //   this.render('Main', {
-// //     to: 'content'
-// //   }); // Yield Main template to where {{> yield "content"}} is in layout.html
-
-// // });
 
 // Router.route('/about', {
 //   'name': 'About',
