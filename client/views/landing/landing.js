@@ -4,9 +4,7 @@ if (Meteor.isClient) {
 	}
 
 	Template.Landing.events({
-		'click .signin-btn': function(e, template) {
-			Router.go('/projects');
-		}
+		
 	});
 }
 
