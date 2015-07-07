@@ -16,7 +16,7 @@ Router.configure({
 });
 
 Router.route('/', function () {
-  this.render('Main', {
+  this.render('Landing', {
     to: 'content'
   }); // Yield Main template to where {{> yield "content"}} is in layout.html
 });
