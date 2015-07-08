@@ -22,9 +22,9 @@ Meteor.methods({
       "paths": null,
 
       // Checkbox for save response
-      "doSaveResponse": false,
+      "doSaveResponse": true,
       // Checkbox for save reaction time
-      "doSaveReactionTime": false,
+      "doSaveReactionTime": true,
       // "pathTaken" might be a better name than response
       "response": null,
       "reactionTime": null,
@@ -56,6 +56,18 @@ Meteor.methods({
     Trials.update(trialId, {
       $set: {"occurances": newOcc}
     });
+  },
+
+  changeDoSaveResponse: function (trialId, respBool) {
+    Trials.update(trialId, {
+      $set: {"doSaveResponse": respBool}
+    })
+  },
+
+  changeDoSaveReactionTime: function (trialId, reactBool) {
+    Trials.update(trialId, {
+      $set: {"doSaveReactionTime": reactBool}
+    })
   },
 
 });
