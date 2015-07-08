@@ -48,6 +48,16 @@ if (Meteor.isClient) {
         name: "Trial " + trialLength,
         index: trialLength
       });
-    }
+    },
+    "click .block-item": function (e, template) {
+      debugger
+      Session.set("currentView", "blockView");
+      Session.set("id", this._id);
+    },
+    "click .trial-item": function (e, template) {
+      debugger
+      Session.set("currentView", "trialView");
+      Session.set("id", this._id);
+    },
   });
 }

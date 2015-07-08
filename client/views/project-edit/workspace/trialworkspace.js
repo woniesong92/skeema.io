@@ -11,8 +11,9 @@ if (Meteor.isClient) {
   }
 
   Template.TrialWorkSpace.events({
-  //   "click .project": function (e, template) {
-  //     
-  //   },
+    // "click .frame-item": function (e, template) {
+    //   Session.set("currentView", "frameView");
+    //   Session.set("id", this._id);
+    // },
   });
 }

@@ -16,22 +16,6 @@ if (Meteor.isClient) {
   }
 
   Template.ProjectEdit.events({
-    "click .block-item": function (e, template) {
-      debugger
-      Session.set("currentView", "blockView");
-      Session.set("id", this._id);
-    },
-    "click .trial-item": function (e, template) {
-      debugger
-      Session.set("currentView", "trialView");
-      Session.set("id", this._id);
-    },
-    // "click .frame-item": function (e, template) {
-    //   Session.set("currentView", "frameView");
-    //   Session.set("id", this._id);
-    // },
-
-
 
   });
 }

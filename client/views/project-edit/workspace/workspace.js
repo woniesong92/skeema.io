@@ -11,8 +11,6 @@ if (Meteor.isClient) {
   }
 
   Template.WorkSpace.events({
-  //   "click .project": function (e, template) {
-  //     
-  //   },
+    
   });
 }
