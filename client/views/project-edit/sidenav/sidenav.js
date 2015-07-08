@@ -19,8 +19,11 @@ if (Meteor.isClient) {
 
   Template.SideNav.events({
     "click .block-item": function (e, template) {
-      // debugger
       $(e.target).closest('.block-item').toggleClass('is-open');
+    },
+
+    "click .trial-item": function (e, template) {
+      e.stopPropagation();
     },
 
     "click .add-block": function (e, template) {
@@ -46,6 +49,15 @@ if (Meteor.isClient) {
         index: trialLength
       });
     },
-    
+    "click .block-item": function (e, template) {
+      debugger
+      Session.set("currentView", "blockView");
+      Session.set("id", this._id);
+    },
+    "click .trial-item": function (e, template) {
+      debugger
+      Session.set("currentView", "trialView");
+      Session.set("id", this._id);
+    },
   });
 }
