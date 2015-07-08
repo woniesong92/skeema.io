@@ -6,13 +6,26 @@ if (Meteor.isClient) {
     // }
   });
 
+
   Template.BlockToolBox.rendered = function () {
     
   }
 
+
   Template.BlockToolBox.events({
-  //   "click .project": function (e, template) {
-  //     
-  //   },
+
+    'change #blockname': function(e, template) { 
+        var newname = $('#blockname').val().trim();
+        var blockId = Session.get("id");
+        Meteor.call('renameBlock', blockId, newname);
+    },
+
+    'change #randomize': function(e, template) { 
+        var randbool = $('#randomize').is(':checked');
+        var blockId = Session.get("id");
+        Meteor.call('changeRandomize', blockId, randbool);
+    }
   });
+
+
 }

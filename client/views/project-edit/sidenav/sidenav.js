@@ -37,7 +37,7 @@ if (Meteor.isClient) {
       Meteor.call("addBlock", {
         projectId: projectId,
         name: "Block " + blockLength,
-        index: blockLength
+        index: blockLength - 1 //DEAR HOWON: SHOULDN'T THIS BE LENGTH MINUS ONE?
       });
     },
 
@@ -50,7 +50,7 @@ if (Meteor.isClient) {
         projectId: projectId,
         blockId: blockId,
         name: "Trial " + trialLength,
-        index: trialLength
+        index: trialLength - 1 //DEAR HOWON: SHOULDN'T THIS ALSO BE LENGTH MINUS ONE? @_@;;
       });
     },
 
