@@ -1,11 +1,15 @@
 if (Meteor.isClient) {
 
   Template.SideNav.helpers({
+    projectName: function() {
+      return this.name;
+    },
+
     blocks: function() {
-      // How can I retrieve the projectId here?
-      debugger
-      var projectId = 1;
-      return Projects.find({_id: projectId}); // is UI.getData() the right choice?
+      // "this" refers to what's returned
+      // by iron router's data function: project object in this case
+      var projectId = this._id;
+      return Blocks.find({projectId: projectId});
     },
 
     trials: function (blockId) {

@@ -2,6 +2,9 @@
 
 <template name="SideNav">
   <div class="left-nav-container">
+    <div class="project-name">
+      {{projectName}}
+    </div>
     <ul class='block-items'>
       {{#each blocks}}
         <li class='block-item'>{{name}}</li>
