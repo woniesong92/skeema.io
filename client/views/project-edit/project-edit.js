@@ -4,27 +4,6 @@ if (Meteor.isClient) {
     project: function() {
       return this;
     },
-    isBlockView: function () {
-      return Session.get("currentView") == "blockView";
-    },
-    isTrialView: function () {
-      return Session.get("currentView") == "trialView";
-    },
-    isFrameView: function () {
-      return Session.get("currentView") == "frameView";
-    },
-    block: function() {
-      var blockId = Session.get("id");
-      return Blocks.findOne({_id: blockId});
-    },
-    trial: function() {
-      var trialId = Session.get("id");
-      return Trials.findOne({_id: trialId});
-    },
-    frame: function() {
-      var frameId = Session.get("id");
-      return Frames.findOne({_id: frameId});
-    }
   });
 
   Template.ProjectEdit.rendered = function () {
@@ -37,8 +16,22 @@ if (Meteor.isClient) {
   }
 
   Template.ProjectEdit.events({
-    "click .block": function (e, template) {
-
+    "click .block-item": function (e, template) {
+      debugger
+      Session.set("currentView", "blockView");
+      Session.set("id", this._id);
     },
+    "click .trial-item": function (e, template) {
+      debugger
+      Session.set("currentView", "trialView");
+      Session.set("id", this._id);
+    },
+    // "click .frame-item": function (e, template) {
+    //   Session.set("currentView", "frameView");
+    //   Session.set("id", this._id);
+    // },
+
+
+
   });
 }
