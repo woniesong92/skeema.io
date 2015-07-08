@@ -1,0 +1,16 @@
+<!-- Should be placed inside left column container -->
+
+<template name="LeftNav">
+  <div class="left-nav-container">
+    <ul class='block-items'>
+      {{#each blocks}}
+        <li class='block-item'>{{name}}</li>
+        <ul class='trial-items'>
+          {{#each trials _id}}
+            <li class='trial=item'>{{name}}</li>
+          {{/each}}
+        </ul>
+      {{/each}}
+    </ul>
+  </div>
+</template>
