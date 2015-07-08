@@ -1,28 +1,26 @@
 <template name="TrialToolBox">
-  <div class="container trial-toolbox-container">
   	<!-- Trial ID: {{ trial._id }} -->
-    <div class="trial-states-saving-container">
+    <div class="container trial-states-saving-row">
       <div class="saving-message">
         I want to save...
       </div>
-      <div class="saving-elems-container">
-        <div class="exit-path-container">
-          <input type='checkbox' class='exit-path-input' id='exit-path-input'>
+      <div class="row saving-elems-container">
+        <div class="col s12 exit-path-container">
+          <input type='checkbox' class='filled-in exit-path-input' id='exit-path-input'>
           <label for='exit-path-input'>Exit path</label>
         </div>
-        <div class="time-elapsed-container">
-          <input type='checkbox' class='time-elapsed-input' id='time-elapsed-input'>
+        <div class="col s12 time-elapsed-container">
+          <input type='checkbox' class='filled-in time-elapsed-input' id='time-elapsed-input'>
           <label for='time-elapsed-input'>Time elapsed</label>
         </div>
       </div>
     </div>
 
-    <div class="trial-paths-container">
+    <div class="container trial-paths-row">
     
       <!-- FIXME: pathc collection doesn't exist yet -->
       {{#each paths}}
         {{> path}}
       {{/each}}
     </div>
-  </div>
 </template> 
