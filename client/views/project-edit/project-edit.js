@@ -1,9 +1,10 @@
 if (Meteor.isClient) {
 
   Template.ProjectEdit.helpers({
-    // projects: function() {
-    //   return UI.getData();
-    // }
+    project: function() {
+      // debugger
+      return this;
+    }
   });
 
   Template.ProjectEdit.events({
