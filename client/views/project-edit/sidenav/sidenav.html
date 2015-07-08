@@ -16,8 +16,11 @@
           {{#each trials _id}}
             <li class='trial-item'>
               <a href='#' class='trial-item-link'>{{name}}</a>
-              <a href='#' class='trial-edit-link'>
-                <i class="fa fa-pencil edit-icon"></i>
+              <!-- <a href='#' class='trial-edit-link'>
+                <i class="fa fa-pencil"></i>
+              </a> -->
+              <a href='#' class='trial-delete-link'>
+                <i class="fa fa-remove fa-fw"></i>
               </a>
             </li>
           {{/each}}

@@ -13,7 +13,7 @@ Meteor.methods({
 
       // FIXME: not sure if paths should be a collection
       "paths": null,
-      
+
       // Checkbox for save response
       "doSaveResponse": false,
       // Checkbox for save reaction time
@@ -27,4 +27,7 @@ Meteor.methods({
     Trials.insert(trial);
   },
 
+  deleteTrial: function (trialId) {
+    Trials.remove(trialId);
+  }
 });

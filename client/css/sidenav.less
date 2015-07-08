@@ -14,6 +14,7 @@
 
 .trial-item {
   text-indent: 20px;
+  z-index: 2;
 }
 
 .add-trial,
@@ -44,7 +45,13 @@
 }
 
 .fa-chevron-down,
-.fa-chevron-left,
-.fa-pencil {
+.fa-chevron-left {
   margin-left: -10px;
+}
+
+.trial-delete-link {
+  // FIXME: click the right part of trial-item
+  // overlaps with the icon, invoking "delete"
+  // method when it shouldn't
+  margin-left: -18px;
 }
