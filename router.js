@@ -43,7 +43,7 @@ Router.route('/projects/:_id', {
   action: function() {
     var projectId = this.params._id;
     this.render('ProjectEdit', {
-      data: Projects.find({_id: projectId}),
+      data: Projects.findOne({_id: projectId}),
       to: 'content'
     });
   }

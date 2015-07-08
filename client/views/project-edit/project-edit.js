@@ -2,7 +2,6 @@ if (Meteor.isClient) {
 
   Template.ProjectEdit.helpers({
     project: function() {
-      // debugger
       return this;
     }
   });
