@@ -13,15 +13,31 @@ if (Meteor.isClient) {
     },
 
     trials: function (blockId) {
-      debugger
       return Trials.find({blockId: blockId});
     }
-
   });
 
   Template.SideNav.events({
-    "click .project-item .rename": function (e, template) {
-      // NOT implemented
+    "click .add-block": function (e, template) {
+      var projectId = this._id;
+      var blockLength = Blocks.find({projectId: projectId}).count();
+      Meteor.call("addBlock", {
+        projectId: projectId,
+        name: "Block " + blockLength,
+        index: blockLength
+      });
     },
+
+    "click .add-trial": function (e, template) {
+      var projectId = this.projectId;
+      var blockId = this._id;
+      var trialLength = Trials.find({blockId: blockId}).count();
+      Meteor.call("addTrial", {
+        projectId: projectId,
+        blockId: blockId,
+        name: "Trial " + trialLength,
+        index: trialLength
+      });
+    }
   });
 }

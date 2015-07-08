@@ -9,6 +9,14 @@ if (Meteor.isServer) {
     return Projects.find({_id: projectId});
   });
 
+  Meteor.publish("blocks", function (projectId) {
+    return Blocks.find({projectId: projectId});
+  });
+
+  Meteor.publish("trials", function (projectId) {
+    return Trials.find({projectId: projectId});
+  });
+
   // Meteor.publish("comments", function(courseCatalog) {
   //   var comments = Comments.find({courseCatalog: courseCatalog});
   //   return comments;

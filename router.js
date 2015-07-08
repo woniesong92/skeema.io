@@ -34,10 +34,13 @@ Router.route('/projects', {
 });
 
 Router.route('/projects/:_id', {
-  // FIXME: probably something wrong here
   waitOn: function() {
     var projectId = this.params._id;
-    return Meteor.subscribe("project", projectId);
+    return [
+      Meteor.subscribe("project", projectId),
+      Meteor.subscribe("blocks", projectId),
+      Meteor.subscribe("trials", projectId),
+    ];
   },
 
   action: function() {

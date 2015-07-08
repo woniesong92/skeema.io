@@ -1,19 +1,21 @@
 <!-- Should be placed inside left column container -->
 
 <template name="SideNav">
-  <div class="left-nav-container">
-    <div class="project-name">
-      {{projectName}}
-    </div>
-    <ul class='block-items'>
-      {{#each blocks}}
-        <li class='block-item'>{{name}}</li>
-        <ul class='trial-items'>
-          {{#each trials _id}}
-            <li class='trial=item'>{{name}}</li>
-          {{/each}}
-        </ul>
-      {{/each}}
-    </ul>
+  <div class="project-name blue lighten-5 accent-3 white-text">
+    {{projectName}}
   </div>
+  <ul class='block-items'>
+    {{#each blocks}}
+      <li class='block-item'>{{name}}</li>
+      <ul class='trial-items'>
+        {{#each trials _id}}
+          <li class='trial=item'>
+            {{name}}
+          </li>
+        {{/each}}
+        <button class="btn add-trial purple lighten-3">Add Trial</button>
+      </ul>
+    {{/each}}
+    <button class="btn add-block">Add Block</button>
+  </ul>
 </template>
