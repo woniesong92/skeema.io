@@ -45,7 +45,7 @@ if (Meteor.isClient) {
         name: "Trial " + trialLength,
         index: trialLength
       });
-      
-    }
+    },
+    
   });
 }
