@@ -1,5 +1,17 @@
 <template name="ToolBox">
 	<div class="container toolbox-container">
-
+		{{#if isBlockView}}
+			{{> BlockToolBox}}
+		{{else}}
+			{{#if isTrialView}}
+				{{> TrialToolBox}}
+			{{else}}
+				{{#if isFrameView}}
+					{{> FrameToolBox}}
+				{{else}}
+					<!-- PROJECT TOOL BOX? -->
+				{{/if}}
+			{{/if}}
+		{{/if}}
 	</div>
 </template> 

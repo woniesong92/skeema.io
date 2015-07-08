@@ -1,4 +1,17 @@
 <template name="WorkSpace">
 	<div class="container workspace-container">
+		{{#if isBlockView}}
+			{{> BlockWorkSpace}}
+		{{else}}
+			{{#if isTrialView}}
+				{{> TrialWorkSpace}}
+			{{else}}
+				{{#if isFrameView}}
+					{{> FrameWorkSpace}}
+				{{else}}
+					<!-- PROJECT WORK SPACE ? -->
+				{{/if}}
+			{{/if}}
+		{{/if}}
 	</div>
 </template>
