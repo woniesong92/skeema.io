@@ -6,9 +6,15 @@ if (Meteor.isClient) {
     }
   });
 
+  Template.ProjectEdit.rendered = function () {
+    Session.set("currentView", "projectView");
+    Session.set("id", UI.getData()._id); // id of selected block, trial, or frame
+    debugger
+  }
+
   Template.ProjectEdit.events({
-  //   "click .project": function (e, template) {
-  //     
-  //   },
+    "click .block": function (e, template) {
+
+    },
   });
 }
