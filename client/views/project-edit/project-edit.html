@@ -1,18 +1,19 @@
 <template name="ProjectEdit">
 {{> Header}}
-<div class="project-edit-container container">
+<div class="project-edit-container">
   <div class="row">
-    <div class="col m12">
-        {{project.name}}
-      <!-- <h4>
-        Project Edit Page
-      </h4> -->
-      <!-- FIXME: data scope -->
+    <div class="col s3">
+      {{> LeftNav}}
+    </div>
+    <div class="col s7">
+      {{project.name}}
+    
       {{> SideNav}}
       {{> WorkSpace}}
       {{> ToolBox}}
       <!-- {{name}} -->
     </div>
+    <div class="col s2"></div>
   </div>
 </div>
 </template>

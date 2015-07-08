@@ -1,6 +1,6 @@
 if (Meteor.isClient) {
 
-  Template.LeftNav.helpers({
+  Template.SideNav.helpers({
     blocks: function() {
       // How can I retrieve the projectId here?
       debugger
@@ -15,7 +15,7 @@ if (Meteor.isClient) {
 
   });
 
-  Template.LeftNav.events({
+  Template.SideNav.events({
     "click .project-item .rename": function (e, template) {
       // NOT implemented
     },
