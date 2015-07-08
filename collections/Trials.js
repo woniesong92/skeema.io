@@ -16,7 +16,7 @@ Meteor.methods({
       "index": data["index"],
 
       // number of times shown within its block
-      "occurances": 1,
+      "occurences": 1,
 
       // FIXME: not sure if paths should be a collection
       "paths": null,
@@ -52,9 +52,9 @@ Meteor.methods({
   },
 
   //FIXME: MUST SHIFT THE INDECES OF THE OTHER TRIALS
-  changeOccurances: function (trialId, newOcc) {
+  changeOccurences: function (trialId, newOcc) {
     Trials.update(trialId, {
-      $set: {"occurances": newOcc}
+      $set: {"occurences": newOcc}
     });
   },
 

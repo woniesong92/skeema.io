@@ -28,6 +28,14 @@ if (Meteor.isClient) {
         var trialId = Session.get("id");
         Meteor.call('changeDoSaveReactionTime', trialId, reactbool);
     },
-    
+
+     'change #occurences': function(e, template) { 
+        var numoccur = $('#occurences').val().trim();
+
+        //FIXME: VALIDATE THAT IT IS A POSITIVE INTEGER (> 0)
+        var trialId = Session.get("id");
+        Meteor.call('changeOccurences', trialId, numoccur);
+    },
+
   });
 }
