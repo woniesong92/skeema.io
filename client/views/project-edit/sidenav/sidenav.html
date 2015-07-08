@@ -7,18 +7,21 @@
   <ul class='block-items'>
     {{#each blocks}}
       <li class='block-item'>
-        {{name}}
-        <i class="fa fa-chevron-down"></i>
+        <a href='#' class='block-item-link'>
+          {{name}}
+          <i class="fa fa-chevron-down"></i>
+          <i class="fa fa-chevron-left"></i>
+        </a>
+        <ul class='trial-items'>
+          {{#each trials _id}}
+            <li class='trial-item'>
+              <a href='#' class='trial-item-link'>{{name}}</a>
+            </li>
+          {{/each}}
+          <a class="add-trial">+ Add Trial</a>
+        </ul>
       </li>
-      <ul class='trial-items'>
-        {{#each trials _id}}
-          <li class='trial-item'>
-            {{name}}
-          </li>
-        {{/each}}
-        <button class="btn add-trial purple lighten-3">Add Trial</button>
-      </ul>
     {{/each}}
-    <button class="btn add-block">Add Block</button>
+    <a class="add-block">+ Add Block</a>
   </ul>
 </template>

@@ -16,6 +16,11 @@
   text-indent: 20px;
 }
 
+.add-trial,
+.add-block {
+  cursor: pointer;
+}
+
 .add-trial {
   margin-left: 20px;
 }
@@ -24,13 +29,21 @@
   margin-left: 10px;
 }
 
-.add-block,
-.add-trial {
-  font-size: 10px;
-  padding: 8px;
-  line-height: 1;
+.block-item .trial-items,
+.block-item .block-item-link .fa-chevron-left,
+.block-item.is-open .block-item-link .fa-chevron-down {
+  display: none;
 }
 
-.fa-chevron-down {
+.block-item.is-open .trial-items {
+  display: block;
+}
+
+.block-item.is-open .block-item-link .fa-chevron-left {
+  display: inline-block;
+}
+
+.fa-chevron-down,
+.fa-chevron-left {
   margin-left: -10px;
 }

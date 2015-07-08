@@ -18,7 +18,13 @@ if (Meteor.isClient) {
   });
 
   Template.SideNav.events({
+    "click .block-item": function (e, template) {
+      // debugger
+      $(e.target).closest('.block-item').toggleClass('is-open');
+    },
+
     "click .add-block": function (e, template) {
+      e.stopPropagation();
       var projectId = this._id;
       var blockLength = Blocks.find({projectId: projectId}).count();
       Meteor.call("addBlock", {
@@ -29,6 +35,7 @@ if (Meteor.isClient) {
     },
 
     "click .add-trial": function (e, template) {
+      e.stopPropagation();
       var projectId = this.projectId;
       var blockId = this._id;
       var trialLength = Trials.find({blockId: blockId}).count();
@@ -38,6 +45,7 @@ if (Meteor.isClient) {
         name: "Trial " + trialLength,
         index: trialLength
       });
+      
     }
   });
 }
