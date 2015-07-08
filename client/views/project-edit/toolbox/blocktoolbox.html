@@ -1,5 +1,10 @@
 <template name="BlockToolBox">
 	<div class="container block-toolbox-container">
-		Block ID: {{ block._id }}
-	</div>
+		 <div class="row">
+		    <div class="col s6">
+	    	  <label for="blockname">Block Name</label>
+		      <input value="{{ block.name }}" id="blockname" type="text">
+			    </div>
+			  </div>
+			</div>
 </template>
