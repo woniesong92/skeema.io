@@ -1,5 +1,17 @@
 <template name="BlockWorkSpace">
-	<div class="container block-workspace-container">
-		Block ID: {{ block._id }}
+	<div class="block-workspace-container">
+    <div class="row">
+    {{#each trials}}
+      <div class='col s4 trial-preview-item-container'>
+        <div class="trial-preview-item cyan lighten-5">
+          <div class='trial-name'>{{name}}</div>
+          <div class='trial-frames'>{{numFrames _id}}</div>
+          <div class='trial-occurences'>{{occurences}}</div>
+        </div>
+      </div>
+    {{/each}}
+    </div>
 	</div>
 </template>
+
+<!-- Block ID: {{ block._id }} -->
