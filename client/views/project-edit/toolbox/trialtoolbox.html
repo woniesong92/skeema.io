@@ -50,11 +50,15 @@
   <div class="trial-paths-row grey darken-3 white-text">
     <div class="container">
       <p class="path-title">Paths</p>
-      <!-- FIXME: pathc collection doesn't exist yet -->
+
+      <!-- FIXME: use Paths collection-->
       {{#each paths}}
         {{> path}}
       {{/each}}
-      <a class="add-path">+ Add Path</a>
+      <!-- <a class="add-path">+ Add Path</a> -->
+          <!-- Modal Trigger -->
+      <a class="waves-effect waves-light btn modal-trigger" href="#modal">Modal Test</a>
+
     </div>
   </div>
 
