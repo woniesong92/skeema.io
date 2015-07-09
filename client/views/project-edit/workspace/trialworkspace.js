@@ -1,3 +1,36 @@
+
+/*
+  Since all jsPlumb elements should be 
+  absolutely positioned, I have to order them
+  in JS rather than in CSS
+*/
+function positionElements() {
+  var frames = $('.frame-preview-item');
+  var numFrames = frames.length;
+  var containerWidth = $('.trial-workspace-container').width();
+  var space = (containerWidth - 90) / 3;
+  var topMargin = 30;
+
+  _.each(frames, function (frame, idx) {
+    var horizontalPos = idx % 3;
+    var verticalPos = Math.floor(idx / 3);
+    var leftMargin = (horizontalPos * space) + 50;
+    var topMargin = (verticalPos * 180) + 30;
+    $(frame).css({
+      left: leftMargin,
+      top: topMargin
+    });
+  });
+
+  // place add item box in the last position
+  var lastLeftMargin = ((numFrames % 3) * space) + 50;
+  var lastTopMargin = (Math.floor(numFrames / 3) * 180) + topMargin;
+  $('.add-frame-item').css({
+    left: lastLeftMargin,
+    top: lastTopMargin
+  });
+}
+
 if (Meteor.isClient) {
   Template.TrialWorkSpace.helpers({
     frames: function() {
@@ -7,13 +40,13 @@ if (Meteor.isClient) {
   });
 
   Template.TrialWorkSpace.onRendered(function() {
-    
+    positionElements();
+
     // jsPlumb helps users mark frames' connections
     jsPlumb.ready(function () {
 
       // setup some defaults for jsPlumb.
       // var instance = jsPlumb.getInstance({
-
       var instance = jsPlumb.getInstance({
         Endpoint: ["Dot", {radius: 2}],
         HoverPaintStyle: {strokeStyle: "#1e8151", lineWidth: 2 },
@@ -24,7 +57,11 @@ if (Meteor.isClient) {
             length: 14,
             foldback: 0.8
           } ],
-          [ "Label", { label: "FOO", id: "label", cssClass: "aLabel" }]
+          [ "Label", {
+            // label: "FOO",
+            id: "label",
+            cssClass: "aLabel"
+          }]
         ],
         Container: "trial-workspace-container"
       });
@@ -50,7 +87,6 @@ if (Meteor.isClient) {
       instance.bind("connection", function (info) {
         info.connection.getOverlay("label").setLabel(info.connection.id);
       });
-
 
       // suspend drawing and initialise.
       instance.batch(function () {

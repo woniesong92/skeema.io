@@ -1,6 +1,12 @@
 /* blockworkspace */
 /* trialworkspace */
 
+// jsPlumb requires the container to have position: relative
+// and movable elements to have position: absolute
+.trial-workspace-container {
+  position: relative;
+}
+
 .trial-preview-item-container .trial-preview-item,
 .frame-preview-item-container .add-frame-container {
   cursor: pointer;
@@ -9,36 +15,12 @@
   height: 200px;
 }
 
-.frame-preview-item {
-  // position: absolute;
-  // margin: 20px 10px;
-
-  // // FIXME: find a way to equally distribute 3 columns with
-  // // equal margins in the given space
-  // width: 27%;
-  // height: 174px;
-  // padding: 10px;
-  // z-index: 4;
-  // border: 1px solid #2e6f9a;
-  // box-shadow: 2px 2px 19px #e0e0e0;
-  // -o-box-shadow: 2px 2px 19px #e0e0e0;
-  // -webkit-box-shadow: 2px 2px 19px #e0e0e0;
-  // -moz-box-shadow: 2px 2px 19px #e0e0e0;
-  // -moz-border-radius: 8px;
-  // border-radius: 8px;
-  // opacity: 0.8;
-  // filter: alpha(opacity=80);
-  // cursor: move;
-  // background-color: white;
-  // font-size: 11px;
-  // -webkit-transition: background-color 0.25s ease-in;
-  // -moz-transition: background-color 0.25s ease-in;
-  // transition: background-color 0.25s ease-in;
-  // margin-left: 20px;
-  // float: left;
-
-  padding: 16px;
+.frame-preview-item,
+.add-frame-item {
   position: absolute;
+  width: 150px;
+  height: 150px;
+  padding: 16px;
   z-index: 4;
   border: 1px solid #2e6f9a;
   box-shadow: 2px 2px 19px #e0e0e0;
@@ -55,7 +37,6 @@
   -webkit-transition: background-color 0.25s ease-in;
   -moz-transition: background-color 0.25s ease-in;
   transition: background-color 0.25s ease-in;
-
 }
 
 .frame-preview-item-container .add-frame-container {
@@ -83,40 +64,15 @@
 
 // jsPlumb
 
-.w {
-  padding: 16px;
-  position: absolute;
-  z-index: 4;
-  border: 1px solid #2e6f9a;
-  box-shadow: 2px 2px 19px #e0e0e0;
-  -o-box-shadow: 2px 2px 19px #e0e0e0;
-  -webkit-box-shadow: 2px 2px 19px #e0e0e0;
-  -moz-box-shadow: 2px 2px 19px #e0e0e0;
-  -moz-border-radius: 8px;
-  border-radius: 8px;
-  opacity: 0.8;
-  filter: alpha(opacity=80);
-  cursor: move;
-  background-color: white;
-  font-size: 11px;
-  -webkit-transition: background-color 0.25s ease-in;
-  -moz-transition: background-color 0.25s ease-in;
-  transition: background-color 0.25s ease-in;
-}
-
-.w:hover {
-  background-color: #5c96bc;
-  color: white;
-
-}
-
 .aLabel {
   -webkit-transition: background-color 0.25s ease-in;
   -moz-transition: background-color 0.25s ease-in;
   transition: background-color 0.25s ease-in;
 }
 
-.aLabel._jsPlumb_hover, ._jsPlumb_source_hover, ._jsPlumb_target_hover {
+.aLabel._jsPlumb_hover,
+._jsPlumb_source_hover,
+._jsPlumb_target_hover {
   background-color: #1e8151;
   color: white;
 }
@@ -131,17 +87,17 @@
 }
 
 .ep {
-    position: absolute;
-    bottom: 37%;
-    right: 5px;
-    width: 1em;
-    height: 1em;
-    background-color: orange;
-    cursor: pointer;
-    box-shadow: 0 0 2px black;
-    -webkit-transition: -webkit-box-shadow 0.25s ease-in;
-    -moz-transition: -moz-box-shadow 0.25s ease-in;
-    transition: box-shadow 0.25s ease-in;
+  position: absolute;
+  bottom: 37%;
+  right: 5px;
+  width: 1em;
+  height: 1em;
+  background-color: orange;
+  cursor: pointer;
+  box-shadow: 0 0 2px black;
+  -webkit-transition: -webkit-box-shadow 0.25s ease-in;
+  -moz-transition: -moz-box-shadow 0.25s ease-in;
+  transition: box-shadow 0.25s ease-in;
 }
 
 .ep:hover {
