@@ -6,7 +6,7 @@ if (Meteor.isClient) {
     // m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     // })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        var contentHeight = $(window).height() - 80;
+        var contentHeight = $(window).height() - 50;
 	    $('body').css("height", contentHeight);
   }
 }
