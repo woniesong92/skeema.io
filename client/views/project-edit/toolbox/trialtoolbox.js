@@ -11,6 +11,10 @@ if (Meteor.isClient) {
   }
 
   Template.TrialToolBox.events({
+
+  });
+
+  Template.TrialSettings.events({
     'change #trialname': function(e, template) { 
         var newname = $('#trialname').val().trim();
         var trialId = Session.get("id");
