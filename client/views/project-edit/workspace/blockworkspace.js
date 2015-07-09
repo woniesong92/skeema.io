@@ -1,5 +1,4 @@
 if (Meteor.isClient) {
-
   Template.BlockWorkSpace.helpers({
     trials: function() {
       var blockId = Session.get('id');
@@ -16,6 +15,6 @@ if (Meteor.isClient) {
       var trialId = this._id;
       Session.set("currentView", "trialView");
       Session.set("id", this._id);
-    },
+    }
   });
 }

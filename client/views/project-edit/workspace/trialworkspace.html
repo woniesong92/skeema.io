@@ -1,5 +1,18 @@
 <template name="TrialWorkSpace">
-	<div class="container trial-workspace-container">
-		Trial ID: {{ trial._id }}
-	</div>
+  <div class="trial-workspace-container">
+    <div class="row">
+    {{#each frames}}
+      <div class='col s4 frame-preview-item-container'>
+        <div class="frame-preview-item cyan lighten-5">
+          <div class='frame-name'>{{name}}</div>
+        </div>
+      </div>
+    {{/each}}
+    <div class='col s4 frame-preview-item-container'>
+      <div class="cyan lighten-5 add-frame-container">
+        <div class='add-frame-text'>+ Add frame</div>
+      </div>
+    </div>
+    </div>
+  </div>
 </template>
