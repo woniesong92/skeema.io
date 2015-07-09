@@ -34,7 +34,7 @@ function positionElements() {
 if (Meteor.isClient) {
   Template.TrialWorkSpace.helpers({
     frames: function() {
-      var trialId = Session.get('id');
+      var trialId = Session.get('trialId');
 
       // check if new frame has just been added
       // this reactive var will make sure that every time
@@ -130,7 +130,7 @@ if (Meteor.isClient) {
     this.autorun(function() {
       console.log("autorun");
 
-      var trialId = Session.get("id");
+      var trialId = Session.get("trialId");
       var frameId = Session.get("frameAdded");
       if (!frameId) {
         return false;
@@ -183,7 +183,7 @@ if (Meteor.isClient) {
   Template.TrialWorkSpace.events({
     "click .frame-preview-item": function (e, template) {
       Session.set("currentView", "frameView");
-      Session.set("id", this._id);
+      Session.set("frameId", this._id);
     },
 
     // "click .add-frame-container": function (e, template) {

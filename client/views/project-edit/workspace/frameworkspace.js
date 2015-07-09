@@ -9,15 +9,20 @@ if (Meteor.isClient) {
   Template.FrameWorkSpace.rendered = function () {
 
     $( ".draggable" ).draggable();
+    var projectId = this._id;
 
     if (Session.get("getAddText")) {
-      //TODO: ADD TEXT FIELD
+      Meteor.call("addElement", {
+        projectId: projectId,
+        frameId: "Block " + blockLength,
+        index: blockLength
+      });
     }
     if (Session.get("getAddImage")) {
       //TODO: UPLOAD IMAGE
     }
     if (Session.get("getAddButton")) {
-      
+
       //FIXME: haven't tested this yet
       $('.frame-workspace-container').append('<a class="btn draggable"><a/>');
     }

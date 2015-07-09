@@ -15,17 +15,17 @@ if (Meteor.isClient) {
   });
 
   Template.registerHelper("block", function (event, template) {
-    var blockId = Session.get("id");
+    var blockId = Session.get("blockId");
     return Blocks.findOne({_id: blockId});
   });
 
   Template.registerHelper("trial", function (event, template) {
-    var trialId = Session.get("id");
+    var trialId = Session.get("trialId");
     return Trials.findOne({_id: trialId});
   });
 
   Template.registerHelper("frame", function (event, template) {
-    var frameId = Session.get("id");
+    var frameId = Session.get("frameId");
     return Frames.findOne({_id: frameId});
   });
 

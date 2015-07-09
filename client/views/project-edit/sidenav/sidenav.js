@@ -24,13 +24,13 @@ if (Meteor.isClient) {
 
       // FIXME: To avoid confusion, should we set it as "blokcId"?
       // this is used in blockworkspace as well
-      Session.set("id", this._id);
+      Session.set("blockId", this._id);
     },
 
     "click .trial-item": function (e, template) {
       e.stopPropagation();
       Session.set("currentView", "trialView");
-      Session.set("id", this._id);
+      Session.set("trialId", this._id);
     },
 
     "click .add-block": function (e, template) {

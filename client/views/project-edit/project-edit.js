@@ -11,8 +11,13 @@ if (Meteor.isClient) {
     // FIXME (LATER): NEED TO MAKE REACTIVE ONLY IN TEMPLATE (NOT GLOBAL); USE REACTIVE-VAR PACKAGE
     Session.set("currentView", "projectView");
 
-    // id of selected block, trial, or frame
-    Session.set("id", UI.getData()._id);
+    
+    Session.set("projectId", UI.getData()._id);
+
+    //should these be initialized?
+    Session.set("blockId", null);
+    Session.set("trialId", null);
+    Session.set("frameId", null);
   }
 
   Template.ProjectEdit.events({
