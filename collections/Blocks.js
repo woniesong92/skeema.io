@@ -3,8 +3,10 @@ Blocks = new Mongo.Collection("blocks");
 Meteor.methods({
 
   addBlock: function (data, callback) {
+    var projectId = data["projectId"];
+
     var block = {
-      "projectId": data["projectId"],
+      "projectId": projectId,
       "name": data["name"],
       "randomize": false,
 
@@ -16,7 +18,20 @@ Meteor.methods({
       "createdAt": Date.now()
     };
 
-    Blocks.insert(block);
+    Blocks.insert(block, function (err, blockId) {
+      // When block is created, let's add one trial to it
+      // by default
+      if (err) {
+        console.log(err, "Block making failed");
+        return;
+      }
+      Meteor.call("addTrial", {
+        projectId: projectId,
+        blockId: blockId,
+        name: "Trial " + 0,
+        index: 0
+      });
+    });
   },
 
   renameBlock: function (blockId, newName) {

@@ -3,8 +3,10 @@ Trials = new Mongo.Collection("trials");
 Meteor.methods({
 
   addTrial: function (data, callback) {
+    var projectId = data["projectId"];
+
     var trial = {
-      "projectId": data["projectId"],
+      "projectId": projectId,
       "blockId": data["blockId"],
 
       // NOT SURE WE NEED THIS
@@ -31,7 +33,20 @@ Meteor.methods({
       "createdAt": Date.now()
     };
 
-    Trials.insert(trial);
+    Trials.insert(trial, function (err, trialId) {
+      // When trial is created, let's add one frame to it
+      // by default
+      if (err) {
+        console.log(err, "Frame making failed");
+        return;
+      }
+      Meteor.call("addFrame", {
+        projectId: projectId,
+        trialId: trialId,
+        name: "Frame " + 0,
+        index: 0
+      });
+    });
   },
 
   deleteTrial: function (trialId) {
