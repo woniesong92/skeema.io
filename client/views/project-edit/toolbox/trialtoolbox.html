@@ -15,9 +15,7 @@
       </div>
 
       <div class="row saving-message">
-        <p>
-          I want to save...
-        </p>
+        <p>I want to save...</p>
       </div>
       <div class="row saving-elems-container">
         <div class="col s12 exit-path-container">
@@ -36,7 +34,7 @@
 
       <div class="row num-occurences-container">
         <div class="col s8">
-          <label for="trialname"># Occurences</label>
+          <span># Occurences</span>
         </div>
         <div class="col s4">
           <input value="{{ trial.occurences }}" id="occurences" type="text">
@@ -49,12 +47,14 @@
 
 <template name="TrialPaths">
 
-  <div class="trial-paths-row blue lighten-5 accent-3 white-text">
+  <div class="trial-paths-row grey darken-3 white-text">
     <div class="container">
+      <p class="path-title">Paths</p>
       <!-- FIXME: pathc collection doesn't exist yet -->
       {{#each paths}}
         {{> path}}
       {{/each}}
+      <a class="add-path">+ Add Path</a>
     </div>
   </div>
 
