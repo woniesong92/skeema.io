@@ -36,10 +36,12 @@ Router.route('/projects', {
 Router.route('/projects/:_id', {
   waitOn: function() {
     var projectId = this.params._id;
+    // TODO: subscribe project should be based on userId
     return [
       Meteor.subscribe("project", projectId),
       Meteor.subscribe("blocks", projectId),
       Meteor.subscribe("trials", projectId),
+      Meteor.subscribe("frames", projectId)
     ];
   },
 

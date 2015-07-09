@@ -3,7 +3,8 @@ Frames = new Mongo.Collection("frames");
 Meteor.methods({
   addFrame: function (data, callback) {
     var frame = {
-      "trialId": data["trial_id"],
+      "projectId": data["projectId"],
+      "trialId": data["trialId"],
       "name": data["name"],
       
       // User can place frame4 before frame3, so we need
@@ -14,6 +15,6 @@ Meteor.methods({
     };
 
     Frames.insert(frame);
-  },
+  }
 
 });

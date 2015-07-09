@@ -1,19 +1,26 @@
 if (Meteor.isClient) {
-
   Template.TrialWorkSpace.helpers({
-    // projects: function() {
-    //   return UI.getData();
-    // }
+    frames: function() {
+      var trialId = Session.get('id');
+      return Frames.find({trialId: trialId});
+    }
   });
 
-  Template.TrialWorkSpace.rendered = function () {
-    
-  }
-
   Template.TrialWorkSpace.events({
-    // "click .frame-item": function (e, template) {
-    //   Session.set("currentView", "frameView");
-    //   Session.set("id", this._id);
-    // },
+    "click .frame-preview-item": function (e, template) {
+      Session.set("currentView", "frameView");
+      Session.set("id", this._id);
+    },
+
+    "click .add-frame-container": function (e, template) {
+      var projectId = this._id;
+      var trialId = Session.get('id');
+      var numFrames = Frames.find({trialId: trialId}).count();
+      Meteor.call('addFrame', {
+        projectId: projectId,
+        trialId: trialId,
+        name: "Frame " + numFrames
+      });
+    }
   });
 }
