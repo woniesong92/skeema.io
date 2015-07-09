@@ -7,10 +7,13 @@ if (Meteor.isClient) {
   });
 
   Template.TrialWorkSpace.onRendered(function() {
-
+    
+    // jsPlumb helps users mark frames' connections
     jsPlumb.ready(function () {
 
       // setup some defaults for jsPlumb.
+      // var instance = jsPlumb.getInstance({
+
       var instance = jsPlumb.getInstance({
         Endpoint: ["Dot", {radius: 2}],
         HoverPaintStyle: {strokeStyle: "#1e8151", lineWidth: 2 },
@@ -23,12 +26,12 @@ if (Meteor.isClient) {
           } ],
           [ "Label", { label: "FOO", id: "label", cssClass: "aLabel" }]
         ],
-        Container: "statemachine-demo"
+        Container: "trial-workspace-container"
       });
 
-      window.jsp = instance;
+      Template.TrialWorkSpace.jsp = instance;
 
-      var windows = jsPlumb.getSelector(".statemachine-demo .w");
+      var windows = jsPlumb.getSelector(".frame-preview-item");
 
       // initialise draggable elements.
       instance.draggable(windows);
@@ -56,13 +59,13 @@ if (Meteor.isClient) {
           anchor: "Continuous",
           connector: [ "StateMachine", { curviness: 20 } ],
           connectorStyle: { strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4 },
-          maxConnections: 5,
+          maxConnections: 10,
           onMaxConnections: function (info, e) {
             alert("Maximum connections (" + info.maxConnections + ") reached");
           }
         });
 
-        // initialise all '.w' elements as connection targets.
+        // initialise all '.frame-preview-item' elements as connection targets.
         instance.makeTarget(windows, {
           dropOptions: { hoverClass: "dragHover" },
           anchor: "Continuous",
@@ -70,13 +73,11 @@ if (Meteor.isClient) {
         });
 
         // and finally, make a couple of connections
-        instance.connect({ source: "opened", target: "phone1" });
-        instance.connect({ source: "phone1", target: "phone1" });
-        instance.connect({ source: "phone1", target: "inperson" });
+        // TODO: iterate over the path collection and connect the nodes accordingly
+        // instance.connect({ source: "opened", target: "phone1" });
       });
 
       jsPlumb.fire("jsPlumbDemoLoaded", instance);
-
     });
 
   });
@@ -88,13 +89,61 @@ if (Meteor.isClient) {
     },
 
     "click .add-frame-container": function (e, template) {
+      var jsp = Template.TrialWorkSpace.jsp;
       var projectId = this._id;
       var trialId = Session.get('id');
       var numFrames = Frames.find({trialId: trialId}).count();
+
       Meteor.call('addFrame', {
         projectId: projectId,
         trialId: trialId,
         name: "Frame " + numFrames
+      }, function (err, frameId) {
+        if (err) {
+          console.log("adding Frame failed");
+          return false;
+        }
+
+        // There is a bug in the library. Use frameElement
+        // as an argument to jsp instance functions
+        var selector = "#frame-" + frameId;
+        var frameElement = $(selector);
+
+        jsp.draggable(frameElement);
+        
+        jsp.bind("click", function (c) {
+          jsp.detach(c);
+        });
+
+        jsp.bind("connection", function (info) {
+          info.connection.getOverlay("label").setLabel(info.connection.id);
+        });
+
+        jsp.batch(function () {
+          jsp.makeSource(frameElement, {
+            filter: ".ep",
+            anchor: "Continuous",
+            connector: [ "StateMachine", { curviness: 20 } ],
+            connectorStyle: {
+              strokeStyle: "#5c96bc",
+              lineWidth: 2,
+              outlineColor:"transparent",
+              outlineWidth: 4
+            },
+            maxConnections: 10,
+            onMaxConnections: function (info, e) {
+              alert("Maximum connections (" + info.maxConnections + ") reached");
+            }
+          });
+
+          // initialise all '.frame-preview-item' elements as connection targets.
+          jsp.makeTarget(frameElement, {
+            dropOptions: { hoverClass: "dragHover" },
+            anchor: "Continuous",
+            allowLoopback: true
+          });
+        });
+
       });
     }
   });

@@ -1,35 +1,14 @@
 <template name="TrialWorkSpace">
-  <div class="trial-workspace-container">
-<!--     <div class="row">
-    {{#each frames}}
-      <div class='col s4 frame-preview-item-container'>
-        <div class="frame-preview-item cyan lighten-5">
+  <div class="trial-workspace-container">  
+    <div class="row">
+      {{#each frames}}
+        <div id="frame-{{_id}}" class="frame-preview-item cyan lighten-5">
           <div class='frame-name'>{{name}}</div>
+          <div class="ep"></div>
         </div>
-      </div>
-    {{/each}}
-    <div class='col s4 frame-preview-item-container'>
+      {{/each}}
       <div class="cyan lighten-5 add-frame-container">
         <div class='add-frame-text'>+ Add frame</div>
-      </div>
-    </div>
-    </div> -->
-
-    <div class="demo statemachine-demo" id="statemachine-demo">
-      <div class="w" id="opened">BEGIN
-        <div class="ep"></div>
-      </div>
-      <div class="w" id="phone1">PHONE INTERVIEW 1
-        <div class="ep"></div>
-      </div>
-      <div class="w" id="phone2">PHONE INTERVIEW 2
-        <div class="ep"></div>
-      </div>
-      <div class="w" id="inperson">IN PERSON
-        <div class="ep"></div>
-      </div>
-      <div class="w" id="rejected">REJECTED
-        <div class="ep"></div>
       </div>
     </div>
   </div>

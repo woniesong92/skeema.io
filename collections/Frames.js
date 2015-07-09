@@ -1,7 +1,7 @@
 Frames = new Mongo.Collection("frames");
 
 Meteor.methods({
-  addFrame: function (data, callback) {
+  addFrame: function (data) {
     var frame = {
       "projectId": data["projectId"],
       "trialId": data["trialId"],
@@ -14,7 +14,7 @@ Meteor.methods({
       "createdAt": Date.now()
     };
 
-    Frames.insert(frame);
+    // new frameId will be returned to the caller
+    return Frames.insert(frame);
   }
-
 });
