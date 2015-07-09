@@ -1,1 +1,93 @@
 @import "global.import.less";
+
+.modal {
+  min-height: 300px;
+  max-height: none;
+  width: 400px;
+}
+
+.modal input {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.modal h4 {
+  font-size: 24px;
+}
+
+.modal-footer {
+  position: absolute;
+  bottom: 0;
+  padding: 10px;
+}
+
+.modal-footer a {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.modal .divider {
+  position: relative;
+  bottom: 5px;
+}
+
+.modal-fields {
+  margin-top: 20px;
+}
+
+.modal-fields .row {
+  padding-bottom: 10px;
+}
+
+.time-options, .key-options {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+
+
+/* custom input style for modal */
+
+.modal label {
+  color: #777;
+}
+
+.modal input[type=text]:not([readonly]),
+.modal input[type=number] {
+  background-color: transparent;
+  border: 1px solid #777;
+  color: #000;
+  border-radius: 3px;
+  outline: none;
+  height: 2rem;
+  width: 20%;
+  font-size: 1rem;
+  margin: 0 0 15px 10px;
+  padding: 0 3px;
+  box-shadow: none;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  transition: all .3s;
+}
+
+ /* label underline focus color */
+.modal input[type=text]:focus,
+.modal input[type=number]:focus {
+ border-bottom: 1px solid #777;
+ box-shadow: 0 1px 0 0 #777;
+}
+
+/* text field border */
+.modal input[type=text]:focus:not([readonly]),
+.modal input[type=number]:focus {
+    border-bottom: 2px solid #777;
+    box-shadow: 0 2px 0 0 #777;
+    padding: 1px 3px; }
+
+.modal input[type=text]:focus:not([readonly]) + label,
+.modal input[type=number]:focus {
+    color: #777; }
