@@ -35,6 +35,13 @@ if (Meteor.isClient) {
   Template.TrialWorkSpace.helpers({
     frames: function() {
       var trialId = Session.get('id');
+
+      // check if new frame has just been added
+      // this reactive var will make sure that every time
+      // frameAdded value in Session changes, this function runs
+      var frameId = Session.get("frameAdded");
+
+      // return all frames whose parent is this trial
       return Frames.find({trialId: trialId});
     }
   });
@@ -116,6 +123,61 @@ if (Meteor.isClient) {
       jsPlumb.fire("jsPlumbDemoLoaded", instance);
     });
 
+    /*
+      autorun: every time a new frame is added, this is run and
+      binds the new frame to a draggable state
+    */
+    this.autorun(function() {
+      console.log("autorun");
+
+      var trialId = Session.get("id");
+      var frameId = Session.get("frameAdded");
+      if (!frameId) {
+        return false;
+      }
+
+      var jsp = Template.TrialWorkSpace.jsp;
+      var numFrames = Frames.find({trialId: trialId}).count();
+
+      var selector = "#frame-" + frameId;
+      var frameElement = $(selector);
+
+      jsp.draggable(frameElement);
+      
+      jsp.bind("click", function (c) {
+        jsp.detach(c);
+      });
+
+      jsp.bind("connection", function (info) {
+        info.connection.getOverlay("label").setLabel(info.connection.id);
+      });
+
+      jsp.batch(function () {
+        jsp.makeSource(frameElement, {
+          filter: ".ep",
+          anchor: "Continuous",
+          connector: [ "StateMachine", { curviness: 20 } ],
+          connectorStyle: {
+            strokeStyle: "#5c96bc",
+            lineWidth: 2,
+            outlineColor:"transparent",
+            outlineWidth: 4
+          },
+          maxConnections: 10,
+          onMaxConnections: function (info, e) {
+            alert("Maximum connections (" + info.maxConnections + ") reached");
+          }
+        });
+
+        // initialise all '.frame-preview-item' elements as connection targets.
+        jsp.makeTarget(frameElement, {
+          dropOptions: { hoverClass: "dragHover" },
+          anchor: "Continuous",
+          allowLoopback: true
+        });
+      });
+    });
+
   });
 
   Template.TrialWorkSpace.events({
@@ -124,63 +186,62 @@ if (Meteor.isClient) {
       Session.set("id", this._id);
     },
 
-    "click .add-frame-container": function (e, template) {
-      var jsp = Template.TrialWorkSpace.jsp;
-      var projectId = this._id;
-      var trialId = Session.get('id');
-      var numFrames = Frames.find({trialId: trialId}).count();
+    // "click .add-frame-container": function (e, template) {
+    //   var jsp = Template.TrialWorkSpace.jsp;
+    //   var frameId = Session.get("frameAdded");
+    //   var numFrames = Frames.find({trialId: trialId}).count();
 
-      Meteor.call('addFrame', {
-        projectId: projectId,
-        trialId: trialId,
-        name: "Frame " + numFrames
-      }, function (err, frameId) {
-        if (err) {
-          console.log("adding Frame failed");
-          return false;
-        }
+      // Meteor.call('addFrame', {
+      //   projectId: projectId,
+      //   trialId: trialId,
+      //   name: "Frame " + numFrames
+      // }, function (err, frameId) {
+      //   if (err) {
+      //     console.log("adding Frame failed");
+      //     return false;
+      //   }
 
-        // There is a bug in the library. Use frameElement
-        // as an argument to jsp instance functions
-        var selector = "#frame-" + frameId;
-        var frameElement = $(selector);
+      //   // There is a bug in the library. Use frameElement
+      //   // as an argument to jsp instance functions
+      //   var selector = "#frame-" + frameId;
+      //   var frameElement = $(selector);
 
-        jsp.draggable(frameElement);
+      //   jsp.draggable(frameElement);
         
-        jsp.bind("click", function (c) {
-          jsp.detach(c);
-        });
+      //   jsp.bind("click", function (c) {
+      //     jsp.detach(c);
+      //   });
 
-        jsp.bind("connection", function (info) {
-          info.connection.getOverlay("label").setLabel(info.connection.id);
-        });
+      //   jsp.bind("connection", function (info) {
+      //     info.connection.getOverlay("label").setLabel(info.connection.id);
+      //   });
 
-        jsp.batch(function () {
-          jsp.makeSource(frameElement, {
-            filter: ".ep",
-            anchor: "Continuous",
-            connector: [ "StateMachine", { curviness: 20 } ],
-            connectorStyle: {
-              strokeStyle: "#5c96bc",
-              lineWidth: 2,
-              outlineColor:"transparent",
-              outlineWidth: 4
-            },
-            maxConnections: 10,
-            onMaxConnections: function (info, e) {
-              alert("Maximum connections (" + info.maxConnections + ") reached");
-            }
-          });
+      //   jsp.batch(function () {
+      //     jsp.makeSource(frameElement, {
+      //       filter: ".ep",
+      //       anchor: "Continuous",
+      //       connector: [ "StateMachine", { curviness: 20 } ],
+      //       connectorStyle: {
+      //         strokeStyle: "#5c96bc",
+      //         lineWidth: 2,
+      //         outlineColor:"transparent",
+      //         outlineWidth: 4
+      //       },
+      //       maxConnections: 10,
+      //       onMaxConnections: function (info, e) {
+      //         alert("Maximum connections (" + info.maxConnections + ") reached");
+      //       }
+      //     });
 
-          // initialise all '.frame-preview-item' elements as connection targets.
-          jsp.makeTarget(frameElement, {
-            dropOptions: { hoverClass: "dragHover" },
-            anchor: "Continuous",
-            allowLoopback: true
-          });
-        });
+      //     // initialise all '.frame-preview-item' elements as connection targets.
+      //     jsp.makeTarget(frameElement, {
+      //       dropOptions: { hoverClass: "dragHover" },
+      //       anchor: "Continuous",
+      //       allowLoopback: true
+      //     });
+      //   });
 
-      });
-    }
+    //   });
+    // }
   });
 }
