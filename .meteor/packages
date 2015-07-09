@@ -10,3 +10,4 @@ iron:router
 materialize:materialize
 fortawesome:fontawesome
 mizzao:jquery-ui
+jsplumb:jsplumb

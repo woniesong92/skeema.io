@@ -6,6 +6,13 @@ if (Meteor.isClient) {
     }
   });
 
+  Template.TrialWorkSpace.onRendered(function() {
+    console.log("TrialWorkSpace rendered");
+    jsPlumb.ready(function() {
+      console.log("js plumb is ready");
+    });
+  });
+
   Template.TrialWorkSpace.events({
     "click .frame-preview-item": function (e, template) {
       Session.set("currentView", "frameView");
