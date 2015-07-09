@@ -7,12 +7,23 @@ if (Meteor.isClient) {
   });
 
   Template.FrameToolBox.rendered = function () {
-    
+    Session.set("addText", false);
+    Session.set("addImage", false);
+    Session.set("addButton", false);
   }
 
   Template.FrameToolBox.events({
-  //   "click .project": function (e, template) {
-  //     
-  //   },
+  });
+
+  Template.FrameElements.events({
+    'click .add-text-btn': function (e, template) {
+      Session.set("addText", true);
+    },
+    'click .add-img-btn': function (e, template) {
+      Session.set("addImage", true);
+    },
+    'click .add-btn-btn': function (e, template) {
+      Session.set("addButton", true);
+    },
   });
 }
