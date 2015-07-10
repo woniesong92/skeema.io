@@ -3,9 +3,9 @@
 		Frame ID: {{ frame._id }}
 
     {{#each elements}}
-        <div id="element-{{_id}}" class="element-item draggable">
-          <span class='.draggable'>{{content}}</span>
-        </div>
+        <span id="element-{{_id}}" class="element-item draggable">
+         {{content}}
+        </span>
       {{/each}}
 	</div>
 </template>

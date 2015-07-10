@@ -21,7 +21,7 @@ if (Meteor.isClient) {
     isButton: function () {
       return this.type == "button";
     },
-    
+
     isImage: function () {
       return this.type == "image";
     }
@@ -30,7 +30,7 @@ if (Meteor.isClient) {
 
   Template.FrameWorkSpace.rendered = function () {
 
-    $( ".draggable" ).draggable();
+    $( ".draggable" ).draggable({ containment: ".frame-workspace-container", scroll: false });
     // var projectId = this._id;
 
     // if (Session.get("addText")) {
