@@ -18,6 +18,7 @@ if (Meteor.isClient) {
     Session.set("blockId", null);
     Session.set("trialId", null);
     Session.set("frameId", null);
+    Session.set("elementId", null);
   }
 
   Template.ProjectEdit.events({

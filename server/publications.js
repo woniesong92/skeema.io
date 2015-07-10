@@ -21,6 +21,11 @@ if (Meteor.isServer) {
     return Frames.find({projectId: projectId});
   });
 
+  Meteor.publish("elements", function (projectId) {
+    return Elements.find({projectId: projectId});
+  });
+
+
   // Meteor.publish("comments", function(courseCatalog) {
   //   var comments = Comments.find({courseCatalog: courseCatalog});
   //   return comments;

@@ -16,13 +16,13 @@ if (Meteor.isClient) {
 
     'change #blockname': function(e, template) { 
         var newname = $('#blockname').val().trim();
-        var blockId = Session.get("id");
+        var blockId = Session.get("blockId");
         Meteor.call('renameBlock', blockId, newname);
     },
 
     'change #randomize': function(e, template) { 
         var randbool = $('#randomize').is(':checked');
-        var blockId = Session.get("id");
+        var blockId = Session.get("blockId");
         Meteor.call('changeRandomize', blockId, randbool);
     }
   });

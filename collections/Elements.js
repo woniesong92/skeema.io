@@ -6,7 +6,7 @@ Meteor.methods({
       "projectId": data["projectId"],
       "frameId": data["frameId"],
 
-      // represents the html tag (eg. button, img, span)
+      // button, image, or text
       "type": data["type"], 
 
       // object of css attributes

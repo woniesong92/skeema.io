@@ -29,6 +29,11 @@ if (Meteor.isClient) {
     return Frames.findOne({_id: frameId});
   });
 
+  Template.registerHelper("element", function (event, template) {
+    var elementId = Session.get("elementId");
+    return Elements.findOne({_id: elementId});
+  });
+
   // Template.registerHelper("getAddButton", function (event, template) {
   //   return Session.get("addButton");
   // });

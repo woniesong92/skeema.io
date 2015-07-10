@@ -41,7 +41,8 @@ Router.route('/projects/:_id', {
       Meteor.subscribe("project", projectId),
       Meteor.subscribe("blocks", projectId),
       Meteor.subscribe("trials", projectId),
-      Meteor.subscribe("frames", projectId)
+      Meteor.subscribe("frames", projectId),
+      Meteor.subscribe("elements", projectId)
     ];
   },
 

@@ -1,5 +1,11 @@
 <template name="FrameWorkSpace">
 	<div class="container frame-workspace-container">
 		Frame ID: {{ frame._id }}
+
+    {{#each elements}}
+        <div id="element-{{_id}}" class="element-item">
+          <span class='.draggable'>{{content}}</span>
+        </div>
+      {{/each}}
 	</div>
 </template>
