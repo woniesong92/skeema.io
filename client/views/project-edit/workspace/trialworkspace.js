@@ -1,3 +1,45 @@
+function singleJSPWindow (frameId) {
+
+  var jsp = Template.TrialWorkSpace.jsp;
+  var templateInstance = Template.instance();
+  var numFrames = templateInstance.$('.frame-preview-item').length;
+  var frameElement = templateInstance.$("#frame-" + frameId);
+
+  jsp.draggable(frameElement);
+  
+  jsp.bind("click", function (c) {
+    jsp.detach(c);
+  });
+
+  jsp.bind("connection", function (info) {
+    info.connection.getOverlay("label").setLabel(info.connection.id);
+  });
+
+  jsp.batch(function () {
+    jsp.makeSource(frameElement, {
+      filter: ".ep",
+      anchor: "Continuous",
+      connector: [ "StateMachine", { curviness: 20 } ],
+      connectorStyle: {
+        strokeStyle: "#5c96bc",
+        lineWidth: 2,
+        outlineColor:"transparent",
+        outlineWidth: 4
+      },
+      maxConnections: 10,
+      onMaxConnections: function (info, e) {
+        alert("Maximum connections (" + info.maxConnections + ") reached");
+      }
+    });
+
+    jsp.makeTarget(frameElement, {
+      dropOptions: { hoverClass: "dragHover" },
+      anchor: "Continuous",
+      allowLoopback: true
+    });
+  });
+}
+
 
 /*
   Since all jsPlumb elements should be 
@@ -53,7 +95,7 @@ function setupJSPWindows() {
           cssClass: "aLabel"
         }]
       ],
-      Container: "trial-workspace-container"
+      Container: "frame-items-container"
     });
 
     Template.TrialWorkSpace.jsp = instance;
@@ -108,78 +150,38 @@ function setupJSPWindows() {
 }
 
 if (Meteor.isClient) {
-  Template.TrialWorkSpace.helpers({
+  var frameItemsTemplate;
+  Template.TrialWorkSpace.onRendered(function() {
+    this.autorun(function() {
+      var trialId = Session.get("trialId");
+      if (frameItemsTemplate) {
+        // FIXME: clear all paths when changing trials
+        // jsPlumb.empty($('.frame-items-container'));
+        Blaze.remove(frameItemsTemplate);
+      }
+      // FIXME: there might be a way to replace Blaze.render and Blaze.remove
+      frameItemsTemplate = Blaze.render(Template.FrameItems,
+        $('.frame-items-container')[0]);
+    });
+  });
+
+  Template.FrameItems.helpers({
     frames: function() {
       var trialId = Session.get('trialId');
-
-      // check if new frame has just been added
-      // this reactive var will make sure that every time
-      // frameAdded value in Session changes, this function runs
-      var frameId = Session.get("frameAdded");
-
-      // return all frames whose parent is this trial
       return Frames.find({trialId: trialId});
     }
   });
 
-  Template.TrialWorkSpace.onRendered(function() {
+  Template.FrameItems.onRendered(function() {
     positionElements();
+    setupJSPWindows();
 
     this.autorun(function() {
-
-      
-      setupJSPWindows();
-
-      console.log("autorun");
-
-      var trialId = Session.get("trialId");
       var frameId = Session.get("frameAdded");
-      if (!frameId) {
-        return false;
+      if (frameId) {
+        singleJSPWindow(frameId);  
       }
-
-      var jsp = Template.TrialWorkSpace.jsp;
-      var numFrames = Frames.find({trialId: trialId}).count();
-
-      var selector = "#frame-" + frameId;
-      var frameElement = $(selector);
-
-      jsp.draggable(frameElement);
-      
-      jsp.bind("click", function (c) {
-        jsp.detach(c);
-      });
-
-      jsp.bind("connection", function (info) {
-        info.connection.getOverlay("label").setLabel(info.connection.id);
-      });
-
-      jsp.batch(function () {
-        jsp.makeSource(frameElement, {
-          filter: ".ep",
-          anchor: "Continuous",
-          connector: [ "StateMachine", { curviness: 20 } ],
-          connectorStyle: {
-            strokeStyle: "#5c96bc",
-            lineWidth: 2,
-            outlineColor:"transparent",
-            outlineWidth: 4
-          },
-          maxConnections: 10,
-          onMaxConnections: function (info, e) {
-            alert("Maximum connections (" + info.maxConnections + ") reached");
-          }
-        });
-
-        // initialise all '.frame-preview-item' elements as connection targets.
-        jsp.makeTarget(frameElement, {
-          dropOptions: { hoverClass: "dragHover" },
-          anchor: "Continuous",
-          allowLoopback: true
-        });
-      });
     });
-
   });
 
   Template.TrialWorkSpace.events({
@@ -187,63 +189,5 @@ if (Meteor.isClient) {
       Session.set("currentView", "frameView");
       Session.set("frameId", this._id);
     },
-
-    // "click .add-frame-container": function (e, template) {
-    //   var jsp = Template.TrialWorkSpace.jsp;
-    //   var frameId = Session.get("frameAdded");
-    //   var numFrames = Frames.find({trialId: trialId}).count();
-
-      // Meteor.call('addFrame', {
-      //   projectId: projectId,
-      //   trialId: trialId,
-      //   name: "Frame " + numFrames
-      // }, function (err, frameId) {
-      //   if (err) {
-      //     console.log("adding Frame failed");
-      //     return false;
-      //   }
-
-      //   // There is a bug in the library. Use frameElement
-      //   // as an argument to jsp instance functions
-      //   var selector = "#frame-" + frameId;
-      //   var frameElement = $(selector);
-
-      //   jsp.draggable(frameElement);
-        
-      //   jsp.bind("click", function (c) {
-      //     jsp.detach(c);
-      //   });
-
-      //   jsp.bind("connection", function (info) {
-      //     info.connection.getOverlay("label").setLabel(info.connection.id);
-      //   });
-
-      //   jsp.batch(function () {
-      //     jsp.makeSource(frameElement, {
-      //       filter: ".ep",
-      //       anchor: "Continuous",
-      //       connector: [ "StateMachine", { curviness: 20 } ],
-      //       connectorStyle: {
-      //         strokeStyle: "#5c96bc",
-      //         lineWidth: 2,
-      //         outlineColor:"transparent",
-      //         outlineWidth: 4
-      //       },
-      //       maxConnections: 10,
-      //       onMaxConnections: function (info, e) {
-      //         alert("Maximum connections (" + info.maxConnections + ") reached");
-      //       }
-      //     });
-
-      //     // initialise all '.frame-preview-item' elements as connection targets.
-      //     jsp.makeTarget(frameElement, {
-      //       dropOptions: { hoverClass: "dragHover" },
-      //       anchor: "Continuous",
-      //       allowLoopback: true
-      //     });
-      //   });
-
-    //   });
-    // }
   });
 }
