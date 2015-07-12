@@ -31,6 +31,82 @@ function positionElements() {
   });
 }
 
+function setupJSPWindows() {
+  // jsPlumb helps users mark frames' connections
+  jsPlumb.ready(function () {
+
+    // setup some defaults for jsPlumb.
+    // var instance = jsPlumb.getInstance({
+    var instance = jsPlumb.getInstance({
+      Endpoint: ["Dot", {radius: 2}],
+      HoverPaintStyle: {strokeStyle: "#1e8151", lineWidth: 2 },
+      ConnectionOverlays: [
+        [ "Arrow", {
+          location: 1,
+          id: "arrow",
+          length: 14,
+          foldback: 0.8
+        } ],
+        [ "Label", {
+          // label: "FOO",
+          id: "label",
+          cssClass: "aLabel"
+        }]
+      ],
+      Container: "trial-workspace-container"
+    });
+
+    Template.TrialWorkSpace.jsp = instance;
+
+    var windows = jsPlumb.getSelector(".frame-preview-item");
+
+    // initialise draggable elements.
+    instance.draggable(windows);
+
+    // bind a click listener to each connection; the connection is deleted. you could of course
+    // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
+    // happening.
+    instance.bind("click", function (c) {
+      instance.detach(c);
+    });
+
+    // bind a connection listener. note that the parameter passed to this function contains more than
+    // just the new connection - see the documentation for a full list of what is included in 'info'.
+    // this listener sets the connection's internal
+    // id as the label overlay's text.
+    instance.bind("connection", function (info) {
+      info.connection.getOverlay("label").setLabel(info.connection.id);
+    });
+
+    // suspend drawing and initialise.
+    instance.batch(function () {
+      instance.makeSource(windows, {
+        filter: ".ep",
+        anchor: "Continuous",
+        connector: [ "StateMachine", { curviness: 20 } ],
+        connectorStyle: { strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4 },
+        maxConnections: 10,
+        onMaxConnections: function (info, e) {
+          alert("Maximum connections (" + info.maxConnections + ") reached");
+        }
+      });
+
+      // initialise all '.frame-preview-item' elements as connection targets.
+      instance.makeTarget(windows, {
+        dropOptions: { hoverClass: "dragHover" },
+        anchor: "Continuous",
+        allowLoopback: true
+      });
+
+      // and finally, make a couple of connections
+      // TODO: iterate over the path collection and connect the nodes accordingly
+      // instance.connect({ source: "opened", target: "phone1" });
+    });
+
+    jsPlumb.fire("jsPlumbDemoLoaded", instance);
+  });
+}
+
 if (Meteor.isClient) {
   Template.TrialWorkSpace.helpers({
     frames: function() {
@@ -49,85 +125,11 @@ if (Meteor.isClient) {
   Template.TrialWorkSpace.onRendered(function() {
     positionElements();
 
-    // jsPlumb helps users mark frames' connections
-    jsPlumb.ready(function () {
-
-      // setup some defaults for jsPlumb.
-      // var instance = jsPlumb.getInstance({
-      var instance = jsPlumb.getInstance({
-        Endpoint: ["Dot", {radius: 2}],
-        HoverPaintStyle: {strokeStyle: "#1e8151", lineWidth: 2 },
-        ConnectionOverlays: [
-          [ "Arrow", {
-            location: 1,
-            id: "arrow",
-            length: 14,
-            foldback: 0.8
-          } ],
-          [ "Label", {
-            // label: "FOO",
-            id: "label",
-            cssClass: "aLabel"
-          }]
-        ],
-        Container: "trial-workspace-container"
-      });
-
-      Template.TrialWorkSpace.jsp = instance;
-
-      var windows = jsPlumb.getSelector(".frame-preview-item");
-
-      // initialise draggable elements.
-      instance.draggable(windows);
-
-      // bind a click listener to each connection; the connection is deleted. you could of course
-      // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
-      // happening.
-      instance.bind("click", function (c) {
-        instance.detach(c);
-      });
-
-      // bind a connection listener. note that the parameter passed to this function contains more than
-      // just the new connection - see the documentation for a full list of what is included in 'info'.
-      // this listener sets the connection's internal
-      // id as the label overlay's text.
-      instance.bind("connection", function (info) {
-        info.connection.getOverlay("label").setLabel(info.connection.id);
-      });
-
-      // suspend drawing and initialise.
-      instance.batch(function () {
-        instance.makeSource(windows, {
-          filter: ".ep",
-          anchor: "Continuous",
-          connector: [ "StateMachine", { curviness: 20 } ],
-          connectorStyle: { strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4 },
-          maxConnections: 10,
-          onMaxConnections: function (info, e) {
-            alert("Maximum connections (" + info.maxConnections + ") reached");
-          }
-        });
-
-        // initialise all '.frame-preview-item' elements as connection targets.
-        instance.makeTarget(windows, {
-          dropOptions: { hoverClass: "dragHover" },
-          anchor: "Continuous",
-          allowLoopback: true
-        });
-
-        // and finally, make a couple of connections
-        // TODO: iterate over the path collection and connect the nodes accordingly
-        // instance.connect({ source: "opened", target: "phone1" });
-      });
-
-      jsPlumb.fire("jsPlumbDemoLoaded", instance);
-    });
-
-    /*
-      autorun: every time a new frame is added, this is run and
-      binds the new frame to a draggable state
-    */
     this.autorun(function() {
+
+      
+      setupJSPWindows();
+
       console.log("autorun");
 
       var trialId = Session.get("trialId");
