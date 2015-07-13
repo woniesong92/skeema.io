@@ -155,10 +155,9 @@ if (Meteor.isClient) {
     this.autorun(function() {
       var trialId = Session.get("trialId");
       if (frameItemsTemplate) {
-        // FIXME: clear all paths when changing trials
-        // jsPlumb.empty($('.frame-items-container'));
         Blaze.remove(frameItemsTemplate);
       }
+
       // FIXME: there might be a way to replace Blaze.render and Blaze.remove
       frameItemsTemplate = Blaze.render(Template.FrameItems,
         $('.frame-items-container')[0]);
@@ -173,6 +172,7 @@ if (Meteor.isClient) {
   });
 
   Template.FrameItems.onRendered(function() {
+
     positionElements();
     setupJSPWindows();
 
@@ -182,6 +182,13 @@ if (Meteor.isClient) {
         singleJSPWindow(frameId);  
       }
     });
+  });
+
+  Template.FrameItems.onDestroyed(function() {
+    var instance = Template.TrialWorkSpace.jsp;
+    if (instance) {
+      instance.detachEveryConnection();
+    }
   });
 
   Template.TrialWorkSpace.events({
