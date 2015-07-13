@@ -31,6 +31,15 @@ if (Meteor.isClient) {
   Template.FrameWorkSpace.rendered = function () {
 
     $( ".draggable" ).draggable({ containment: ".frame-workspace-container", scroll: false });
+
+    this.autorun(function() {
+      var elementId = Session.get("elementAdded");
+      if (elementId) {
+        console.log(elementId);
+        //FIXME: IS THIS THE BEST WAY? Kind of repetitive..
+        $( ".draggable" ).draggable({ containment: ".frame-workspace-container", scroll: false });
+      }
+    });
     // var projectId = this._id;
 
     // if (Session.get("addText")) {

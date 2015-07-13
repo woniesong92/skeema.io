@@ -19,7 +19,6 @@ if (Meteor.isClient) {
     'click .add-text-btn': function (e, template) {
       var projectId = this._id;
       var cssObj = {'color': '#000', 'font-size': '18px'};
-      debugger
       // Session.set("addText", true);
        Meteor.call("addElement", {
         projectId: projectId,
