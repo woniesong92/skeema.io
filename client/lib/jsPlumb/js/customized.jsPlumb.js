@@ -1,0 +1,4 @@
+/*
+  this library contains extra functionalities
+  added to jsPlumb to suit our needs
+*/

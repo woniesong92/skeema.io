@@ -41,6 +41,11 @@ function makeFramesConnectable() {
     // id as the label overlay's text.
     instance.bind("connection", function (info) {
       info.connection.getOverlay("label").setLabel(info.connection.id);
+
+      // FIXME: hacky hacky~ instead of Session, replace it with ReactiveVar
+      // TrialToolbox will get this change and open up the modal
+      // when a new connection is establisehd
+      Session.set("openModalForPath", info.connection.id);
     });
 
     // suspend drawing and initialise.
@@ -78,7 +83,6 @@ function makeFramesConnectable() {
   Same as makeFramesConnectable, but only for a single
   frame
 */
-
 function makeNewFrameConnectable (frameId) {
   var jsp = Template.TrialWorkSpace.jsp;
   var templateInstance = Template.instance();
@@ -86,15 +90,6 @@ function makeNewFrameConnectable (frameId) {
   var frameElement = templateInstance.$("#frame-" + frameId);
 
   jsp.draggable(frameElement);
-
-  // these were already set
-  // jsp.bind("click", function (c) {
-  //   jsp.detach(c);
-  // });
-
-  // jsp.bind("connection", function (info) {
-  //   info.connection.getOverlay("label").setLabel(info.connection.id);
-  // });
 
   jsp.batch(function () {
     jsp.makeSource(frameElement, {
@@ -202,5 +197,6 @@ if (Meteor.isClient) {
     // FIXME: using Session for this kind of stuff is hacky.
     // Would using ReactiveVar solve this problem?
     Session.set("frameAdded", null);
+    Session.set("openModalForPath", null);
   });
 }
