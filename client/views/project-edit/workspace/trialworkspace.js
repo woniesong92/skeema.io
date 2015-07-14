@@ -151,14 +151,23 @@ if (Meteor.isClient) {
     this.autorun(function() {
       var trialId = Session.get("trialId");
       if (frameItemsTemplate) {
+
+        // FIXME: there might be a way to replace Blaze.render and Blaze.remove
+        // Using Meteor.defer() seems simpler but its performance is worse
+        // -- for now, removing/inserting template manually to be able to use
+        // onRenderd and onDestroyed callbacks
         Blaze.remove(frameItemsTemplate);
       }
-
-      // FIXME: there might be a way to replace Blaze.render and Blaze.remove
-      // Using Meteor.defer() seems simpler but its performance is worse
       frameItemsTemplate = Blaze.render(Template.FrameItems,
         $('.frame-items-container')[0]);
     });
+  });
+
+  Template.TrialWorkSpace.events({
+    "click .frame-preview-item": function (e, template) {
+      Session.set("currentView", "frameView");
+      Session.set("frameId", this._id);
+    },
   });
 
   Template.FrameItems.helpers({
@@ -178,6 +187,7 @@ if (Meteor.isClient) {
         makeNewFrameConnectable(frameId);  
       }
     });
+
   });
 
   Template.FrameItems.onDestroyed(function() {
@@ -185,12 +195,12 @@ if (Meteor.isClient) {
     if (instance) {
       instance.detachEveryConnection();
     }
-  });
 
-  Template.TrialWorkSpace.events({
-    "click .frame-preview-item": function (e, template) {
-      Session.set("currentView", "frameView");
-      Session.set("frameId", this._id);
-    },
+    // Remove frameAdded Session, to prevent autorun inside
+    // FrameItems.onRendered from running when the template
+    // is freshly rendered.
+    // FIXME: using Session for this kind of stuff is hacky.
+    // Would using ReactiveVar solve this problem?
+    Session.set("frameAdded", null);
   });
 }
