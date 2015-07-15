@@ -30,28 +30,36 @@
 <!-- TODO: MAKE ANOTHER SECTION, MOVE THIS ONE UP -->
 <template name="ElementSettings">
 
-  <div class="elt-settings-row grey darken-3 white-text">
-    <div class="row">
-        <div class="col s12">
+  <div class="elt-settings-row grey darken-3 white-text container">
 
-          {{#if selectedIsText}}
+      {{#if selectedIsText}}
+        <div class="row">
+          <div class="col s12">
             <p class="frame-elements-title">Text Element</p>
             <label for="element-content">Content</label>
             <input value="{{ element.content }}" id="element-content" type="text">
-          {{/if}}
+         
+            <div id="cpb" class="demoPanel" style="width:170px">
+              Event binding:<br/>
+              change.color and mouseover.color<br/><br/>
+              <input id="cp1"/><br/> 
+            </div>
+          </div>
+        </div>
 
-          {{#if selectedIsButton}}
+      {{/if}}
+
+
+      {{#if selectedIsButton}}
+        <div class="row">
+          <div class="col s12">
             <p class="frame-elements-title">Button Element</p>
             <label for="element-content">Content</label>
             <input value="{{ element.content }}" id="element-content" type="text">
-          {{/if}}
-
+          </div>
         </div>
-      </div>
-    <div class="container">
-       
+      {{/if}}
 
-    </div>
   </div>
 
 </template>
