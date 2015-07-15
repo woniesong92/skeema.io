@@ -1,0 +1,59 @@
+
+// jsPlumb
+
+.aLabel {
+  -webkit-transition: background-color 0.25s ease-in;
+  -moz-transition: background-color 0.25s ease-in;
+  transition: background-color 0.25s ease-in;
+}
+
+.aLabel._jsPlumb_hover,
+._jsPlumb_source_hover,
+._jsPlumb_target_hover {
+  // background-color: #1e8151;
+  // color: white;
+}
+
+.aLabel {
+  background-color: white;
+  opacity: 0.8;
+  padding: 0.3em;
+  border-radius: 0.5em;
+  border: 1px solid #346789;
+  cursor: pointer;
+}
+
+.ep {
+  position: absolute;
+  bottom: 37%;
+  right: 5px;
+  width: 1em;
+  height: 1em;
+  background-color: orange;
+  cursor: pointer;
+  box-shadow: 0 0 2px black;
+  -webkit-transition: -webkit-box-shadow 0.25s ease-in;
+  -moz-transition: -moz-box-shadow 0.25s ease-in;
+  transition: box-shadow 0.25s ease-in;
+}
+
+.ep:hover {
+  box-shadow: 0px 0px 6px black;
+}
+
+.statemachine-demo ._jsPlumb_endpoint {
+  z-index: 3;
+}
+
+.dragHover {
+  /* FIXME: this style doesn't work when jsPlumb styles
+  are moved to this file from workspace.less.
+  Must be some kind of caching problem?
+  Come back here if this problem continues */
+  border: 2px solid orange;
+}
+
+path,
+._jsPlumb_endpoint {
+  cursor: pointer;
+}
