@@ -179,7 +179,7 @@ if (Meteor.isClient) {
   });
 
   Template.TrialWorkSpace.events({
-    "click .frame-preview-item": function (e, template) {
+    "click .frame-edit-btn": function (e, template) {
       Session.set("currentView", "frameView");
       Session.set("frameId", this._id);
     },
