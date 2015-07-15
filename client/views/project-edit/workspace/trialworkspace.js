@@ -31,8 +31,9 @@ function makeFramesConnectable() {
     // bind a click listener to each connection; the connection is deleted. you could of course
     // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
     // happening.
-    instance.bind("click", function (c) {
-      instance.detach(c);
+    instance.bind("click", function (con) {
+      instance.detach(con);
+      Meteor.call("deletePath", con.id);
     });
 
     // bind a connection listener. note that the parameter passed to this function contains more than
@@ -40,21 +41,26 @@ function makeFramesConnectable() {
     // this listener sets the connection's internal
     // id as the label overlay's text.
     instance.bind("connection", function (info) {
-      info.connection.getOverlay("label").setLabel(info.connection.id);
-
       // FIXME: hacky hacky~ instead of Session, replace it with ReactiveVar
       // TrialToolbox will get this change and open up the modal
       // when a new connection is establisehd
-
       var pathInfo = {
-        frameId: Session.get("frameId"),
-        sourceId: info.sourceId,
-        targetId: info.targetId,
-        eventType: null
+        projectId: Session.get("projectId"),
+        trialId: Session.get("trialId"),
+        sourceId: info.sourceId.replace("frame-", ""),
+        targetId: info.targetId.replace("frame-", ""),
+        eventType: null,
+        eventParam: null
       }
 
-      Meteor.call("addPath", pathInfo, function (err, pathId) {
+      Meteor.call("addPath", pathInfo, function (err, pathInfo) {
+        var pathId = pathInfo.pathId;
+        var numPaths = pathInfo.numPaths;
         Session.set("pathId", pathId);
+        info.connection.id = pathId;
+
+        // FIXME: set label to a more appropriate one
+        info.connection.getOverlay("label").setLabel("path " + numPaths);
       });
     });
 
@@ -192,7 +198,6 @@ if (Meteor.isClient) {
         makeNewFrameConnectable(frameId);  
       }
     });
-
   });
 
   Template.FrameItems.onDestroyed(function() {
