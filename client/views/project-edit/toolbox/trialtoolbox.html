@@ -51,18 +51,33 @@
     <div class="container">
       <p class="path-title">Paths</p>
 
-      <!-- FIXME: use Paths collection-->
-      {{#each paths}}
-        {{> path}}
-      {{/each}}
-
       <!-- TODO: move add frame btn to wherever appropriate -->
       <div class="add-frame-container">
         <button class="waves-effect waves-light btn add-frame">
           Add Frame
         </button>
       </div>
+
+      {{#each paths}}
+        {{> PathItem}}
+      {{/each}}
     </div>
   </div>
 
+</template>
+
+<template name="PathItem">
+  <div class="path-item">
+    <table class="path-item-table">
+      <tr>
+        <td>{{frameName sourceId}}</td>
+        <td>{{frameName targetId}}</td>
+      </tr>
+      <tr>
+        <td>{{eventType}}</td>
+        <td>{{eventParam}}</td>
+      </tr>
+    </table>
+    <i class="fa fa-times path-item-delete"></i>
+  </div>
 </template>

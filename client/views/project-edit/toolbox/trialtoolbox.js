@@ -1,14 +1,7 @@
 if (Meteor.isClient) {
-
-  Template.TrialToolBox.helpers({
-    // isMine: function(owner) {
-    //   return owner == Meteor.userId();
-    // }
-  });
-
   Template.TrialToolBox.onRendered(function() {
     this.autorun(function() {
-      var pathId = Session.get("openModalForPath");
+      var pathId = Session.get("pathId");
       if (pathId) {
         $('#modal').openModal();
       }
@@ -60,7 +53,35 @@ if (Meteor.isClient) {
         }
         Session.set("frameAdded", frameId);
       });
+
+      $('#modal').closeModal();
     }
   });
+
+  Template.TrialPaths.helpers({
+    paths: function() {
+      var trialId = Session.get("trialId");
+      return Paths.find({trialId: trialId});
+    }
+  });
+
+  Template.PathItem.helpers({
+    frameName: function (frameId) {
+
+      // FIXME: this is called twice every time a path
+      // is created, because path is updated twice.
+      // maybe it's not a good idea to create a path
+      // without eventType and Param. I should defer
+      // creating a path until the user has entered
+      // the event type and param.
+      return Frames.findOne(frameId).name;
+    }
+  })
+
+  Template.PathItem.events({
+    "click .path-item-delete": function (e, template) {
+      Meteor.call("deletePath", this._id);
+    }
+  })
 }
 

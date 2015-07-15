@@ -21,6 +21,10 @@ if (Meteor.isServer) {
     return Frames.find({projectId: projectId});
   });
 
+  Meteor.publish("paths", function (projectId) {
+    return Paths.find({projectId: projectId});
+  });
+
   Meteor.publish("elements", function (projectId) {
     return Elements.find({projectId: projectId});
   });
