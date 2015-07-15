@@ -42,7 +42,6 @@ if (Meteor.isClient) {
     },
     'change #duration': function (e, template) {
       var duration = $.trim($('#duration').val());
-      debugger
       if (duration.length > 0 && isPositiveInteger(duration)) {
         $('#create-path-btn').removeClass('disabled');
       } else {

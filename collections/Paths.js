@@ -5,19 +5,30 @@ Meteor.methods({
   addPath: function (data, callback) {
     var path = {
 
+      "frameId": data["frameId"],
+
       // id of the origin trial
-      "fromId": data["fromId"],
+      "sourceId": data["sourceId"],
 
       // id of the destination trial
-      "toId": data["toId"],
+      "targetId": data["targetId"],
 
       // time, keypress, click, etc.
-      "event": data["event"],
+      "eventType": data["eventType"],
       "createdAt": Date.now()
     };
 
-    Paths.insert(path);
+    return Paths.insert(path);
   },
+
+  updatePathEvent: function (pathId, eventType, eventParam) {
+    Paths.update(pathId, {
+      $set: {
+        'eventType': eventType,
+        'eventParam': eventParam
+      }
+    });
+  }
 
   deletePath: function (pathId) {
     Paths.remove(pathId);

@@ -8,7 +8,7 @@ if (Meteor.isClient) {
 
   Template.TrialToolBox.onRendered(function() {
     this.autorun(function() {
-      var pathId = Session.get("openModalForPath");
+      var pathId = Session.get("pathId");
       if (pathId) {
         $('#modal').openModal();
       }

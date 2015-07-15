@@ -45,7 +45,17 @@ function makeFramesConnectable() {
       // FIXME: hacky hacky~ instead of Session, replace it with ReactiveVar
       // TrialToolbox will get this change and open up the modal
       // when a new connection is establisehd
-      Session.set("openModalForPath", info.connection.id);
+
+      var pathInfo = {
+        frameId: Session.get("frameId"),
+        sourceId: info.sourceId,
+        targetId: info.targetId,
+        eventType: null
+      }
+
+      Meteor.call("addPath", pathInfo, function (err, pathId) {
+        Session.set("pathId", pathId);
+      });
     });
 
     // suspend drawing and initialise.
@@ -197,6 +207,6 @@ if (Meteor.isClient) {
     // FIXME: using Session for this kind of stuff is hacky.
     // Would using ReactiveVar solve this problem?
     Session.set("frameAdded", null);
-    Session.set("openModalForPath", null);
+    Session.set("pathId", null);
   });
 }
