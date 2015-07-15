@@ -65,6 +65,8 @@ if (Meteor.isClient) {
           connector: commonConnectorStyle
         });
 
+        // connection object is tied to Mongo's object by sharing the same id
+        con.id = path._id;
         con.getOverlay("label").setLabel(path.name);
       });
 
