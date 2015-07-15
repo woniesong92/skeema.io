@@ -14,6 +14,7 @@ if (Meteor.isClient) {
   }
 
   Template.FrameToolBox.events({
+
     'click .add-text-btn': function (e, template) {
       var projectId = this._id;
       var cssObj = {"color": "#000", "font-size": "18px"};
@@ -33,9 +34,11 @@ if (Meteor.isClient) {
         Session.set("elementAdded", elementId);
       });
     },
+
     'click .add-img-btn': function (e, template) {
       
     },
+
     'click .add-btn-btn': function (e, template) {
       var projectId = this._id;
       var cssObj = {"color": "#fff", "font-size": "18px"};
@@ -55,5 +58,12 @@ if (Meteor.isClient) {
         Session.set("elementAdded", elementId);
       });
     },
+
+    'change #element-content': function(e, template) { 
+      var newcontent = $('#element-content').val().trim();
+      var elementId = Session.get("elementId");
+      Meteor.call('editContent', elementId, newcontent);
+    },
+
   });
 }

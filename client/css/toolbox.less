@@ -1,5 +1,9 @@
 @import "global.import.less";
 
+.toolbox-container h3 {
+  font-size: 20px;
+}
+
 .toolbox-container {
   float: right;
   padding: 0;
@@ -10,11 +14,15 @@
 }
 
 .toolbox-container .container {
-  padding: 20px 5px 10px 0px;
+  padding: 20px 10px 10px 0px;
 }
 
-.trial-paths-row .container, .frame-elts-row .container {
-  padding: 10px 5px 20px 0px
+.trial-paths-row .container, .elt-settings-row .container {
+  padding: 10px 5px 20px 0px;
+}
+
+.elt-settings-row {
+  padding: 10px 15px 10px 5px;
 }
 
 /* trial tool box */
@@ -22,7 +30,7 @@
   margin-left: 10px;
 }
 
-.trial-paths-row, .frame-elts-row {
+.trial-paths-row, .elt-settings-row {
   height: 50%;
   position: absolute;
   bottom: 0;
@@ -42,5 +50,4 @@
   padding-right: 10px;
   margin: 5px;
 }
-
 

@@ -34,6 +34,21 @@ if (Meteor.isClient) {
     return Elements.findOne({_id: elementId});
   });
 
+  Template.registerHelper("selectedIsText", function (event, template) {
+    var elementId = Session.get("elementId");
+    return Elements.findOne({_id: elementId}).type == "text";
+  });
+
+  Template.registerHelper("selectedIsButton", function (event, template) {
+    var elementId = Session.get("elementId");
+    return Elements.findOne({_id: elementId}).type == "button";
+  });
+
+  Template.registerHelper("selectedIsImage", function (event, template) {
+    var elementId = Session.get("elementId");
+    return Elements.findOne({_id: elementId}).type == "image";
+  });
+
   // Template.registerHelper("getAddButton", function (event, template) {
   //   return Session.get("addButton");
   // });
