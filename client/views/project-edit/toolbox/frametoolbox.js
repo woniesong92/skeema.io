@@ -13,12 +13,10 @@ if (Meteor.isClient) {
   }
 
   Template.FrameToolBox.events({
-  });
-
-  Template.FrameElements.events({
     'click .add-text-btn': function (e, template) {
       var projectId = this._id;
-      var cssObj = {'color': '#000', 'font-size': '18px'};
+      var cssObj = {"color": "#000", "font-size": "18px"};
+      var cssStr = JSON.stringify(cssObj);
       // Session.set("addText", true);
        Meteor.call("addElement", {
         projectId: projectId,
@@ -28,7 +26,7 @@ if (Meteor.isClient) {
         //FIXME: THIS IS ALWAYS NULL...
         // css: JSON.stringify(cssObj),
 
-        css: "color:#000;font-size:18px;",
+        css: cssStr,
         content: "Text"
       }, function (err, elementId) {
         if (err) {

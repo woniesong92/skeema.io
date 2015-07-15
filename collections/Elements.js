@@ -10,7 +10,7 @@ Meteor.methods({
       "type": data["type"], 
 
       // object of css attributes
-      "css": data["attributes"],
+      "css": data["css"],
 
       // html content (text and button)
       "content": data["content"],
@@ -19,5 +19,18 @@ Meteor.methods({
 
     // new frameId will be returned to the caller
     return Elements.insert(element);
+  },
+
+  editContent: function (elementId, newContent){
+    Elements.update(elementId, {
+      $set: {'content': newContent}
+    });
+  },
+
+  editCss: function (elementId, newCssObj){
+    var newCssStr = JSON.stringify(newCssObj);
+    Elements.update(elementId, {
+      $set: {'css': newCssStr}
+    })
   }
 });

@@ -29,20 +29,47 @@ if (Meteor.isClient) {
 
 
   Template.FrameWorkSpace.rendered = function () {
+
+    Session.set("selectedElementId", null);
+
     var sPositions = localStorage.positions || "{}",
     positions = JSON.parse(sPositions);
     $.each(positions, function (id, pos) {
-        $("#" + id).css(pos)
+         $("#" + id).css(pos);
     });
 
+    var elts = Elements.find({ "frameId" : Session.get("frameId") });
+    elts.forEach(function (elt) {
+      console.log(elt.css);
+      $("#" + elt._id).css(elt.css);
+    }); 
+
+
+    // FIXME: does not save the new position in the css..
     $( ".draggable" ).draggable({
           containment: ".frame-workspace-container",
           scroll: false,
           stop: function (event, ui) {
-            positions[this.id] = ui.position
-            localStorage.positions = JSON.stringify(positions)
+            console.log(this.id);
+            positions[this.id] = ui.position;
+            debugger
+            localStorage.positions = JSON.stringify(positions);
+             var elementCss = $("#" + this.id).css();
+
+             // FIXME: THE FOLLOWING DID NOT WORK (DID NOT SAVE THE POSITION)
+             // elementCss.top = ui.position.top;
+             // elementCss.left = ui.position.left;
+            Meteor.call("editCss", this.id, elementCss , function (err, elementId) {
+              
+              if (err) {
+                console.log("editing css failed", err);
+                return false;
+              }
+              console.log("success editing " + this.id);
+            });
           }
         });
+
 
     this.autorun(function() {
       var elementId = Session.get("elementAdded");
@@ -53,8 +80,20 @@ if (Meteor.isClient) {
           containment: ".frame-workspace-container",
           scroll: false,
           stop: function (event, ui) {
-            positions[this.id] = ui.position
-            localStorage.positions = JSON.stringify(positions)
+            positions[this.id] = ui.position;
+            debugger
+            localStorage.positions = JSON.stringify(positions);
+            var elementCss = JSON.parse($("#" + this.id).css());
+           //  elementCss.top = ui.position.top;
+           // elementCss.left = ui.position.left;
+            Meteor.call("editCss", this.id, elementCss , function (err, elementId) {
+              
+              if (err) {
+                console.log("editing css failed", err);
+                return false;
+              }
+              console.log("success editing " + elementId);
+            });
           }
         });
       }
@@ -84,8 +123,8 @@ if (Meteor.isClient) {
   }
 
   Template.FrameWorkSpace.events({
-  //   "click .project": function (e, template) {
-  //     
-  //   },
+    "click .element-item": function (e, template) {
+      Session.set("selectedElementId", this._id);
+    },
   });
 }
