@@ -30,7 +30,7 @@ if (Meteor.isClient) {
 
   Template.FrameWorkSpace.rendered = function () {
 
-    Session.set("selectedElementId", null);
+    Session.set("elementId", null);
 
     var sPositions = localStorage.positions || "{}",
     positions = JSON.parse(sPositions);
@@ -123,8 +123,9 @@ if (Meteor.isClient) {
   }
 
   Template.FrameWorkSpace.events({
+
     "click .element-item": function (e, template) {
-      Session.set("selectedElementId", this._id);
+      Session.set("elementId", this._id);
     },
   });
 }
