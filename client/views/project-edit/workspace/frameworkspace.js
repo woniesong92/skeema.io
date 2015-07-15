@@ -29,15 +29,34 @@ if (Meteor.isClient) {
 
 
   Template.FrameWorkSpace.rendered = function () {
+    var sPositions = localStorage.positions || "{}",
+    positions = JSON.parse(sPositions);
+    $.each(positions, function (id, pos) {
+        $("#" + id).css(pos)
+    });
 
-    $( ".draggable" ).draggable({ containment: ".frame-workspace-container", scroll: false });
+    $( ".draggable" ).draggable({
+          containment: ".frame-workspace-container",
+          scroll: false,
+          stop: function (event, ui) {
+            positions[this.id] = ui.position
+            localStorage.positions = JSON.stringify(positions)
+          }
+        });
 
     this.autorun(function() {
       var elementId = Session.get("elementAdded");
       if (elementId) {
         console.log(elementId);
         //FIXME: IS THIS THE BEST WAY? Kind of repetitive..
-        $( ".draggable" ).draggable({ containment: ".frame-workspace-container", scroll: false });
+        $( ".draggable" ).draggable({
+          containment: ".frame-workspace-container",
+          scroll: false,
+          stop: function (event, ui) {
+            positions[this.id] = ui.position
+            localStorage.positions = JSON.stringify(positions)
+          }
+        });
       }
     });
     // var projectId = this._id;
