@@ -10,6 +10,7 @@ if (Meteor.isClient) {
     // Session.set("addText", false);
     // Session.set("addImage", false);
     // Session.set("addButton", false);
+    Session.set("elementAdded", null);
   }
 
   Template.FrameToolBox.events({
@@ -22,10 +23,6 @@ if (Meteor.isClient) {
         projectId: projectId,
         frameId: Session.get("frameId"),
         type: "text",
-
-        //FIXME: THIS IS ALWAYS NULL...
-        // css: JSON.stringify(cssObj),
-
         css: cssStr,
         content: "Text"
       }, function (err, elementId) {
@@ -37,10 +34,26 @@ if (Meteor.isClient) {
       });
     },
     'click .add-img-btn': function (e, template) {
-      // Session.set("addImage", true);
+      
     },
     'click .add-btn-btn': function (e, template) {
-      // Session.set("addButton", true);
+      var projectId = this._id;
+      var cssObj = {"color": "#fff", "font-size": "18px"};
+      var cssStr = JSON.stringify(cssObj);
+      // Session.set("addText", true);
+       Meteor.call("addElement", {
+        projectId: projectId,
+        frameId: Session.get("frameId"),
+        type: "button",
+        css: cssStr,
+        content: "Button"
+      }, function (err, elementId) {
+        if (err) {
+          console.log("Adding element failed", err);
+          return false;
+        }
+        Session.set("elementAdded", elementId);
+      });
     },
   });
 }
