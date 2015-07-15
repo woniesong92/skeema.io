@@ -6,6 +6,7 @@ Meteor.methods({
     var path = {
       "projectId": data["projectId"],
       "trialId": data["trialId"],
+      "name": data["name"],
 
       // id of the origin trial
       "sourceId": data["sourceId"],
@@ -19,10 +20,7 @@ Meteor.methods({
       "createdAt": Date.now()
     };
 
-    return {
-      pathId: Paths.insert(path),
-      numPaths: Paths.find({trialId: data["trialId"]}).count()
-    }
+    return Paths.insert(path);
   },
 
   updatePathEvent: function (data) {

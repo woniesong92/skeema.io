@@ -56,7 +56,7 @@ if (Meteor.isClient) {
       var trialId = Session.get('trialId');
       var paths = Paths.find({trialId: trialId}).fetch();
       _.each(paths, function (path) {
-        instance.connect({
+        var con = instance.connect({
           source: path.sourceId,
           target: path.targetId
         }, {
@@ -64,6 +64,8 @@ if (Meteor.isClient) {
           anchor: commonAnchor,
           connector: commonConnectorStyle
         });
+
+        con.getOverlay("label").setLabel(path.name);
       });
 
       // bind a click listener to each connection; the connection is deleted. you could of course
@@ -82,24 +84,23 @@ if (Meteor.isClient) {
         // FIXME: hacky hacky~ instead of Session, replace it with ReactiveVar
         // TrialToolbox will get this change and open up the modal
         // when a new connection is establisehd
-
-        var pathInfo = {
+        var trialId = Session.get("trialId");
+        var numPaths = Paths.find({trialId: trialId}).count();
+        var pathName = "Path " + numPaths;
+        var path = {
           projectId: Session.get("projectId"),
-          trialId: Session.get("trialId"),
+          trialId: trialId,
+          name: pathName,
           sourceId: info.sourceId,
           targetId: info.targetId,
           eventType: null,
           eventParam: null
         }
 
-        Meteor.call("addPath", pathInfo, function (err, pathInfo) {
-          var pathId = pathInfo.pathId;
-          var numPaths = pathInfo.numPaths;
+        Meteor.call("addPath", path, function (err, pathId) {
           Session.set("pathId", pathId);
           info.connection.id = pathId;
-
-          // FIXME: set label to a more appropriate one
-          info.connection.getOverlay("label").setLabel("path " + numPaths);
+          info.connection.getOverlay("label").setLabel(pathName);
         });
       });
 
