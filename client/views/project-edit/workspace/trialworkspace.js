@@ -65,6 +65,8 @@ if (Meteor.isClient) {
           connector: commonConnectorStyle
         });
 
+        // connection object is tied to Mongo's object by sharing the same id
+        con.id = path._id;
         con.getOverlay("label").setLabel(path.name);
       });
 
@@ -177,7 +179,7 @@ if (Meteor.isClient) {
   });
 
   Template.TrialWorkSpace.events({
-    "click .frame-preview-item": function (e, template) {
+    "click .frame-edit-btn": function (e, template) {
       Session.set("currentView", "frameView");
       Session.set("frameId", this._id);
     },
