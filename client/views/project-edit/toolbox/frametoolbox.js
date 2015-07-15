@@ -11,6 +11,18 @@ if (Meteor.isClient) {
     // Session.set("addImage", false);
     // Session.set("addButton", false);
     Session.set("elementAdded", null);
+
+    // this.autorun(function() {
+    //   debugger
+    //   var selectedElementId = Session.get("elementId");
+        $('#cpBoth').colorpicker();
+    // });
+
+
+
+
+
+
   }
 
   Template.FrameToolBox.events({
