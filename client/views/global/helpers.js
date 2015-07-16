@@ -75,7 +75,6 @@ if (Meteor.isClient) {
   });
 
   // handlebar each function with index
-
   Template.registerHelper('withIndex', function (context, options) {
     if (context) {
       return context.map(function (item, idx) {
@@ -83,5 +82,5 @@ if (Meteor.isClient) {
         return item;
       });
     }
-  });  
+  });
 }

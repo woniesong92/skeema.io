@@ -206,11 +206,6 @@ if (Meteor.isClient) {
       jsPlumb.fire("jsPlumbDemoLoaded", instance);
     });
 
-
-
-
-
-
     var jsp = Template.TrialWorkSpace.jsp;
     var templateInstance = Template.instance();
     var numFrames = templateInstance.$(".frame-preview-item").length;
@@ -237,22 +232,22 @@ if (Meteor.isClient) {
     });
   });
 
-  var frameItemsTemplate;
-  Template.TrialWorkSpace.onRendered(function() {
-    this.autorun(function() {
-      var trialId = Session.get("trialId");
-      if (frameItemsTemplate) {
+  // var frameItemsTemplate;
+  // Template.TrialWorkSpace.onRendered(function() {
+  //   this.autorun(function() {
+  //     var trialId = Session.get("trialId");
+  //     if (frameItemsTemplate) {
 
-        // FIXME: there might be a way to replace Blaze.render and Blaze.remove
-        // Using Meteor.defer() seems simpler but its performance is worse
-        // -- for now, removing/inserting template manually to be able to use
-        // onRenderd and onDestroyed callbacks
-        Blaze.remove(frameItemsTemplate);
-      }
-      frameItemsTemplate = Blaze.render(Template.FrameItems,
-        $('.frame-items-container')[0]);
-    });
-  });
+  //       // FIXME: there might be a way to replace Blaze.render and Blaze.remove
+  //       // Using Meteor.defer() seems simpler but its performance is worse
+  //       // -- for now, removing/inserting template manually to be able to use
+  //       // onRenderd and onDestroyed callbacks
+  //       Blaze.remove(frameItemsTemplate);
+  //     }
+  //     frameItemsTemplate = Blaze.render(Template.FrameItems,
+  //       $('.frame-items-container')[0]);
+  //   });
+  // });
 
   Template.TrialWorkSpace.events({
     "click .frame-edit-btn": function (e, template) {
@@ -265,92 +260,91 @@ if (Meteor.isClient) {
     frames: function() {
       var trialId = Session.get('trialId');
       return Frames.find({trialId: trialId});
-    }
+    },
+
+    // numFrames: function() {
+    //   return Frames.find({trialId: trialId}).count();
+    // }
   });
 
-  Template.FrameItems.onRendered(function() {
-    console.log("FrameItems rendered");
+  // Template.FrameItems.onRendered(function() {
+  //   jsPlumb.ready(function () {
+  //     var instance = Template.TrialWorkSpace.jsp;
+  //     var frames = $('.frame-preview-item');
+  //     instance.draggable(frames);
 
-    // FIXME: I need an event when all the child templates have been rendered
-    // so I can set jsPlumb settings.
-    // positions are better handled by single frame elements
+  //     // // connect the frames that have paths between them
+  //     var trialId = Session.get('trialId');
+  //     // var paths = Paths.find({trialId: trialId}).fetch();
+  //     // _.each(paths, function (path) {
+  //     //   var con = instance.connect({
+  //     //     source: path.sourceId,
+  //     //     target: path.targetId
+  //     //   }, {
+  //     //     paintStyle: commonStrokeStyle,
+  //     //     anchor: commonAnchor,
+  //     //     connector: commonConnectorStyle
+  //     //   });
 
-    debugger
+  //     //   // connection object is tied to Mongo's object by sharing the same id
+  //     //   con.id = path._id;
+  //     //   con.getOverlay("label").setLabel(path.name);
+  //     // });
 
-    jsPlumb.ready(function () {
-      var instance = Template.TrialWorkSpace.jsp;
-      var frames = $('.frame-preview-item');
-      instance.draggable(frames);
+  //     // bind a click listener to each connection; the connection is deleted. you could of course
+  //     // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
+  //     // happening.
+  //     instance.bind("click", function (con) {
+  //       instance.detach(con);
+  //       Meteor.call("deletePath", con.id);
+  //     });
 
-      // // connect the frames that have paths between them
-      var trialId = Session.get('trialId');
-      // var paths = Paths.find({trialId: trialId}).fetch();
-      // _.each(paths, function (path) {
-      //   var con = instance.connect({
-      //     source: path.sourceId,
-      //     target: path.targetId
-      //   }, {
-      //     paintStyle: commonStrokeStyle,
-      //     anchor: commonAnchor,
-      //     connector: commonConnectorStyle
-      //   });
+  //     // bind a connection listener. note that the parameter passed to this function contains more than
+  //     // just the new connection - see the documentation for a full list of what is included in 'info'.
+  //     // this listener sets the connection's internal
+  //     // id as the label overlay's text.
+  //     instance.bind("connection", function (info) {
+  //       // FIXME: hacky hacky~ instead of Session, replace it with ReactiveVar
+  //       // TrialToolbox will get this change and open up the modal
+  //       // when a new connection is establisehd
+  //       var trialId = Session.get("trialId");
+  //       var numPaths = Paths.find({trialId: trialId}).count();
+  //       var pathName = "Path " + numPaths;
+  //       var path = {
+  //         projectId: Session.get("projectId"),
+  //         trialId: trialId,
+  //         name: pathName,
+  //         sourceId: info.sourceId,
+  //         targetId: info.targetId,
+  //         eventType: null,
+  //         eventParam: null
+  //       }
 
-      //   // connection object is tied to Mongo's object by sharing the same id
-      //   con.id = path._id;
-      //   con.getOverlay("label").setLabel(path.name);
-      // });
+  //       Meteor.call("addPath", path, function (err, pathId) {
+  //         Session.set("pathId", pathId);
+  //         info.connection.id = pathId;
+  //         info.connection.getOverlay("label").setLabel(pathName);
+  //       });
+  //     });
 
-      // bind a click listener to each connection; the connection is deleted. you could of course
-      // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
-      // happening.
-      instance.bind("click", function (con) {
-        instance.detach(con);
-        Meteor.call("deletePath", con.id);
-      });
+  //     // suspend drawing and initialise.
+  //     instance.batch(function () {
+  //       instance.makeSource(frames, commonSrcSettings);
+  //       instance.makeTarget(frames, commonTargetSettings);
+  //     });
+  //   });
 
-      // bind a connection listener. note that the parameter passed to this function contains more than
-      // just the new connection - see the documentation for a full list of what is included in 'info'.
-      // this listener sets the connection's internal
-      // id as the label overlay's text.
-      instance.bind("connection", function (info) {
-        // FIXME: hacky hacky~ instead of Session, replace it with ReactiveVar
-        // TrialToolbox will get this change and open up the modal
-        // when a new connection is establisehd
-        var trialId = Session.get("trialId");
-        var numPaths = Paths.find({trialId: trialId}).count();
-        var pathName = "Path " + numPaths;
-        var path = {
-          projectId: Session.get("projectId"),
-          trialId: trialId,
-          name: pathName,
-          sourceId: info.sourceId,
-          targetId: info.targetId,
-          eventType: null,
-          eventParam: null
-        }
-
-        Meteor.call("addPath", path, function (err, pathId) {
-          Session.set("pathId", pathId);
-          info.connection.id = pathId;
-          info.connection.getOverlay("label").setLabel(pathName);
-        });
-      });
-
-      // suspend drawing and initialise.
-      instance.batch(function () {
-        instance.makeSource(frames, commonSrcSettings);
-        instance.makeTarget(frames, commonTargetSettings);
-      });
-    });
-
-  })
+  // })
 
   Template.FrameItem.onRendered(function() {
-    console.log("FrameItem rendered");
-
     // position the frame item
     var $frame = this.$('.frame-preview-item');
     var position = Frames.findOne($frame.attr('id')).position;
+    var frameIndex = this.data.index;
+    var trialId = Session.get("trialId");
+    var numFrames = Frames.find({trialId: trialId}).count();
+    var isLastFrame = (frameIndex + 1 === numFrames) ? true : false;
+
     if (position) {
       $frame.css({
         top: position.top,
@@ -358,11 +352,10 @@ if (Meteor.isClient) {
       });
     } else {
       var frameId = $frame.attr('id');
-      var idx = $frame.data('index');
       var containerWidth = $('.trial-workspace-container').width();
       var space = (containerWidth - 90) / 3;
-      var horizontalPos = idx % 3;
-      var verticalPos = Math.floor(idx / 3);
+      var horizontalPos = frameIndex % 3;
+      var verticalPos = Math.floor(frameIndex / 3);
       var left = (horizontalPos * space) + 50;
       var top = (verticalPos * 180) + 30;
       
@@ -377,7 +370,42 @@ if (Meteor.isClient) {
       });
     }
 
+    // FIXME: listening to events should be handled here too? I guess?
 
+    // Do jsPlumb operations
+    jsPlumb.ready(function () {
+      var instance = Template.TrialWorkSpace.jsp;
+
+      // make this frame draggable
+      instance.draggable($frame);
+
+      // draw the paths too if its the last frameitem that was rendered
+
+      // draw paths
+      if (isLastFrame) {
+        console.log("start drawing paths");
+        debugger
+        var paths = Paths.find({trialId: trialId}).fetch();
+        _.each(paths, function (path) {
+          var con = instance.connect({
+            source: path.sourceId,
+            target: path.targetId
+          }, {
+            paintStyle: commonStrokeStyle,
+            anchor: commonAnchor,
+            connector: commonConnectorStyle
+          });
+
+          // connection object is tied to Mongo's object by sharing the same id
+          con.id = path._id;
+          con.getOverlay("label").setLabel(path.name);
+        });
+        debugger
+      }
+    });
+
+    console.log("done drawing all the frames");
+    // FIXME: instead of doing operations here, I could fire "all frames rendered" evt
 
   });
 

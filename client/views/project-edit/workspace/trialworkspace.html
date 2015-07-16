@@ -1,11 +1,15 @@
 <template name="TrialWorkSpace">
   <div class="trial-workspace-container">  
     <div class="row frame-items-container">
-      <!-- {{>FrameItems is programmatically inserted here}} -->
+      <div class="frame-items">
+        {{#each withIndex frames}}
+          {{> FrameItem}}
+        {{/each}}
+      </div>
     </div>
   </div>
 </template>
-
+<!-- 
 <template name="FrameItems">
   <div class="frame-items">
     {{#each withIndex frames}}
@@ -13,9 +17,10 @@
     {{/each}}
   </div>
 </template>
+ -->
 
 <template name="FrameItem">
-  <div id="{{_id}}" class="frame-preview-item cyan lighten-5" data-index="{{index}}">
+  <div id="{{_id}}" class="frame-preview-item cyan lighten-5">
     <div class='frame-name'>{{name}}</div>
     <div class="ep"></div>
     <div class="btn-container">
