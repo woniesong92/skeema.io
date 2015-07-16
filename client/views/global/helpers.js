@@ -73,5 +73,15 @@ if (Meteor.isClient) {
   Template.registerHelper('formatDate', function (date) {
     return moment(date).format('MMMM Do YYYY, h:mm a');
   });
-  
+
+  // handlebar each function with index
+
+  Template.registerHelper('withIndex', function (context, options) {
+    if (context) {
+      return context.map(function (item, idx) {
+        item.index = idx;
+        return item;
+      });
+    }
+  });  
 }

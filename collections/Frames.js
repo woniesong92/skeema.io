@@ -11,10 +11,18 @@ Meteor.methods({
       // an index field
       // FIXME: not sure how to deal with images yet
       "images": null,
-      "createdAt": Date.now()
+      "createdAt": Date.now(),
+      "position": null
     };
 
     // new frameId will be returned to the caller
     return Frames.insert(frame);
+  },
+
+  addFramePosition: function (frameId, position) {
+    return Frames.update(frameId, {
+      $set: {position: position}
+    });
+    console.log("update frame position")
   }
 });
