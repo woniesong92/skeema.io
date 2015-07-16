@@ -40,7 +40,7 @@ if (Meteor.isClient) {
 
     var elts = Elements.find({ "frameId" : Session.get("frameId") });
     elts.forEach(function (elt) {
-      console.log(elt.css);
+      // console.log(elt.css);
       $("#" + elt._id).css(elt.css);
     }); 
 
@@ -52,7 +52,6 @@ if (Meteor.isClient) {
           stop: function (event, ui) {
             console.log(this.id);
             positions[this.id] = ui.position;
-            debugger
             localStorage.positions = JSON.stringify(positions);
              var elementCss = $("#" + this.id).css();
 
@@ -81,7 +80,6 @@ if (Meteor.isClient) {
           scroll: false,
           stop: function (event, ui) {
             positions[this.id] = ui.position;
-            debugger
             localStorage.positions = JSON.stringify(positions);
             var elementCss = JSON.parse($("#" + this.id).css());
            //  elementCss.top = ui.position.top;

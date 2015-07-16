@@ -34,33 +34,50 @@
     <div class="row">
       <div class="col s12">
 
-        <div class="demoPanel" style="width:130px">
-          Both
-          <input id="cpBoth" value="#31859b" />
-        </div>
-
       {{#if selectedIsText}}
         
-            <p class="frame-elements-title">Text Element</p>
-            <label for="element-content">Content</label>
-            <input value="{{ element.content }}" id="element-content" type="text">
-         
-            
-          
+        {{> TextSettings}}
+
       {{/if}}
 
 
       {{#if selectedIsButton}}
 
-            <p class="frame-elements-title">Button Element</p>
-            <label for="element-content">Content</label>
-            <input value="{{ element.content }}" id="element-content" type="text">
-        
+        {{> ButtonSettings}}
+
       {{/if}}
+
       </div>
     </div>
 
 
   </div>
 
+</template>
+
+
+<template name="TextSettings">
+  <p class="frame-elements-title">Text Element</p>
+  <label for="element-content">Content</label>
+  <input value="{{ element.content }}" id="element-content" type="text">
+
+  <div class="demoPanel" style="width:130px">
+    Change Text Color
+    <input id="text-colorpicker" value="{{color}}" />
+  </div>
+
+</template>
+
+<template name="ButtonSettings">
+  <p class="frame-elements-title">Button Element</p>
+  <label for="element-content">Content</label>
+  <input value="{{ element.content }}" id="element-content" type="text">
+  <div class="demoPanel" style="width:130px">
+      Change Button Text Color
+      <input id="button-colorpicker" value="{{color}}" />
+  </div>
+  <div class="demoPanel" style="width:130px">
+      Change Button Background Color
+      <input id="button-colorpicker" value="{{backgroundColor}}" />
+  </div>
 </template>

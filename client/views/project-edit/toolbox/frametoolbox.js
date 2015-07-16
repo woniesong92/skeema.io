@@ -11,18 +11,14 @@ if (Meteor.isClient) {
     // Session.set("addImage", false);
     // Session.set("addButton", false);
     Session.set("elementAdded", null);
+  }
 
-    // this.autorun(function() {
-    //   debugger
-    //   var selectedElementId = Session.get("elementId");
-        $('#cpBoth').colorpicker();
-    // });
+  Template.ButtonSettings.rendered = function () {
+    $('#button-colorpicker').colorpicker();
+  }
 
-
-
-
-
-
+  Template.TextSettings.rendered = function () {
+    $('#text-colorpicker').colorpicker();
   }
 
   Template.FrameToolBox.events({

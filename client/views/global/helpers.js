@@ -49,6 +49,18 @@ if (Meteor.isClient) {
     return Elements.findOne({_id: elementId}).type == "image";
   });
 
+  Template.registerHelper("color", function (event, template) {
+    var elementId = Session.get("elementId");
+    var cssObj = Elements.findOne({_id: elementId}).css;
+    return JSON.parse(cssObj).color;
+  });
+
+  Template.registerHelper("backgroundColor", function (event, template) {
+    var elementId = Session.get("elementId");
+    var cssObj = Elements.findOne({_id: elementId}).css;
+    return JSON.parse(cssObj)["background-color"];
+  });
+
   // Template.registerHelper("getAddButton", function (event, template) {
   //   return Session.get("addButton");
   // });
