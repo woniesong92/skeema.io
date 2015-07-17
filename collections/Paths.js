@@ -38,14 +38,7 @@ Meteor.methods({
     // if this function was invoked from the toolbox,
     // we should detach the connection
     if (Meteor.isClient) {
-      //FIXME: the way to retreive a jsp instance might
-      //change in future.
-      var instance = Template.TrialWorkSpace.jsp;
-      instance.select().each(function (con) {
-        if (con.id === pathId) {
-          instance.detach(con);
-        }
-      });
+      Session.set("deletedPathId", pathId);
     }
   }
 });

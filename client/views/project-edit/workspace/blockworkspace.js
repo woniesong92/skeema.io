@@ -14,7 +14,7 @@ if (Meteor.isClient) {
     "click .trial-preview-item": function (e, template) {
       var trialId = this._id;
       Session.set("currentView", "trialView");
-      Session.set("id", this._id);
+      Session.set("trialId", trialId);
     }
   });
 }

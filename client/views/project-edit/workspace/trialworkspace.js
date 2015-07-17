@@ -44,8 +44,6 @@ if (Meteor.isClient) {
   }
 
   function drawPaths (instance, trialId) {
-    console.log("drawPaths");
-
     var paths = Paths.find({trialId: trialId}).fetch();
     _.each(paths, function (path) {
       var con = instance.connect({
@@ -70,18 +68,37 @@ if (Meteor.isClient) {
       self.jspInstance = jsPlumb.getInstance(instanceSetting);
     });
 
-    this.mustInitialize = true;
+    // TODO: add comments
+    // HOWON: THESE ARE RUN FIRST WHEN THE TEMPLATE IS CREATED
+    // ANY WAY TO AVOID IT?
+    this.trialChanged = Tracker.autorun(function() {
+      var trialId = Session.get("trialId");
+      self.mustInitialize = true;
+    });
+
+    // this session comes from Paths.js
+    this.pathDeleted = Tracker.autorun(function() {
+
+      // FIXME: learn how these trackers actually work and why
+      // this is run in the beginning even when the session vars aren't set yet
+      // debugger
+      var deletedPathId = Session.get("deletedPathId");
+      self.jspInstance.select().each(function (con) {
+        if (con.id === deletedPathId) {
+          self.jspInstance.detach(con);
+        }
+      });
+    });
   });
 
+  // TODO: add comments
   Template.TrialWorkSpace.onRendered(function() {
     var self = this;
 
     this.autorun(function() {
       var allFramesReady = Session.get("allFramesReady");
-      var trialId = Session.get("trialId");
 
       if (allFramesReady) {
-        console.log("TrialWorkSpace Rendered");
 
         var jspInstance = self.jspInstance;
         var $frames = $('.frame-preview-item');
@@ -93,8 +110,14 @@ if (Meteor.isClient) {
         // make things draggable
         jspInstance.draggable($frames);
 
+        // make frames sources and sinks so they can be connected
+        jspInstance.batch(function () {
+          jspInstance.makeSource($frames, commonSrcSettings);
+          jspInstance.makeTarget($frames, commonTargetSettings);
+        });
+
         // draw existing paths
-        drawPaths(jspInstance, trialId);
+        drawPaths(jspInstance, self.trialId);
 
         // bind event: click a connection to detach it
         jspInstance.bind("click", function (con) {
@@ -104,7 +127,7 @@ if (Meteor.isClient) {
 
         // bind event: when a new connection is added, add it to DB too
         jspInstance.bind("connection", function (info) {
-          var trialId = Session.get("trialId");
+          var trialId = self.trialId;
           var numPaths = Paths.find({trialId: trialId}).count();
           var pathName = "Path " + numPaths;
           var path = {
@@ -124,12 +147,6 @@ if (Meteor.isClient) {
           });
         });
 
-        // make frames sources and sinks so they can be connected
-        jspInstance.batch(function () {
-          jspInstance.makeSource($frames, commonSrcSettings);
-          jspInstance.makeTarget($frames, commonTargetSettings);
-        });
-
         Session.set("allFramesReady", false);
         self.mustInitialize = false;
       }
@@ -147,6 +164,7 @@ if (Meteor.isClient) {
   Template.TrialWorkSpace.helpers({
     frames: function() {
       var trialId = Session.get('trialId');
+      Template.instance().trialId = trialId;
       return Frames.find({trialId: trialId});
     }
   });
@@ -156,7 +174,8 @@ if (Meteor.isClient) {
     var $frame = this.$('.frame-preview-item');
     var position = Frames.findOne($frame.attr('id')).position;
     var frameIndex = this.data.index;
-    var trialId = Session.get("trialId");
+    // var trialId = Session.get("trialId"); // replace with this.parent().trialId?
+    var trialId = this.parent().trialId;
     var numFrames = Frames.find({trialId: trialId}).count();
     var isLastFrame = (frameIndex + 1 === numFrames) ? true : false;
 
@@ -186,10 +205,8 @@ if (Meteor.isClient) {
     }
 
     if (isLastFrame && this.parent().mustInitialize) {
-      debugger
       Session.set("allFramesReady", true);
     } else if (isLastFrame) {
-      debugger
       var jspInstance = this.parent().jspInstance;
       jspInstance.draggable($frame);
       jspInstance.makeSource($frame, commonSrcSettings);
