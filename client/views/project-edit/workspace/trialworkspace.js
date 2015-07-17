@@ -43,179 +43,21 @@ if (Meteor.isClient) {
     allowLoopback: true
   }
 
-  // FIXME: where is the best place for these functions?
-  function makeFramesConnectable() {
-    jsPlumb.ready(function () {
-      var instance = jsPlumb.getInstance(instanceSetting);
-
-      // FIXME: is this okay to tie this instance val to template?
-      Template.TrialWorkSpace.jsp = instance;
-
-      var frames = jsPlumb.getSelector(".frame-preview-item");
-      instance.draggable(frames);
-
-      // connect the frames that have paths between them
-      var trialId = Session.get('trialId');
-      var paths = Paths.find({trialId: trialId}).fetch();
-      _.each(paths, function (path) {
-        var con = instance.connect({
-          source: path.sourceId,
-          target: path.targetId
-        }, {
-          paintStyle: commonStrokeStyle,
-          anchor: commonAnchor,
-          connector: commonConnectorStyle
-        });
-
-        // connection object is tied to Mongo's object by sharing the same id
-        con.id = path._id;
-        con.getOverlay("label").setLabel(path.name);
+  function drawPaths (instance, trialId) {
+    var paths = Paths.find({trialId: trialId}).fetch();
+    _.each(paths, function (path) {
+      var con = instance.connect({
+        source: path.sourceId,
+        target: path.targetId
+      }, {
+        paintStyle: commonStrokeStyle,
+        anchor: commonAnchor,
+        connector: commonConnectorStyle
       });
 
-      // bind a click listener to each connection; the connection is deleted. you could of course
-      // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
-      // happening.
-      instance.bind("click", function (con) {
-        instance.detach(con);
-        Meteor.call("deletePath", con.id);
-      });
-
-      // bind a connection listener. note that the parameter passed to this function contains more than
-      // just the new connection - see the documentation for a full list of what is included in 'info'.
-      // this listener sets the connection's internal
-      // id as the label overlay's text.
-      instance.bind("connection", function (info) {
-        // FIXME: hacky hacky~ instead of Session, replace it with ReactiveVar
-        // TrialToolbox will get this change and open up the modal
-        // when a new connection is establisehd
-        var trialId = Session.get("trialId");
-        var numPaths = Paths.find({trialId: trialId}).count();
-        var pathName = "Path " + numPaths;
-        var path = {
-          projectId: Session.get("projectId"),
-          trialId: trialId,
-          name: pathName,
-          sourceId: info.sourceId,
-          targetId: info.targetId,
-          eventType: null,
-          eventParam: null
-        }
-
-        Meteor.call("addPath", path, function (err, pathId) {
-          Session.set("pathId", pathId);
-          info.connection.id = pathId;
-          info.connection.getOverlay("label").setLabel(pathName);
-        });
-      });
-
-      // suspend drawing and initialise.
-      instance.batch(function () {
-        instance.makeSource(frames, commonSrcSettings);
-        instance.makeTarget(frames, commonTargetSettings);
-      });
-
-      // Not really sure where I should need this event
-      jsPlumb.fire("jsPlumbDemoLoaded", instance);
-    });
-  }
-
-
-  /*
-    Same as makeFramesConnectable, but only for a single
-    frame
-  */
-  function makeFrameConnectable (frameId) {
-    jsPlumb.ready(function () {
-      var instance;
-      if (Template.TrialWorkSpace.jsp) {
-        instance = Template.TrialWorkSpace.jsp;
-      } else {
-        instance = jsPlumb.getInstance(instanceSetting);
-        Template.TrialWorkSpace.jsp = instance;
-      }
-
-      var instance = jsPlumb.getInstance(instanceSetting);
-
-      // FIXME: is this okay to tie this instance val to template?
-      // Template.TrialWorkSpace.jsp = instance;
-
-      var frames = jsPlumb.getSelector(".frame-preview-item");
-      instance.draggable(frames);
-
-      // connect the frames that have paths between them
-      var trialId = Session.get('trialId');
-      var paths = Paths.find({trialId: trialId}).fetch();
-      _.each(paths, function (path) {
-        var con = instance.connect({
-          source: path.sourceId,
-          target: path.targetId
-        }, {
-          paintStyle: commonStrokeStyle,
-          anchor: commonAnchor,
-          connector: commonConnectorStyle
-        });
-
-        // connection object is tied to Mongo's object by sharing the same id
-        con.id = path._id;
-        con.getOverlay("label").setLabel(path.name);
-      });
-
-      // bind a click listener to each connection; the connection is deleted. you could of course
-      // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
-      // happening.
-      instance.bind("click", function (con) {
-        instance.detach(con);
-        Meteor.call("deletePath", con.id);
-      });
-
-      // bind a connection listener. note that the parameter passed to this function contains more than
-      // just the new connection - see the documentation for a full list of what is included in 'info'.
-      // this listener sets the connection's internal
-      // id as the label overlay's text.
-      instance.bind("connection", function (info) {
-        // FIXME: hacky hacky~ instead of Session, replace it with ReactiveVar
-        // TrialToolbox will get this change and open up the modal
-        // when a new connection is establisehd
-        var trialId = Session.get("trialId");
-        var numPaths = Paths.find({trialId: trialId}).count();
-        var pathName = "Path " + numPaths;
-        var path = {
-          projectId: Session.get("projectId"),
-          trialId: trialId,
-          name: pathName,
-          sourceId: info.sourceId,
-          targetId: info.targetId,
-          eventType: null,
-          eventParam: null
-        }
-
-        Meteor.call("addPath", path, function (err, pathId) {
-          Session.set("pathId", pathId);
-          info.connection.id = pathId;
-          info.connection.getOverlay("label").setLabel(pathName);
-        });
-      });
-
-      // suspend drawing and initialise.
-      instance.batch(function () {
-        instance.makeSource(frames, commonSrcSettings);
-        instance.makeTarget(frames, commonTargetSettings);
-      });
-
-      // Not really sure where I should need this event
-      jsPlumb.fire("jsPlumbDemoLoaded", instance);
-    });
-
-    var jsp = Template.TrialWorkSpace.jsp;
-    var templateInstance = Template.instance();
-    var numFrames = templateInstance.$(".frame-preview-item").length;
-    var frameElement = templateInstance.$("#" + frameId);
-
-    jsp.draggable(frameElement);
-
-    jsp.batch(function () {
-      jsp.makeSource(frameElement, commonSrcSettings);
-      jsp.makeTarget(frameElement, commonTargetSettings);
+      // connection object is tied to Mongo's object by sharing the same id
+      con.id = path._id;
+      con.getOverlay("label").setLabel(path.name);
     });
   }
 
@@ -226,28 +68,93 @@ if (Meteor.isClient) {
   */
 
   Template.TrialWorkSpace.onCreated(function() {
+    var self = this;
+
     jsPlumb.ready(function () {
-      var instance = jsPlumb.getInstance(instanceSetting);
-      Template.TrialWorkSpace.jsp = instance;
+      self.jspInstance = jsPlumb.getInstance(instanceSetting);
     });
+
+    // FIXME: this is a perfect place to use ReactiveVar
+    // this.areFramesReady = new ReactiveVar;
+    // this.areFramesReady.set(false);
+    Session.set("areFramesReady", false);
   });
 
-  // var frameItemsTemplate;
-  // Template.TrialWorkSpace.onRendered(function() {
-  //   this.autorun(function() {
-  //     var trialId = Session.get("trialId");
-  //     if (frameItemsTemplate) {
+  Template.TrialWorkSpace.onRendered(function() {
+    var self = this;
+    this.autorun(function() {
+      console.log("TrialWorkSpace Rendered");
+      
+      var trialId = Session.get("trialId");
+      var areFramesReady = Session.get("areFramesReady");
+      var jspInstance = self.jspInstance;
+      
+      // jsPlumb.ready(function () {
+      // empty whatever that was left over
+      jspInstance.unbind();
+      jspInstance.detachEveryConnection();
+      
+      if (areFramesReady) {
+        var $frames = $('.frame-preview-item');
 
-  //       // FIXME: there might be a way to replace Blaze.render and Blaze.remove
-  //       // Using Meteor.defer() seems simpler but its performance is worse
-  //       // -- for now, removing/inserting template manually to be able to use
-  //       // onRenderd and onDestroyed callbacks
-  //       Blaze.remove(frameItemsTemplate);
-  //     }
-  //     frameItemsTemplate = Blaze.render(Template.FrameItems,
-  //       $('.frame-items-container')[0]);
-  //   });
-  // });
+        // make frames draggable
+        jspInstance.draggable($frames);
+
+        // bind a click listener to each connection; the connection is deleted. you could of course
+        // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
+        // happening.
+        jspInstance.bind("click", function (con) {
+          jspInstance.detach(con);
+          Meteor.call("deletePath", con.id);
+        });
+
+        // bind a connection listener. note that the parameter passed to this function contains more than
+        // just the new connection - see the documentation for a full list of what is included in 'info'.
+        // this listener sets the connection's internal
+        // id as the label overlay's text.
+        jspInstance.bind("connection", function (info) {
+          // FIXME: hacky hacky~ instead of Session, replace it with ReactiveVar
+          // TrialToolbox will get this change and open up the modal
+          // when a new connection is establisehd
+          var trialId = Session.get("trialId");
+          var numPaths = Paths.find({trialId: trialId}).count();
+          var pathName = "Path " + numPaths;
+          var path = {
+            projectId: Session.get("projectId"),
+            trialId: trialId,
+            name: pathName,
+            sourceId: info.sourceId,
+            targetId: info.targetId,
+            eventType: null,
+            eventParam: null
+          }
+          
+          debugger
+
+          Meteor.call("addPath", path, function (err, pathId) {
+            debugger
+            Session.set("pathId", pathId);
+            info.connection.id = pathId;
+            info.connection.getOverlay("label").setLabel(pathName);
+          });
+        });
+
+        // suspend drawing and initialise.
+        jspInstance.batch(function () {
+          jspInstance.makeSource($frames, commonSrcSettings);
+          jspInstance.makeTarget($frames, commonTargetSettings);
+        });
+
+        // connect the frames that have paths between them
+        drawPaths(jspInstance, trialId);
+
+        // Session.set("areFramesReady", false);
+        // intentionally using delete here to avoid reload
+        delete Session.keys["areFramesReady"];
+      }
+
+    });
+  });
 
   Template.TrialWorkSpace.events({
     "click .frame-edit-btn": function (e, template) {
@@ -260,85 +167,15 @@ if (Meteor.isClient) {
     frames: function() {
       var trialId = Session.get('trialId');
       return Frames.find({trialId: trialId});
-    },
-
-    // numFrames: function() {
-    //   return Frames.find({trialId: trialId}).count();
-    // }
+    }
   });
-
-  // Template.FrameItems.onRendered(function() {
-  //   jsPlumb.ready(function () {
-  //     var instance = Template.TrialWorkSpace.jsp;
-  //     var frames = $('.frame-preview-item');
-  //     instance.draggable(frames);
-
-  //     // // connect the frames that have paths between them
-  //     var trialId = Session.get('trialId');
-  //     // var paths = Paths.find({trialId: trialId}).fetch();
-  //     // _.each(paths, function (path) {
-  //     //   var con = instance.connect({
-  //     //     source: path.sourceId,
-  //     //     target: path.targetId
-  //     //   }, {
-  //     //     paintStyle: commonStrokeStyle,
-  //     //     anchor: commonAnchor,
-  //     //     connector: commonConnectorStyle
-  //     //   });
-
-  //     //   // connection object is tied to Mongo's object by sharing the same id
-  //     //   con.id = path._id;
-  //     //   con.getOverlay("label").setLabel(path.name);
-  //     // });
-
-  //     // bind a click listener to each connection; the connection is deleted. you could of course
-  //     // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
-  //     // happening.
-  //     instance.bind("click", function (con) {
-  //       instance.detach(con);
-  //       Meteor.call("deletePath", con.id);
-  //     });
-
-  //     // bind a connection listener. note that the parameter passed to this function contains more than
-  //     // just the new connection - see the documentation for a full list of what is included in 'info'.
-  //     // this listener sets the connection's internal
-  //     // id as the label overlay's text.
-  //     instance.bind("connection", function (info) {
-  //       // FIXME: hacky hacky~ instead of Session, replace it with ReactiveVar
-  //       // TrialToolbox will get this change and open up the modal
-  //       // when a new connection is establisehd
-  //       var trialId = Session.get("trialId");
-  //       var numPaths = Paths.find({trialId: trialId}).count();
-  //       var pathName = "Path " + numPaths;
-  //       var path = {
-  //         projectId: Session.get("projectId"),
-  //         trialId: trialId,
-  //         name: pathName,
-  //         sourceId: info.sourceId,
-  //         targetId: info.targetId,
-  //         eventType: null,
-  //         eventParam: null
-  //       }
-
-  //       Meteor.call("addPath", path, function (err, pathId) {
-  //         Session.set("pathId", pathId);
-  //         info.connection.id = pathId;
-  //         info.connection.getOverlay("label").setLabel(pathName);
-  //       });
-  //     });
-
-  //     // suspend drawing and initialise.
-  //     instance.batch(function () {
-  //       instance.makeSource(frames, commonSrcSettings);
-  //       instance.makeTarget(frames, commonTargetSettings);
-  //     });
-  //   });
-
-  // })
 
   Template.FrameItem.onRendered(function() {
     // position the frame item
     var $frame = this.$('.frame-preview-item');
+
+    console.log($frame);
+
     var position = Frames.findOne($frame.attr('id')).position;
     var frameIndex = this.data.index;
     var trialId = Session.get("trialId");
@@ -370,69 +207,10 @@ if (Meteor.isClient) {
       });
     }
 
-    // FIXME: listening to events should be handled here too? I guess?
-
-    // Do jsPlumb operations
-    jsPlumb.ready(function () {
-      var instance = Template.TrialWorkSpace.jsp;
-
-      // make this frame draggable
-      instance.draggable($frame);
-
-      // draw the paths too if its the last frameitem that was rendered
-
-      // draw paths
-      if (isLastFrame) {
-        console.log("start drawing paths");
-        debugger
-        var paths = Paths.find({trialId: trialId}).fetch();
-        _.each(paths, function (path) {
-          var con = instance.connect({
-            source: path.sourceId,
-            target: path.targetId
-          }, {
-            paintStyle: commonStrokeStyle,
-            anchor: commonAnchor,
-            connector: commonConnectorStyle
-          });
-
-          // connection object is tied to Mongo's object by sharing the same id
-          con.id = path._id;
-          con.getOverlay("label").setLabel(path.name);
-        });
-        debugger
-      }
-    });
-
-    console.log("done drawing all the frames");
-    // FIXME: instead of doing operations here, I could fire "all frames rendered" evt
-
+    if (isLastFrame) {
+      // FIXME: use ReactiveVar instead of Session. See the other comments
+      debugger
+      Session.set("areFramesReady", true);
+    }
   });
-
-  // Template.FrameItems.onRendered(function() {
-  //   alignElements();
-  //   makeFramesConnectable();
-
-  //   this.autorun(function() {
-  //     var frameId = Session.get("frameAdded");
-  //     if (frameId) {
-  //       makeNewFrameConnectable(frameId);  
-  //     }
-  //   });
-  // });
-
-  // Template.FrameItems.onDestroyed(function() {
-  //   var instance = Template.TrialWorkSpace.jsp;
-  //   if (instance) {
-  //     instance.detachEveryConnection();
-  //   }
-
-  //   // Remove frameAdded Session, to prevent autorun inside
-  //   // FrameItems.onRendered from running when the template
-  //   // is freshly rendered.
-  //   // FIXME: using Session for this kind of stuff is hacky.
-  //   // Would using ReactiveVar solve this problem?
-  //   Session.set("frameAdded", null);
-  //   Session.set("pathId", null);
-  // });
 }
