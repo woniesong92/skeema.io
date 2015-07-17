@@ -44,6 +44,8 @@ if (Meteor.isClient) {
   }
 
   function drawPaths (instance, trialId) {
+    console.log("drawPaths");
+
     var paths = Paths.find({trialId: trialId}).fetch();
     _.each(paths, function (path) {
       var con = instance.connect({
@@ -61,61 +63,47 @@ if (Meteor.isClient) {
     });
   }
 
-  /*
-    Align all frame elements in DOM (3 elements/row).
-    Since all jsPlumb elements should be absolutely positioned, they should
-    be orederd using JS instead of CSS.
-  */
-
   Template.TrialWorkSpace.onCreated(function() {
     var self = this;
-
+    
     jsPlumb.ready(function () {
       self.jspInstance = jsPlumb.getInstance(instanceSetting);
     });
 
-    // FIXME: this is a perfect place to use ReactiveVar
-    // this.areFramesReady = new ReactiveVar;
-    // this.areFramesReady.set(false);
-    Session.set("areFramesReady", false);
+    this.mustInitialize = true;
   });
 
   Template.TrialWorkSpace.onRendered(function() {
     var self = this;
-    this.autorun(function() {
-      console.log("TrialWorkSpace Rendered");
-      
-      var trialId = Session.get("trialId");
-      var areFramesReady = Session.get("areFramesReady");
-      var jspInstance = self.jspInstance;
-      
-      // jsPlumb.ready(function () {
-      // empty whatever that was left over
-      jspInstance.unbind();
-      jspInstance.detachEveryConnection();
-      
-      if (areFramesReady) {
-        var $frames = $('.frame-preview-item');
 
-        // make frames draggable
+    this.autorun(function() {
+      var allFramesReady = Session.get("allFramesReady");
+      var trialId = Session.get("trialId");
+
+      if (allFramesReady) {
+        console.log("TrialWorkSpace Rendered");
+
+        var jspInstance = self.jspInstance;
+        var $frames = $('.frame-preview-item');
+        
+        // delete previous elements and unbind events
+        jspInstance.unbind();
+        jspInstance.detachEveryConnection();
+
+        // make things draggable
         jspInstance.draggable($frames);
 
-        // bind a click listener to each connection; the connection is deleted. you could of course
-        // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
-        // happening.
+        // draw existing paths
+        drawPaths(jspInstance, trialId);
+
+        // bind event: click a connection to detach it
         jspInstance.bind("click", function (con) {
           jspInstance.detach(con);
           Meteor.call("deletePath", con.id);
         });
 
-        // bind a connection listener. note that the parameter passed to this function contains more than
-        // just the new connection - see the documentation for a full list of what is included in 'info'.
-        // this listener sets the connection's internal
-        // id as the label overlay's text.
+        // bind event: when a new connection is added, add it to DB too
         jspInstance.bind("connection", function (info) {
-          // FIXME: hacky hacky~ instead of Session, replace it with ReactiveVar
-          // TrialToolbox will get this change and open up the modal
-          // when a new connection is establisehd
           var trialId = Session.get("trialId");
           var numPaths = Paths.find({trialId: trialId}).count();
           var pathName = "Path " + numPaths;
@@ -128,29 +116,22 @@ if (Meteor.isClient) {
             eventType: null,
             eventParam: null
           }
-          
-          debugger
 
           Meteor.call("addPath", path, function (err, pathId) {
-            debugger
             Session.set("pathId", pathId);
             info.connection.id = pathId;
             info.connection.getOverlay("label").setLabel(pathName);
           });
         });
 
-        // suspend drawing and initialise.
+        // make frames sources and sinks so they can be connected
         jspInstance.batch(function () {
           jspInstance.makeSource($frames, commonSrcSettings);
           jspInstance.makeTarget($frames, commonTargetSettings);
         });
 
-        // connect the frames that have paths between them
-        drawPaths(jspInstance, trialId);
-
-        // Session.set("areFramesReady", false);
-        // intentionally using delete here to avoid reload
-        delete Session.keys["areFramesReady"];
+        Session.set("allFramesReady", false);
+        self.mustInitialize = false;
       }
 
     });
@@ -173,9 +154,6 @@ if (Meteor.isClient) {
   Template.FrameItem.onRendered(function() {
     // position the frame item
     var $frame = this.$('.frame-preview-item');
-
-    console.log($frame);
-
     var position = Frames.findOne($frame.attr('id')).position;
     var frameIndex = this.data.index;
     var trialId = Session.get("trialId");
@@ -207,10 +185,15 @@ if (Meteor.isClient) {
       });
     }
 
-    if (isLastFrame) {
-      // FIXME: use ReactiveVar instead of Session. See the other comments
+    if (isLastFrame && this.parent().mustInitialize) {
       debugger
-      Session.set("areFramesReady", true);
+      Session.set("allFramesReady", true);
+    } else if (isLastFrame) {
+      debugger
+      var jspInstance = this.parent().jspInstance;
+      jspInstance.draggable($frame);
+      jspInstance.makeSource($frame, commonSrcSettings);
+      jspInstance.makeTarget($frame, commonTargetSettings);
     }
   });
 }
