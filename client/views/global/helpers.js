@@ -36,29 +36,36 @@ if (Meteor.isClient) {
 
   Template.registerHelper("selectedIsText", function (event, template) {
     var elementId = Session.get("elementId");
-    return Elements.findOne({_id: elementId}).type == "text";
+    if (elementId != null){
+      return Elements.findOne({_id: elementId}).type == "text";
+    }
+    return false;
   });
 
   Template.registerHelper("selectedIsButton", function (event, template) {
     var elementId = Session.get("elementId");
-    return Elements.findOne({_id: elementId}).type == "button";
+    if (elementId != null){
+      return Elements.findOne({_id: elementId}).type == "button";
+    }
+    return false;
   });
 
   Template.registerHelper("selectedIsImage", function (event, template) {
     var elementId = Session.get("elementId");
-    return Elements.findOne({_id: elementId}).type == "image";
+    if (elementId != null){
+      return Elements.findOne({_id: elementId}).type == "image";
+    }
+    return false;
   });
 
   Template.registerHelper("color", function (event, template) {
     var elementId = Session.get("elementId");
-    var cssObj = Elements.findOne({_id: elementId}).css;
-    return JSON.parse(cssObj).color;
+    return $('#' + elementId).css('color');
   });
 
   Template.registerHelper("backgroundColor", function (event, template) {
     var elementId = Session.get("elementId");
-    var cssObj = Elements.findOne({_id: elementId}).css;
-    return JSON.parse(cssObj)["background-color"];
+    return $('#' + elementId).css('background-color');
   });
 
   // Template.registerHelper("getAddButton", function (event, template) {

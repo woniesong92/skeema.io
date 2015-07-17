@@ -32,17 +32,22 @@ if (Meteor.isClient) {
 
     Session.set("elementId", null);
 
-    var sPositions = localStorage.positions || "{}",
-    positions = JSON.parse(sPositions);
-    $.each(positions, function (id, pos) {
-         $("#" + id).css(pos);
+    var frameElts = Elements.find({"frameId": Session.get("frameId") });
+    frameElts.forEach(function(elt) {
+        $('.frame-workspace-container').append(elt.html);
     });
 
-    var elts = Elements.find({ "frameId" : Session.get("frameId") });
-    elts.forEach(function (elt) {
-      // console.log(elt.css);
-      $("#" + elt._id).css(elt.css);
-    }); 
+    // var sPositions = localStorage.positions || "{}",
+    // positions = JSON.parse(sPositions);
+    // $.each(positions, function (id, pos) {
+    //      $("#" + id).css(pos);
+    // });
+
+    // var elts = Elements.find({ "frameId" : Session.get("frameId") });
+    // elts.forEach(function (elt) {
+    //   // console.log(elt.css);
+    //   $("#" + elt._id).css(elt.css);
+    // }); 
 
 
     // FIXME: does not save the new position in the css..
@@ -51,21 +56,21 @@ if (Meteor.isClient) {
           scroll: false,
           stop: function (event, ui) {
             console.log(this.id);
-            positions[this.id] = ui.position;
-            localStorage.positions = JSON.stringify(positions);
-             var elementCss = $("#" + this.id).css();
+            // positions[this.id] = ui.position;
+            // localStorage.positions = JSON.stringify(positions);
+            //  var elementCss = $("#" + this.id).css();
 
              // FIXME: THE FOLLOWING DID NOT WORK (DID NOT SAVE THE POSITION)
              // elementCss.top = ui.position.top;
              // elementCss.left = ui.position.left;
-            Meteor.call("editCss", this.id, elementCss , function (err, elementId) {
+          //   Meteor.call("editCss", this.id, elementCss , function (err, elementId) {
               
-              if (err) {
-                console.log("editing css failed", err);
-                return false;
-              }
-              console.log("success editing " + this.id);
-            });
+          //     if (err) {
+          //       console.log("editing css failed", err);
+          //       return false;
+          //     }
+          //     console.log("success editing " + this.id);
+          //   });
           }
         });
 
@@ -75,25 +80,31 @@ if (Meteor.isClient) {
       if (elementId) {
         console.log(elementId);
         //FIXME: IS THIS THE BEST WAY? Kind of repetitive..
+
+        var elt = Elements.findOne({_id: elementId});
+        $('.frame-workspace-container').append(elt.html);
+
         $( ".draggable" ).draggable({
           containment: ".frame-workspace-container",
           scroll: false,
           stop: function (event, ui) {
-            positions[this.id] = ui.position;
-            localStorage.positions = JSON.stringify(positions);
-            var elementCss = JSON.parse($("#" + this.id).css());
-           //  elementCss.top = ui.position.top;
-           // elementCss.left = ui.position.left;
-            Meteor.call("editCss", this.id, elementCss , function (err, elementId) {
+            console.log(this.id);
+          //   positions[this.id] = ui.position;
+          //   localStorage.positions = JSON.stringify(positions);
+          //   var elementCss = JSON.parse($("#" + this.id).css());
+          //  //  elementCss.top = ui.position.top;
+          //  // elementCss.left = ui.position.left;
+          //   Meteor.call("editCss", this.id, elementCss , function (err, elementId) {
               
-              if (err) {
-                console.log("editing css failed", err);
-                return false;
-              }
-              console.log("success editing " + elementId);
-            });
-          }
-        });
+          //     if (err) {
+          //       console.log("editing css failed", err);
+          //       return false;
+          //     }
+          //     console.log("success editing " + elementId);
+          //   });
+           }
+         });
+
       }
     });
     // var projectId = this._id;
@@ -123,7 +134,7 @@ if (Meteor.isClient) {
   Template.FrameWorkSpace.events({
 
     "click .element-item": function (e, template) {
-      Session.set("elementId", this._id);
+      Session.set("elementId", e.target.id);
     },
   });
 }

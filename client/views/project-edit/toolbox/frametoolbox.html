@@ -22,7 +22,7 @@
             <i class="fa fa-file-image-o"></i>
           </a>
           <a class="btn waves-effect waves-light blue lighten-5 accent-3 element-btn add-btn-btn">Button</a>
-
+          <a class="btn waves-effect waves-light white black-text save-btn">Save Changes</a>
     </div>
 
 </template> 
@@ -61,9 +61,9 @@
   <label for="element-content">Content</label>
   <input value="{{ element.content }}" id="element-content" type="text">
 
-  <div class="demoPanel" style="width:130px">
+  <div class="demoPanel" style="width:80px">
     Change Text Color
-    <input id="text-colorpicker" value="{{color}}" />
+    <input id="text-colorpicker" value="{{color}}" type="text" />
   </div>
 
 </template>
@@ -72,12 +72,12 @@
   <p class="frame-elements-title">Button Element</p>
   <label for="element-content">Content</label>
   <input value="{{ element.content }}" id="element-content" type="text">
-  <div class="demoPanel" style="width:130px">
+  <div class="demoPanel" style="width:80px">
       Change Button Text Color
-      <input id="button-colorpicker" value="{{color}}" />
+      <input id="button-colorpicker" value="{{color}}" type="text" />
   </div>
-  <div class="demoPanel" style="width:130px">
+  <div class="demoPanel" style="width:80px">
       Change Button Background Color
-      <input id="button-colorpicker" value="{{backgroundColor}}" />
+      <input id="button-colorpicker" value="{{backgroundColor}}" type="text" />
   </div>
 </template>
