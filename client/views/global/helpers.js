@@ -68,6 +68,11 @@ if (Meteor.isClient) {
     return $('#' + elementId).css('background-color');
   });
 
+  Template.registerHelper("textContent", function (event, template) {
+    var elementId = Session.get("elementId");
+    return $('#' + elementId).text();
+  });
+
   // Template.registerHelper("getAddButton", function (event, template) {
   //   return Session.get("addButton");
   // });

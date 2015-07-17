@@ -13,18 +13,6 @@ if (Meteor.isClient) {
     Session.set("elementAdded", null);
   }
 
-  Template.ButtonSettings.rendered = function () {
-    $('#button-colorpicker').colorpicker({
-      displayIndicator: false
-    });
-  }
-
-  Template.TextSettings.rendered = function () {
-    $('#text-colorpicker').colorpicker({
-      displayIndicator: false
-    });
-  }
-
   Template.FrameToolBox.events({
 
     'click .save-btn': function (e, template) {

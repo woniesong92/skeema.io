@@ -59,7 +59,7 @@
 <template name="TextSettings">
   <p class="frame-elements-title">Text Element</p>
   <label for="element-content">Content</label>
-  <input value="{{ element.content }}" id="element-content" type="text">
+  <input value="{{ textContent }}" id="element-content" type="text">
 
   <div class="demoPanel" style="width:80px">
     Change Text Color
@@ -71,13 +71,13 @@
 <template name="ButtonSettings">
   <p class="frame-elements-title">Button Element</p>
   <label for="element-content">Content</label>
-  <input value="{{ element.content }}" id="element-content" type="text">
+  <input value="{{ textContent }}" id="element-content" type="text">
   <div class="demoPanel" style="width:80px">
       Change Button Text Color
-      <input id="button-colorpicker" value="{{color}}" type="text" />
+      <input id="button-text-colorpicker" value="{{color}}" type="text" />
   </div>
   <div class="demoPanel" style="width:80px">
       Change Button Background Color
-      <input id="button-colorpicker" value="{{backgroundColor}}" type="text" />
+      <input id="button-bg-colorpicker" value="{{backgroundColor}}" type="text" />
   </div>
 </template>
