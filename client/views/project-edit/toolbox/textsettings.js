@@ -19,6 +19,12 @@ if (Meteor.isClient) {
       var elementId = Session.get("elementId");
       $('#' + elementId).text(newcontent);
     },
+    'change.color #text-colorpicker': function(e, template) { 
+      debugger
+      var newcolor = $('#text-colorpicker').val().trim();
+      var elementId = Session.get("elementId");
+      $('#' + elementId).css('color', newcolor + '+ !important');
+    },
 
   });
 }

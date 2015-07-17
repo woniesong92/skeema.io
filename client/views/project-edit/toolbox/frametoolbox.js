@@ -20,6 +20,7 @@ if (Meteor.isClient) {
       $('.element-item').each(function (index){
           var newHTML = $(this).prop('outerHTML');
           Meteor.call("setHTML", this.id, newHTML, function(err){
+            debugger
             if (err){
               console.log("saving HTML changes failed for "+ this.id);
               return false;
@@ -82,10 +83,12 @@ if (Meteor.isClient) {
 
         // removed the shadow on hover, but there's still lag when dragging
         var htmlStr = "<span id= '" + elementId
-                      + "' class='btn btn-flat btn-no-hover draggable teal white-text element-item' "
+                      + "' class='btn btn-no-hover draggable element-item' "
                       +"style='font-family:Arial;"
                       + "font-size:18px;"
                       + "position:absolute;"
+                      + "background-color:blue !important;"
+                      + "color:#fff !important;"
                       + "top:50%;"
                       + "left:50%;'"
                       +">Button</span>";
@@ -99,6 +102,17 @@ if (Meteor.isClient) {
           }
           Session.set("elementAdded", elementId);
         });
+      });
+    },
+    'click .remove-elt': function (e, template) {
+      var elementId = Session.get("elementId");
+      Meteor.call("deleteElement", elementId, function (e){
+        if (e) {
+          console.log("Deleting element "+elementId+" failed");
+          return false;
+        }
+        Materialize.toast('Removed successfully', 4000);
+        $('#'+elementId).remove();
       });
     },
 
