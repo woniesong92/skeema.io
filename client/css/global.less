@@ -212,3 +212,22 @@ input[type=text]:focus:not([readonly]) + label, input[type=password]:focus:not([
 td, th {
   padding: 0;
 }
+
+/* ui draggable */
+
+ul.projects li:not(.ui-sortable-helper) {
+  float: left;
+  margin: 0px 6.5px 12px;
+  cursor: pointer;
+  -webkit-transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -ms-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+}
+
+/* button */
+
+.btn-no-hover:hover {
+  box-shadow: none;
+}
