@@ -73,22 +73,11 @@ if (Meteor.isClient) {
     return $('#' + elementId).text();
   });
 
-  // Template.registerHelper("getAddButton", function (event, template) {
-  //   return Session.get("addButton");
-  // });
+  Template.registerHelper("isChoosingClick", function (event, template) {
+    return Session.get("chooseClick");
+  });
 
-  // Template.registerHelper("getAddText", function (event, template) {
-  //   return Session.get("addText");
-  // });
 
-  // Template.registerHelper("getAddImage", function (event, template) {
-  //   return Session.get("addImage");
-  // });
-  
-
-  // Template.registerHelper("isLoading", function() {
-  //   return CourseSearch.getStatus().loading;
-  // });
 
   Template.registerHelper('isAdmin', function() {
     return (Meteor.user() && Meteor.user().role == "admin");

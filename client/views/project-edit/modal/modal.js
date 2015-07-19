@@ -19,6 +19,7 @@ if (Meteor.isClient) {
 
   Template.Modal.rendered = function () {
      $('select').material_select();
+     Session.set("chooseClick", false);
   }
 
   Template.Modal.events({
@@ -71,15 +72,17 @@ if (Meteor.isClient) {
       } else {
         // FIXME: this eventParam will be the element to be clicked
         eventParam = null;
+        Session.set("chooseClick", true);
+        // $('#modal').closeModal();
+        $('#frame-modal').openModal();
       }
 
-      Meteor.call("updatePathEvent", {
-        pathId: Session.get("pathId"),
-        eventType: eventType,
-        eventParam: eventParam
-      });
-
-      $('#modal').closeModal();
+        Meteor.call("updatePathEvent", {
+          pathId: Session.get("pathId"),
+          eventType: eventType,
+          eventParam: eventParam
+        });
+        $('#modal').closeModal();
     },
 
   });
