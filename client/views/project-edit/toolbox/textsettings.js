@@ -23,7 +23,7 @@ if (Meteor.isClient) {
       debugger
       var newcolor = $('#text-colorpicker').val().trim();
       var elementId = Session.get("elementId");
-      $('#' + elementId).css('color', newcolor + '+ !important');
+      $('#' + elementId).css('color', newcolor + ' !important');
     },
 
   });

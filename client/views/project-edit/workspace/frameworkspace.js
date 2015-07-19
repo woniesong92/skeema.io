@@ -59,6 +59,7 @@ if (Meteor.isClient) {
           containment: ".frame-workspace-container",
           scroll: false,
           stop: function (event, ui) {
+            Session.set("elementId", this.id);
             console.log(this.id);
           }
         });
@@ -86,7 +87,6 @@ if (Meteor.isClient) {
       if (Session.get("addText")){
         Session.set("addText", false);
         var position = getPosition(e);
-        debugger
         var top = position.top;
         var left = position.left;
 
@@ -97,7 +97,6 @@ if (Meteor.isClient) {
           frameId: Session.get("frameId"),
           type: "text",
         }, function (err, elementId) {
-          debugger
          if (err) {
             console.log("Adding element failed", err);
             return false;
@@ -113,7 +112,6 @@ if (Meteor.isClient) {
                         + "left:" + left + "px;'"
                         +">Text</span>";
           Meteor.call("setHTML", elementId, htmlStr, function(e) {
-            debugger
             if (e) {
               console.log("Setting selector failed");
 
@@ -129,7 +127,7 @@ if (Meteor.isClient) {
                 containment: ".frame-workspace-container",
                 scroll: false,
                 stop: function (event, ui) {
-                  console.log(this.id);
+                  Session.set("elementId", this.id);
                  }
                });
           });
@@ -140,7 +138,6 @@ if (Meteor.isClient) {
       if (Session.get("addButton")){
             Session.set("addButton", false);
             var position = getPosition(e);
-            debugger
             var top = position.top;
             var left = position.left;
             var projectId = this._id;
@@ -161,8 +158,8 @@ if (Meteor.isClient) {
                         +"style='font-family:Arial;"
                         + "font-size:18px;"
                         + "position:absolute;"
-                        + "background-color:blue !important;"
-                        + "color:#fff !important;"
+                        + "background-color:blue;"
+                        + "color:#fff;"
                         + "top:" + top +"px;"
                         + "left:" + left + "px;'"
                         +">Button</span>";
@@ -182,12 +179,13 @@ if (Meteor.isClient) {
                 containment: ".frame-workspace-container",
                 scroll: false,
                 stop: function (event, ui) {
-                  console.log(this.id);
+                  Session.set("elementId", this.id);
                  }
                });
 
           });
         });
+       $('.frame-workspace-container').css('cursor', 'auto');
       }
 
       if (Session.get("addImage")){
