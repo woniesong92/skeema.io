@@ -1,5 +1,23 @@
 if (Meteor.isClient) {
 
+  /* Helper funcitons for adding elements */
+
+  function getPosition (e) {
+    var x;
+    var y;
+    if (e.pageX || e.pageY) { 
+      x = e.pageX;
+      y = e.pageY;
+    }
+    else { 
+      x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
+      y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
+    } 
+    // x -= $('.frame-workspace-container').offsetLeft;
+    // y -= $('.frame-workspace-container').offsetTop;
+    return {top: y, left: x};
+  }
+
 
   Template.FrameWorkSpace.helpers({
     elements: function() {
@@ -8,7 +26,7 @@ if (Meteor.isClient) {
       // check if new frame has just been added
       // this reactive var will make sure that every time
       // frameAdded value in Session changes, this function runs
-      var elementId = Session.get("elementAdded");
+      // var elementId = Session.get("elementAdded");
 
       // return all frames whose parent is this trial
       return Elements.find({frameId: frameId});
@@ -37,8 +55,6 @@ if (Meteor.isClient) {
         $('.frame-workspace-container').append(elt.html);
     });
 
-
-    // FIXME: does not save the new position in the css..
     $( ".draggable" ).draggable({
           containment: ".frame-workspace-container",
           scroll: false,
@@ -49,24 +65,11 @@ if (Meteor.isClient) {
 
 
     this.autorun(function() {
-      debugger
-      var elementAdded = Session.get("elementAdded");
-      if (elementAdded) {
-        Session.set("elementAdded", null);
-        console.log(elementAdded);
-        //FIXME: IS THIS THE BEST WAY? Kind of repetitive..
-
-        var elt = Elements.findOne({_id: elementAdded});
-        $('.frame-workspace-container').append(elt.html);
-
-        $( ".draggable" ).draggable({
-          containment: ".frame-workspace-container",
-          scroll: false,
-          stop: function (event, ui) {
-            console.log(this.id);
-           }
-         });
-
+      var addText = Session.get("addText");
+      var addButton = Session.get("addButton");
+      var addImage = Session.get("addImage");
+      if (addText || addButton || addImage) {
+        $('.frame-workspace-container').css('cursor', 'copy');
       }
     });
     
@@ -77,5 +80,123 @@ if (Meteor.isClient) {
     "click .element-item": function (e, template) {
       Session.set("elementId", e.target.id);
     },
+
+    "click .frame-workspace-container": function (e, template) {
+
+      if (Session.get("addText")){
+        Session.set("addText", false);
+        var position = getPosition(e);
+        debugger
+        var top = position.top;
+        var left = position.left;
+
+        var projectId = this._id;
+      // Session.set("addText", true);
+        Meteor.call("addElement", {
+          projectId: projectId,
+          frameId: Session.get("frameId"),
+          type: "text",
+        }, function (err, elementId) {
+          debugger
+         if (err) {
+            console.log("Adding element failed", err);
+            return false;
+          }
+          var htmlStr = "<span id= '" + elementId
+                        + "' class='draggable element-item' "
+                        + "contenteditable='true' "
+                        + "style='font-family:Arial;"
+                        + "font-size:18px;"
+                        + "color:#000;"
+                        + "position:absolute;"
+                        + "top:" + top + "px;"
+                        + "left:" + left + "px;'"
+                        +">Text</span>";
+          Meteor.call("setHTML", elementId, htmlStr, function(e) {
+            debugger
+            if (e) {
+              console.log("Setting selector failed");
+
+              // Delete the object if setting HTML fails
+              Meteor.call("deleteElement", elementId);
+              return false;
+            }
+            
+            var elt = Elements.findOne({_id: elementId});
+              $('.frame-workspace-container').append(elt.html);
+
+              $( ".draggable" ).draggable({
+                containment: ".frame-workspace-container",
+                scroll: false,
+                stop: function (event, ui) {
+                  console.log(this.id);
+                 }
+               });
+          });
+        });
+        $('.frame-workspace-container').css('cursor', 'auto');
+      }
+
+      if (Session.get("addButton")){
+            Session.set("addButton", false);
+            var position = getPosition(e);
+            debugger
+            var top = position.top;
+            var left = position.left;
+            var projectId = this._id;
+        // Session.set("addText", true);
+        Meteor.call("addElement", {
+          projectId: projectId,
+          frameId: Session.get("frameId"),
+          type: "button",
+        }, function (err, elementId){
+         if (err) {
+            console.log("Adding element failed", err);
+            return false;
+          }
+
+          // removed the shadow on hover, but there's still lag when dragging
+          var htmlStr = "<span id= '" + elementId
+                        + "' class='btn btn-no-hover draggable element-item' "
+                        +"style='font-family:Arial;"
+                        + "font-size:18px;"
+                        + "position:absolute;"
+                        + "background-color:blue !important;"
+                        + "color:#fff !important;"
+                        + "top:" + top +"px;"
+                        + "left:" + left + "px;'"
+                        +">Button</span>";
+          Meteor.call("setHTML", elementId, htmlStr, function(e) {
+            if (e) {
+              console.log("Setting selector failed");
+
+              // Delete the object if setting HTML fails
+              Meteor.call("deleteElement", elementId);
+              return false;
+            }
+
+            var elt = Elements.findOne({_id: elementId});
+              $('.frame-workspace-container').append(elt.html);
+
+              $( ".draggable" ).draggable({
+                containment: ".frame-workspace-container",
+                scroll: false,
+                stop: function (event, ui) {
+                  console.log(this.id);
+                 }
+               });
+
+          });
+        });
+      }
+
+      if (Session.get("addImage")){
+        Session.set("addImage", false);
+        //TODO
+      }
+
+    },
+
+    
   });
 }

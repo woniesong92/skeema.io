@@ -14,11 +14,11 @@ if (Meteor.isClient) {
   }
 
   Template.TextSettings.events({
-    'change #element-content': function(e, template) { 
-      var newcontent = $('#element-content').val().trim();
-      var elementId = Session.get("elementId");
-      $('#' + elementId).text(newcontent);
-    },
+    // 'change #element-content': function(e, template) { 
+    //   var newcontent = $('#element-content').val().trim();
+    //   var elementId = Session.get("elementId");
+    //   $('#' + elementId).text(newcontent);
+    // },
     'change.color #text-colorpicker': function(e, template) { 
       debugger
       var newcolor = $('#text-colorpicker').val().trim();
