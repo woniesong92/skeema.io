@@ -59,6 +59,12 @@ if (Meteor.isClient) {
       con.id = path._id;
       con.getOverlay("label").setLabel(path.name);
     });
+
+
+    // FIXME: a hacky way to solve a problem. Without this, when frames
+    // are moved and not saved, the paths are drawn in reference to the old
+    // frame positions. Maybe jsPlumb saves frames' position states separately?
+    instance.repaintEverything();
   }
 
   Template.TrialWorkSpace.onCreated(function() {
@@ -97,15 +103,14 @@ if (Meteor.isClient) {
 
     this.autorun(function() {
       var allFramesReady = Session.get("allFramesReady");
+      // debugger
 
       if (allFramesReady) {
-
         var jspInstance = self.jspInstance;
         var $frames = $('.frame-preview-item');
         
         // delete previous elements and unbind events
-        jspInstance.unbind();
-        jspInstance.detachEveryConnection();
+        jspInstance.reset();
 
         // make things draggable
         jspInstance.draggable($frames);
@@ -150,7 +155,6 @@ if (Meteor.isClient) {
         Session.set("allFramesReady", false);
         self.mustInitialize = false;
       }
-
     });
   });
 
@@ -171,10 +175,10 @@ if (Meteor.isClient) {
 
   Template.FrameItem.onRendered(function() {
     // position the frame item
+
     var $frame = this.$('.frame-preview-item');
     var position = Frames.findOne($frame.attr('id')).position;
     var frameIndex = this.data.index;
-    // var trialId = Session.get("trialId"); // replace with this.parent().trialId?
     var trialId = this.parent().trialId;
     var numFrames = Frames.find({trialId: trialId}).count();
     var isLastFrame = (frameIndex + 1 === numFrames) ? true : false;
@@ -204,8 +208,11 @@ if (Meteor.isClient) {
       });
     }
 
+    // All frames are rendered for the first time
     if (isLastFrame && this.parent().mustInitialize) {
       Session.set("allFramesReady", true);
+
+    // A new frame has been added and rendered for the first time
     } else if (isLastFrame) {
       var jspInstance = this.parent().jspInstance;
       jspInstance.draggable($frame);
