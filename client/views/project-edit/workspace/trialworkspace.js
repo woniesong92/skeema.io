@@ -169,12 +169,8 @@ if (Meteor.isClient) {
           }
 
           Meteor.call("addPath", path, function (err, pathId) {
-            
             var pathInfo = {
               pathId: pathId,
-
-              // this will be used when the frame workspace
-              // should be shown for a click event
               sourceFrame: info.source.id
             }
             Session.set("pathInfo", pathInfo);

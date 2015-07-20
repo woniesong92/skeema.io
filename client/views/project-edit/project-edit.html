@@ -2,6 +2,7 @@
 {{> Header}}
 {{> Modal}}
 <div class="project-edit-container">
+
   <div class="row">
 
     <!--
@@ -15,12 +16,21 @@
       {{> SideNav}}
     </div>
     <div class="col s8 top-workspace-container">
+
+  <div class="row onbottom"> 
+    <div class="workspace-container">
       {{> WorkSpace}}
     </div>
+  </div>
 
-    <div class="col s2 toolbox-container z-depth-1 grey darken-2 white-text">
+  <!-- <div class="row ontop"> -->
+    <div class="sidenav-container z-depth-1 white">
+      {{> SideNav}}
+    </div>
+
+    <div class="toolbox-container z-depth-1 grey darken-2 white-text">
       {{> ToolBox}}
     </div>
-  </div>
+ <!--  </div> -->
 </div>
 </template>

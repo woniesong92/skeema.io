@@ -15,13 +15,22 @@
   height: 200px;
 }
 
-.workspace-container, .frame-workspace-container {
+.workspace-container,
+.frame-workspace-container {
   width: 100%;
   height: inherit;
 }
 
 .top-workspace-container {
   z-index: 10;
+}
+
+.frame-workspace-container,
+.trial-workspace-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
 }
 
 .frame-preview-item,

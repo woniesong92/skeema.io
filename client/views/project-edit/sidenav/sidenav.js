@@ -18,6 +18,16 @@ if (Meteor.isClient) {
   });
 
   Template.SideNav.events({
+    "click .project-name": function (e, template) {
+      if ($('.sidenav-container').hasClass("collasped-left")){
+        $('.sidenav-container').removeClass("collasped-left");
+        $('.sidenav-container').addClass("expanded-left");
+      } else {
+        $('.sidenav-container').removeClass("expanded-left");
+        $('.sidenav-container').addClass("collasped-left");
+      }
+    },
+
     "click .block-item": function (e, template) {
       $(e.target).closest('.block-item').toggleClass('is-open');
       Session.set("currentView", "blockView");

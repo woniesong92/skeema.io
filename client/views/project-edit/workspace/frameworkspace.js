@@ -13,8 +13,14 @@ if (Meteor.isClient) {
       x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
       y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
     } 
-    // x -= $('.frame-workspace-container').offsetLeft;
-    // y -= $('.frame-workspace-container').offsetTop;
+    
+    // delete this after frame-workspace-container is 100% of body
+    // x -= $('.frame-workspace-container').offset().left;
+    // y -= $('.frame-workspace-container').offset().top;
+    
+    x = (x / $('.frame-workspace-container').width()) * 100;
+    y = (y / $('.frame-workspace-container').height()) * 100;
+    debugger
     return {top: y, left: x};
   }
 
@@ -166,8 +172,8 @@ if (Meteor.isClient) {
                         + "font-size:18px;"
                         + "color:#000;"
                         + "position:absolute;"
-                        + "top:" + top + "px;"
-                        + "left:" + left + "px;'"
+                        + "top:" + top + "%;"
+                        + "left:" + left + "%;'"
                         +">Text</span>";
           Meteor.call("setHTML", elementId, htmlStr, function(e) {
             if (e) {
@@ -219,8 +225,8 @@ if (Meteor.isClient) {
                         + "position:absolute;"
                         + "background-color:blue;"
                         + "color:#fff;"
-                        + "top:" + top +"px;"
-                        + "left:" + left + "px;'"
+                        + "top:" + top +"%;"
+                        + "left:" + left + "%;'"
                         +">Button</span>";
           Meteor.call("setHTML", elementId, htmlStr, function(e) {
             if (e) {
