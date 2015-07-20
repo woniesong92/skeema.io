@@ -19,6 +19,12 @@ Meteor.methods({
     return Frames.insert(frame);
   },
 
+  renameFrame: function (frameId, newname){
+    return Frames.update(frameId, {
+      $set: {name: newname}
+    });
+  },
+
   addFramePosition: function (frameId, position) {
     return Frames.update(frameId, {
       $set: {position: position}

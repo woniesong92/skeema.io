@@ -15,6 +15,12 @@ if (Meteor.isClient) {
 
   Template.FrameToolBox.events({
 
+    'change #framename': function (e, template) { 
+      var newname = $('#framename').val().trim();
+      var frameId = Session.get("frameId");
+      Meteor.call('renameFrame', frameId, newname);
+    },
+
     'click .save-btn': function (e, template) {
       // for each .element-item
       $('.element-item').each(function (index){
