@@ -55,6 +55,8 @@ if (Meteor.isClient) {
         $('.frame-workspace-container').append(elt.html);
     });
 
+    $('.frame-workspace-container span').attr('contenteditable', 'true');
+
     $( ".draggable" ).draggable({
           containment: ".frame-workspace-container",
           scroll: false,
@@ -103,7 +105,6 @@ if (Meteor.isClient) {
           }
           var htmlStr = "<span id= '" + elementId
                         + "' class='draggable element-item' "
-                        + "contenteditable='true' "
                         + "style='font-family:Arial;"
                         + "font-size:18px;"
                         + "color:#000;"
@@ -122,6 +123,7 @@ if (Meteor.isClient) {
             
             var elt = Elements.findOne({_id: elementId});
               $('.frame-workspace-container').append(elt.html);
+              $('#' + elementId).attr('contenteditable', 'true');
 
               $( ".draggable" ).draggable({
                 containment: ".frame-workspace-container",
@@ -174,8 +176,9 @@ if (Meteor.isClient) {
 
             var elt = Elements.findOne({_id: elementId});
               $('.frame-workspace-container').append(elt.html);
+              $('#' + elementId).attr('contenteditable', 'true');
 
-              $( ".draggable" ).draggable({
+              $('#' + elementId).draggable({
                 containment: ".frame-workspace-container",
                 scroll: false,
                 stop: function (event, ui) {
