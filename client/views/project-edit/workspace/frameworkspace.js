@@ -1,6 +1,10 @@
 if (Meteor.isClient) {
 
   /* Helper funcitons for adding elements */
+  function toggleShadow() {
+    $('.sidenav-container, .toolbox-container').toggleClass('shadow');
+    $('.overshadow').toggle();
+  }
 
   function getPosition (e) {
     var x;
@@ -81,7 +85,9 @@ if (Meteor.isClient) {
             Session.set("pathInfo", null);
             Session.set("trialId", infoForChoosing.trialId);
             Session.set("currentView", "trialView");
-            $('.overshadow').hide();
+
+            // FIXME: not sure how to apply it when the width is 100%
+            // toggleShadow();
           });
 
         }, function (err) {
@@ -89,7 +95,8 @@ if (Meteor.isClient) {
         });
 
         // show a backdrop to highlight the frame workspace
-        $('.overshadow').show();
+        // FIXME: not sure how to apply it when the width is 100%
+        // toggleShadow();
 
         // dynamically register a click event
         $('body').one("click", function (e) {
