@@ -18,9 +18,9 @@ if (Meteor.isClient) {
       y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
     } 
     
-    // delete this after frame-workspace-container is 100% of body
-    // x -= $('.frame-workspace-container').offset().left;
-    // y -= $('.frame-workspace-container').offset().top;
+    // relative to parent
+    x -= $('.frame-workspace-container').offset().left;
+    y -= $('.frame-workspace-container').offset().top;
     
     x = (x / $('.frame-workspace-container').width()) * 100;
     y = (y / $('.frame-workspace-container').height()) * 100;
