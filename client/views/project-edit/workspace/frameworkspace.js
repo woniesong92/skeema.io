@@ -56,6 +56,11 @@ if (Meteor.isClient) {
   });
 
   Template.FrameWorkSpace.onCreated(function() {
+    // FIXME: is it okay to add it here?
+    // this is to prevent the modal from showing up
+    // after clicking a trial from a frame view
+    Session.set("pathInfo", null);
+
     // this view is only showing for the user to choose
     // an element from the frame. After the user picks
     // one, the view should revert to the past trialView
