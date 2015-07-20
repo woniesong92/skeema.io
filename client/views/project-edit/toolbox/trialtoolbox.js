@@ -1,8 +1,8 @@
 if (Meteor.isClient) {
   Template.TrialToolBox.onRendered(function() {
     this.autorun(function() {
-      var pathId = Session.get("pathId");
-      if (pathId) {
+      var pathInfo = Session.get("pathInfo");
+      if (pathInfo) {
         $('#modal').openModal();
       }
     });

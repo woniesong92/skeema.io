@@ -45,6 +45,63 @@ if (Meteor.isClient) {
     }
   });
 
+  Template.FrameWorkSpace.onCreated(function() {
+    // this view is only showing for the user to choose
+    // an element from the frame. After the user picks
+    // one, the view should revert to the past trialView
+    this.chooseElement = Tracker.autorun(function() {
+      var infoForChoosing = Session.get("showChoosingElementView");
+      if (infoForChoosing) {
+        var choosingElementDeferred = $.Deferred(function() {
+          console.log("new deferred obj created");
+        });
+
+        choosingElementDeferred.then(function (selector) {
+          
+
+          // add this selector to the click event's param
+          Meteor.call('updatePathEvent', {
+            pathId: infoForChoosing.pathId,
+            eventType: 'click',
+            eventParam: selector
+          }, function (err, data) {
+            // TODO: we prob don't need err/data params
+            // go back to the trialWorkSpace view when it's done
+
+            // FIXME: doesn't it feel weird to invalidate sessions
+            // like this?
+            Session.set("showChoosingElementView", null);
+            Session.set("showFrameWorkspace", null);
+            Session.set("pathInfo", null);
+            Session.set("trialId", infoForChoosing.trialId);
+            Session.set("currentView", "trialView");
+            $('.overshadow').hide();
+          });
+
+        }, function (err) {
+          // FIXME: handle when deferred is rejected for any reason
+        });
+
+        // show a backdrop to highlight the frame workspace
+        $('.overshadow').show();
+
+        // dynamically register a click event
+        $('body').one("click", function (e) {
+          var selector = e.target.id;
+
+          // FIXME: the user should only choose valid elements
+          // check if target is valid
+          // if (selector is valid) { ... }
+          if (true) {
+            choosingElementDeferred.resolve(selector);  
+          } else {
+            choosingElementDeferred.reject("err message");
+          }
+        });
+      }
+    })
+  })
+
 
   Template.FrameWorkSpace.rendered = function () {
 
@@ -58,13 +115,13 @@ if (Meteor.isClient) {
     $('.frame-workspace-container span').attr('contenteditable', 'true');
 
     $( ".draggable" ).draggable({
-          containment: ".frame-workspace-container",
-          scroll: false,
-          stop: function (event, ui) {
-            Session.set("elementId", this.id);
-            console.log(this.id);
-          }
-        });
+      containment: ".frame-workspace-container",
+      scroll: false,
+      stop: function (event, ui) {
+        Session.set("elementId", this.id);
+        console.log(this.id);
+      }
+    });
 
 
     this.autorun(function() {

@@ -20,6 +20,10 @@
   height: inherit;
 }
 
+.top-workspace-container {
+  z-index: 10;
+}
+
 .frame-preview-item,
 .add-frame-item {
   position: absolute;
@@ -74,3 +78,22 @@
   top: 67px;
   text-align: center;
 }
+
+.top-workspace-container {
+  position: relative;
+  background-color: white;
+  z-index: 6;
+}
+
+.overshadow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: black;
+  opacity: 0.7;
+  z-index: 5;
+  display: none;
+}
+

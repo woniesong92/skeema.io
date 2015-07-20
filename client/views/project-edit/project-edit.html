@@ -3,10 +3,18 @@
 {{> Modal}}
 <div class="project-edit-container">
   <div class="row">
+
+    <!--
+      this will overshadow the entire window except for the
+      frame workspace part. This is displayed only when the
+      user is choosing an eleemnt for a click event
+    -->
+    <div class="overshadow"></div>
+
     <div class="col s2 sidenav-container z-depth-1">
       {{> SideNav}}
     </div>
-    <div class="col s8">
+    <div class="col s8 top-workspace-container">
       {{> WorkSpace}}
     </div>
 

@@ -64,17 +64,29 @@ if (Meteor.isClient) {
     'click .create-path-btn': function (e, template) {
       var eventType = $('#event-picker').val();
       var eventParam;
+      var pathInfo = Session.get("pathInfo");
+
       if (eventType === 'keypress') {
         eventParam = $.trim($('#key').val());
       } else if (eventType === 'time') {
         eventParam = $.trim($('#duration').val());
       } else {
-        // FIXME: this eventParam will be the element to be clicked
+        // since this is a click event, we have to show
+        // the frame workspace temporarily for him to
+        // choose an element
+
+        Session.set("showFrameWorkspace", {
+          sourceFrame: pathInfo.sourceFrame,
+          pathId: pathInfo.pathId
+        });
+
         eventParam = null;
       }
 
+      
+
       Meteor.call("updatePathEvent", {
-        pathId: Session.get("pathId"),
+        pathId: pathInfo.pathId,
         eventType: eventType,
         eventParam: eventParam
       });

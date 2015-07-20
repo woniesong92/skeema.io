@@ -69,6 +69,9 @@ if (Meteor.isClient) {
 
   Template.TrialWorkSpace.onCreated(function() {
     var self = this;
+
+    // this is intentioally out of autorun scope
+    var trialId = Session.get("trialId");
     
     jsPlumb.ready(function () {
       self.jspInstance = jsPlumb.getInstance(instanceSetting);
@@ -81,6 +84,26 @@ if (Meteor.isClient) {
       var trialId = Session.get("trialId");
       self.mustInitialize = true;
     });
+
+    // This is another tracker for showing frameworkspace temporarily
+    this.chooseElementToClick = Tracker.autorun(function() {
+
+      // FIXME: usefulInfo contains sourceFrameId and pathId
+      // think of a better name. Also, setting four session
+      // values feels wrong
+      var frameAndPathIds = Session.get("showFrameWorkspace");
+
+      if (frameAndPathIds) {
+        Session.set("showChoosingElementView", {
+          trialId: trialId,
+          pathId: frameAndPathIds.pathId,
+          sourceFrame: frameAndPathIds.sourceFrame
+        });
+        Session.set("frameId", frameAndPathIds.sourceFrame);
+        Session.set("currentView", "frameView");
+      }
+      // Blaze.render
+    })
 
     // this session comes from Paths.js
     this.pathDeleted = Tracker.autorun(function() {
@@ -146,7 +169,15 @@ if (Meteor.isClient) {
           }
 
           Meteor.call("addPath", path, function (err, pathId) {
-            Session.set("pathId", pathId);
+            
+            var pathInfo = {
+              pathId: pathId,
+
+              // this will be used when the frame workspace
+              // should be shown for a click event
+              sourceFrame: info.source.id
+            }
+            Session.set("pathInfo", pathInfo);
             info.connection.id = pathId;
             info.connection.getOverlay("label").setLabel(pathName);
           });
