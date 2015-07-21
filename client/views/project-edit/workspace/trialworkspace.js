@@ -136,7 +136,17 @@ if (Meteor.isClient) {
         jspInstance.reset();
 
         // make things draggable
-        jspInstance.draggable($frames);
+        jspInstance.draggable($frames, {
+          stop: function (e, ui) {
+            debugger
+            var frameId = ui.helper[0].id;
+            // var position = $('#' + ui.id).position();
+
+            //FIXME: THIS PROBABLY NEEDS TO BE IN %, not pixels
+            var position = ui.position;
+            Meteor.call("addFramePosition", frameId, position);
+          }
+        });
 
         // make frames sources and sinks so they can be connected
         jspInstance.batch(function () {
