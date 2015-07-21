@@ -79,14 +79,15 @@ if (Meteor.isClient) {
       // without eventType and Param. I should defer
       // creating a path until the user has entered
       // the event type and param.
+
       return Frames.findOne(frameId).name;
     }
   })
 
   Template.PathItem.events({
     "click .path-item-delete": function (e, template) {
-      Meteor.call("deletePath", this._id);
+      Meteor.call("deletePaths", [this._id]);
     }
-  })
+  });
 }
 
