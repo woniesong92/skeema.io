@@ -19,10 +19,6 @@ if (Meteor.isClient) {
 
   Template.Modal.rendered = function () {
      $('select').material_select();
-     // var numElts = Elements.find({frameId: pathInfo.sourceFrame}).count();
-     //    if (numElts < 1) {
-     //      $('.click-error-msg').addClass('show');
-     //    } 
   }
 
   Template.Modal.events({
@@ -39,9 +35,16 @@ if (Meteor.isClient) {
             $('.time-options').addClass('show');
             break;
           case "click":
-            $('.create-path-btn').removeClass('disabled');
-
-            // FIXME: zoom into frame, prompt element selection
+            var pathInfo = Session.get("pathInfo");
+            if (pathInfo) {
+             var numElts = Elements.find({frameId: pathInfo.sourceFrame}).count();
+              if (numElts < 1) {
+                debugger
+                $('.click-error-msg').addClass('show');
+              } else {
+                $('.create-path-btn').removeClass('disabled');
+              }
+            }
             break;
           default:
             break;
