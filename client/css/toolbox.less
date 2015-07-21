@@ -23,6 +23,8 @@
 
 .elt-settings-row {
   padding: 10px 15px 10px 12px;
+  position: relative;
+  z-index: 2;
 }
 
 /* trial tool box */
@@ -32,12 +34,23 @@
 
 .trial-paths-row, .elt-settings-row {
   position: absolute;
+  top: 280px;
+  margin-top: 25px;
+  z-index: 1;
   bottom: 0;
   width: 100%;
 }
 
+.toolbox-container .container.trial-states-saving-row {
+  height: 270px;
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+  padding: 20px 12% 10px 10%;
+}
+
 .trial-paths-row {
-  height: 50%;
+  padding-top: 20px;
 }
 
 .elt-settings-row {
@@ -92,12 +105,20 @@
   -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
   transform: rotate(-90deg);
   position: absolute;
-  right: 190px;
+  right: 189px;
   top: 120px;
 }
 
 .toolbox-tab:hover {
   cursor: pointer; 
+}
+
+.num-occurences-container span {
+  font-size: 0.9rem;
+}
+
+.num-occurences-container {
+  margin-top: 10px;
 }
 
 
