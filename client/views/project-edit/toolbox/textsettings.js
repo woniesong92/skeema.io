@@ -26,5 +26,11 @@ if (Meteor.isClient) {
       $('#' + elementId).css('color', newcolor + ' !important');
     },
 
+    'change #fontsize': function (e, template) { 
+      var newsize = $('#fontsize').val().trim();
+      var elementId = Session.get("elementId");
+      $('#' + elementId).css('font-size', newsize + 'px');
+    },
+
   });
 }
