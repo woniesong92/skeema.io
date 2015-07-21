@@ -59,7 +59,6 @@ if (Meteor.isClient) {
     // FIXME: is it okay to add it here?
     // this is to prevent the modal from showing up
     // after clicking a trial from a frame view
-    Session.set("pathInfo", null);
 
     // this view is only showing for the user to choose
     // an element from the frame. After the user picks
@@ -67,13 +66,8 @@ if (Meteor.isClient) {
     this.chooseElement = Tracker.autorun(function() {
       var infoForChoosing = Session.get("showChoosingElementView");
       if (infoForChoosing) {
-        var choosingElementDeferred = $.Deferred(function() {
-          console.log("new deferred obj created");
-        });
-
+        var choosingElementDeferred = $.Deferred();
         choosingElementDeferred.then(function (selector) {
-          
-
           // add this selector to the click event's param
           Meteor.call('updatePathEvent', {
             pathId: infoForChoosing.pathId,
@@ -87,7 +81,6 @@ if (Meteor.isClient) {
             // like this?
             Session.set("showChoosingElementView", null);
             Session.set("showFrameWorkspace", null);
-            Session.set("pathInfo", null);
             Session.set("trialId", infoForChoosing.trialId);
             Session.set("currentView", "trialView");
 

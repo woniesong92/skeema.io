@@ -83,8 +83,6 @@ if (Meteor.isClient) {
         eventParam = null;
       }
 
-      
-
       Meteor.call("updatePathEvent", {
         pathId: pathInfo.pathId,
         eventType: eventType,
@@ -94,5 +92,9 @@ if (Meteor.isClient) {
       $('#modal').closeModal();
     },
 
+    'click .delete-path-btn': function (e, template) {
+      var pathInfo = Session.get("pathInfo");
+      Meteor.call("deletePaths", [pathInfo.pathId]);
+    }
   });
 }
