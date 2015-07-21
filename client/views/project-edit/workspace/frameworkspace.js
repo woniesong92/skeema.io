@@ -66,13 +66,8 @@ if (Meteor.isClient) {
     this.chooseElement = Tracker.autorun(function() {
       var infoForChoosing = Session.get("showChoosingElementView");
       if (infoForChoosing) {
-        var choosingElementDeferred = $.Deferred(function() {
-          console.log("new deferred obj created");
-        });
-
+        var choosingElementDeferred = $.Deferred();
         choosingElementDeferred.then(function (selector) {
-          
-
           // add this selector to the click event's param
           Meteor.call('updatePathEvent', {
             pathId: infoForChoosing.pathId,
