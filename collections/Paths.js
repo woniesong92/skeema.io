@@ -32,13 +32,13 @@ Meteor.methods({
     });
   },
 
-  deletePath: function (pathId) {
-    Paths.remove(pathId);
+  deletePaths: function (pathIds) {
+    Paths.remove({
+      _id: { $in: pathIds }
+    });
 
-    // if this function was invoked from the toolbox,
-    // we should detach the connection
     if (Meteor.isClient) {
-      Session.set("deletedPathIds", [pathId]);
+      Session.set("deletedPathIds", pathIds);
     }
   }
 });

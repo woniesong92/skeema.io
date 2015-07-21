@@ -35,7 +35,6 @@ Meteor.methods({
   deleteFrame: function (frameId) {
     Frames.remove(frameId);
 
-
     var sourcePathIds = _.map(Paths.find({ sourceId: frameId }).fetch(),
       function (path) { return path._id; }
     );
@@ -44,7 +43,6 @@ Meteor.methods({
     );
     var pathIds = _.union(sourcePathIds, targetPathIds);
 
-    // This will remove path UI's from the DOM
-    Session.set("deletedPathIds", pathIds);
+    Meteor.call("deletePaths", pathIds);
   }
 });

@@ -163,7 +163,7 @@ if (Meteor.isClient) {
           jspInstance.detach(con);
 
           //FIXME: CHANGE THIS TO SHOW PATH SETTINGS IN TOOLBOX
-          Meteor.call("deletePath", con.id);
+          Meteor.call("deletePaths", [con.id]);
         });
 
         // bind event: when a new connection is added, add it to DB too
