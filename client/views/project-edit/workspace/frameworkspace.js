@@ -24,7 +24,7 @@ if (Meteor.isClient) {
     
     x = (x / $('.frame-workspace-container').width()) * 100;
     y = (y / $('.frame-workspace-container').height()) * 100;
-    debugger
+    // debugger
     return {top: y, left: x};
   }
 

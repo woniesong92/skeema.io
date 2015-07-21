@@ -24,14 +24,14 @@ if (Meteor.isClient) {
     //   $('#' + elementId).text(newcontent);
     // },
     'change.color #button-text-colorpicker': function(e, template) { 
-      debugger
+      // debugger
       var newcolor = $('#button-text-colorpicker').val().trim();
       var elementId = Session.get("elementId");
       $('#' + elementId).css('color', newcolor + ' !important');
     },
 
     'change.color #button-bg-colorpicker': function(e, template) { 
-      debugger
+      // debugger
       var newcolor = $('#button-bg-colorpicker').val().trim();
       var elementId = Session.get("elementId");
       $('#' + elementId).css('background-color', newcolor + ' !important');

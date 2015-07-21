@@ -26,7 +26,7 @@ if (Meteor.isClient) {
       $('.element-item').each(function (index){
           var newHTML = $(this).prop('outerHTML');
           Meteor.call("setHTML", this.id, newHTML, function(err){
-            debugger
+            // debugger
             if (err){
               console.log("saving HTML changes failed for "+ this.id);
               return false;

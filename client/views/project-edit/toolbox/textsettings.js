@@ -20,7 +20,7 @@ if (Meteor.isClient) {
     //   $('#' + elementId).text(newcontent);
     // },
     'change.color #text-colorpicker': function(e, template) { 
-      debugger
+      // debugger
       var newcolor = $('#text-colorpicker').val().trim();
       var elementId = Session.get("elementId");
       $('#' + elementId).css('color', newcolor + ' !important');

@@ -32,17 +32,25 @@ Meteor.methods({
     console.log("update frame position")
   },
 
-  deleteFrame: function (frameId) {
-    Frames.remove(frameId);
+  deleteFrames: function (frameIds) {
+    Frames.remove({
+      _id: { $in: frameIds }
+    });
 
-    var sourcePathIds = _.map(Paths.find({ sourceId: frameId }).fetch(),
-      function (path) { return path._id; }
-    );
-    var targetPathIds = _.map(Paths.find({ targetId: frameId }).fetch(),
-      function (path) { return path._id; }
-    );
-    var pathIds = _.union(sourcePathIds, targetPathIds);
+    var pathIds = [];
+
+    _.each(frameIds, function (frameId) {
+      var sourcePathIds = _.map(Paths.find({ sourceId: frameId }).fetch(),
+        function (path) { return path._id; }
+      );
+      var targetPathIds = _.map(Paths.find({ targetId: frameId }).fetch(),
+        function (path) { return path._id; }
+      );
+
+      pathIds = _.union(pathIds, sourcePathIds, targetPathIds);
+    });
 
     Meteor.call("deletePaths", pathIds);
-  }
+  },
+
 });

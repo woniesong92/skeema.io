@@ -204,7 +204,7 @@ if (Meteor.isClient) {
       Session.set("frameId", this._id);
     },
     "click .frame-remove-btn": function (e, template) {
-      Meteor.call("deleteFrame", this._id, function (e){
+      Meteor.call("deleteFrames", [this._id], function (e){
         if (e) {
           console.log("Deleting frame "+this._id+" failed");
           return false;

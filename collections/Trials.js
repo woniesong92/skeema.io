@@ -51,6 +51,11 @@ Meteor.methods({
 
   deleteTrial: function (trialId) {
     Trials.remove(trialId);
+
+    // delete associated frames
+    var frameIds = _.map(Frames.find({trialId: trialId}).fetch(),
+      function (frame) { return frame._id; });
+    Meteor.call("deleteFrames", frameIds);
   },
 
   renameTrial: function (trialId, newName) {
