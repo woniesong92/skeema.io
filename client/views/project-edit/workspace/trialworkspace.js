@@ -111,11 +111,13 @@ if (Meteor.isClient) {
       // FIXME: learn how these trackers actually work and why
       // this is run in the beginning even when the session vars aren't set yet
       // debugger
-      var deletedPathId = Session.get("deletedPathId");
-      self.jspInstance.select().each(function (con) {
-        if (con.id === deletedPathId) {
-          self.jspInstance.detach(con);
-        }
+      var deletedPathIds = Session.get("deletedPathIds");
+      _.each(deletedPathIds, function (deletedPathId) {
+        self.jspInstance.select().each(function (con) {
+          if (con.id === deletedPathId) {
+            self.jspInstance.detach(con);
+          }
+        });
       });
     });
   });
@@ -138,7 +140,6 @@ if (Meteor.isClient) {
         // make things draggable
         jspInstance.draggable($frames, {
           stop: function (e, ui) {
-            debugger
             var frameId = ui.helper[0].id;
             // var position = $('#' + ui.id).position();
 
@@ -266,7 +267,6 @@ if (Meteor.isClient) {
       var jspInstance = this.parent().jspInstance;
       jspInstance.draggable($frame, {
           stop: function (e, ui) {
-            debugger
             var frameId = ui.helper[0].id;
             // var position = $('#' + ui.id).position();
 
