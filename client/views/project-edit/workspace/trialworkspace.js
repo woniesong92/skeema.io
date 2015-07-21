@@ -243,8 +243,8 @@ if (Meteor.isClient) {
       var space = (containerWidth - 90) / 3;
       var horizontalPos = frameIndex % 3;
       var verticalPos = Math.floor(frameIndex / 3);
-      var left = (horizontalPos * space) + 50;
-      var top = (verticalPos * 180) + 30;
+      var left = (horizontalPos * space) + 290;
+      var top = (verticalPos * 180) + 100;
       
       $frame.css({
         left: left,
