@@ -38,7 +38,7 @@ Meteor.methods({
     // if this function was invoked from the toolbox,
     // we should detach the connection
     if (Meteor.isClient) {
-      Session.set("deletedPathId", pathId);
+      Session.set("deletedPathIds", [pathId]);
     }
   }
 });

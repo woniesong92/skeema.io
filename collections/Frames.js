@@ -34,7 +34,17 @@ Meteor.methods({
 
   deleteFrame: function (frameId) {
     Frames.remove(frameId);
-    Paths.remove({ sourceId: frameId });
-    Paths.remove({ targetId: frameId });
+
+
+    var sourcePathIds = _.map(Paths.find({ sourceId: frameId }).fetch(),
+      function (path) { return path._id; }
+    );
+    var targetPathIds = _.map(Paths.find({ targetId: frameId }).fetch(),
+      function (path) { return path._id; }
+    );
+    var pathIds = _.union(sourcePathIds, targetPathIds);
+
+    // This will remove path UI's from the DOM
+    Session.set("deletedPathIds", pathIds);
   }
 });
