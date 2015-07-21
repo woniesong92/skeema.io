@@ -54,17 +54,47 @@
 
   <div class="trial-paths-row grey darken-3 white-text">
     <div class="container">
-      <p class="path-title">Paths</p>
+      <!-- <p class="path-title">Paths</p>
 
       {{#each paths}}
         {{> PathItem}}
-      {{/each}}
+      {{/each}} -->
+
+    {{#if path}}
+
+     <div class="row">
+      <div class="col s12">
+          <label for="trialname">Path Name</label>
+          <input value="{{ path.name }}" id="pathname" type="text">
+      </div>
+    </div>
+
+      <div class="path-info-row">
+        <span class="path-label">From:</span><span class="path-field">{{frameName path.sourceId}}</span><br>
+      </div>
+
+      <div class="path-info-row">
+        <span class="path-label">To:</span><span class="path-field">{{frameName path.targetId}}</span><br>
+      </div>
+      <div class="path-info-row">
+        <span class="path-label">Event Type:</span><span class="path-field">{{path.eventType}}</span><br>
+      </div>
+
+      <div class="path-info-row">
+        <span class="path-label">Event Param:</span><span class="path-field">{{path.eventParam}}</span><br>
+      </div>
+
+
+      <button class="btn path-item-delete grey darken-2 white-text">Remove Path</button>
+
+    {{/if}}
+
     </div>
   </div>
 
 </template>
 
-<template name="PathItem">
+<!-- <template name="PathItem">
   <div class="path-item">
     <table class="path-item-table">
       <tr>
@@ -78,4 +108,4 @@
     </table>
     <i class="fa fa-times path-item-delete"></i>
   </div>
-</template>
+</template> -->
