@@ -68,6 +68,11 @@ if (Meteor.isClient) {
     return $('#' + elementId).css('background-color');
   });
 
+  Template.registerHelper("fontSize", function (event, template) {
+    var elementId = Session.get("elementId");
+    return parseFloat($('#' + elementId).css('font-size'));
+  });
+
   Template.registerHelper("textContent", function (event, template) {
     var elementId = Session.get("elementId");
     return $('#' + elementId).text();
