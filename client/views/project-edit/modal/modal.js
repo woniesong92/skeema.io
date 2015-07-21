@@ -19,6 +19,10 @@ if (Meteor.isClient) {
 
   Template.Modal.rendered = function () {
      $('select').material_select();
+     // var numElts = Elements.find({frameId: pathInfo.sourceFrame}).count();
+     //    if (numElts < 1) {
+     //      $('.click-error-msg').addClass('show');
+     //    } 
   }
 
   Template.Modal.events({

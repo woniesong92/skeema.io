@@ -13,11 +13,9 @@ if (Meteor.isClient) {
   Template.ToolBox.events({
     "click .toolbox-tab": function (e, template) {
       if ($('.toolbox-container').hasClass("collasped-right")){
-        $('.toolbox-container').removeClass("collasped-right");
-        $('.toolbox-container').addClass("expanded-right");
+        $('.toolbox-container').removeClass("collasped-right").addClass("expanded-right");
       } else {
-        $('.toolbox-container').removeClass("expanded-right");
-        $('.toolbox-container').addClass("collasped-right");
+        $('.toolbox-container').removeClass("expanded-right").addClass("collasped-right");
       }
     },
   });

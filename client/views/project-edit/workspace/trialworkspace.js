@@ -127,6 +127,9 @@ if (Meteor.isClient) {
 
     Session.set("pathId", null);
 
+    $('.collasped-right-completely').removeClass("collasped-right-completely").addClass("expanded-right");
+    $('.collasped-left-completely').removeClass("collasped-left-completely").addClass("expanded-left");
+
     var self = this;
 
     this.autorun(function() {

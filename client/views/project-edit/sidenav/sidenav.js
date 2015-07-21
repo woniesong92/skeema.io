@@ -20,11 +20,9 @@ if (Meteor.isClient) {
   Template.SideNav.events({
     "click .project-name": function (e, template) {
       if ($('.sidenav-container').hasClass("collasped-left")){
-        $('.sidenav-container').removeClass("collasped-left");
-        $('.sidenav-container').addClass("expanded-left");
+        $('.sidenav-container').removeClass("collasped-left").addClass("expanded-left");
       } else {
-        $('.sidenav-container').removeClass("expanded-left");
-        $('.sidenav-container').addClass("collasped-left");
+        $('.sidenav-container').removeClass("expanded-left").addClass("collasped-left");
       }
     },
 

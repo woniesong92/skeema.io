@@ -66,8 +66,17 @@ if (Meteor.isClient) {
     this.chooseElement = Tracker.autorun(function() {
       var infoForChoosing = Session.get("showChoosingElementView");
       if (infoForChoosing) {
+
+        // collapse sidenav and toolbox
+
+        $('.sidenav-container').removeClass("expanded-left").addClass("collasped-left-completely");
+        $('.toolbox-container').removeClass("expanded-right").addClass("collasped-right-completely");
+        
+
         var choosingElementDeferred = $.Deferred();
         choosingElementDeferred.then(function (selector) {
+          // if ($('#' + selector).hasClass('.element-item')) {
+          
           // add this selector to the click event's param
           Meteor.call('updatePathEvent', {
             pathId: infoForChoosing.pathId,
@@ -87,6 +96,9 @@ if (Meteor.isClient) {
             // FIXME: not sure how to apply it when the width is 100%
             // toggleShadow();
           });
+        // } else {
+        //    Materialize.toast("Please choose an element", 2000);
+        // }
 
         }, function (err) {
           // FIXME: handle when deferred is rejected for any reason
@@ -123,7 +135,13 @@ if (Meteor.isClient) {
         $('.frame-workspace-container').append(elt.html);
     });
 
-    $('.frame-workspace-container span').attr('contenteditable', 'true');
+    if (Session.get("showChoosingElementView")){
+      $('.element-item')
+            .attr('contenteditable', 'false')
+            .css('cursor', 'pointer');
+    } else {
+      $('.frame-workspace-container span').attr('contenteditable', 'true');
+    }
 
     $( ".draggable" ).draggable({
       containment: ".frame-workspace-container",
@@ -244,6 +262,7 @@ if (Meteor.isClient) {
 
             var elt = Elements.findOne({_id: elementId});
               $('.frame-workspace-container').append(elt.html);
+
               $('#' + elementId).attr('contenteditable', 'true');
 
               $('#' + elementId).draggable({
