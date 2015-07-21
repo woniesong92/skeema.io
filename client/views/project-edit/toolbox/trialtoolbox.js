@@ -10,6 +10,11 @@ if (Meteor.isClient) {
         $('#modal').openModal();
       }
     });
+
+    // this.autorun(function() {
+    //   var pathInfo = Session.set("pathInfo", null);
+    // });
+    
   });
 
   Template.TrialSettings.events({
