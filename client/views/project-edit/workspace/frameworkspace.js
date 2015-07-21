@@ -72,12 +72,15 @@ if (Meteor.isClient) {
         $('.sidenav-container').removeClass("expanded-left").addClass("collasped-left-completely");
         $('.toolbox-container').removeClass("expanded-right").addClass("collasped-right-completely");
         
+        Materialize.toast('Choose an element to be clicked', 4000, 'click-toast')
 
         var choosingElementDeferred = $.Deferred();
         choosingElementDeferred.then(function (selector) {
           // if ($('#' + selector).hasClass('.element-item')) {
           
           // add this selector to the click event's param
+          $('.show').removeClass('show').addClass('hide');
+          
           Meteor.call('updatePathEvent', {
             pathId: infoForChoosing.pathId,
             eventType: 'click',
@@ -141,7 +144,10 @@ if (Meteor.isClient) {
             .css('cursor', 'pointer')
             .attr('data-tooltip', 'Select');
     } else {
-      $('.frame-workspace-container span').attr('contenteditable', 'true');
+      $('.frame-workspace-container span')
+          .attr('contenteditable', 'true')
+          .removeAttr('data-tooltip');
+      $('.show').removeClass('show').addClass('hide');
     }
 
     $( ".draggable" ).draggable({
