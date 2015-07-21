@@ -264,7 +264,17 @@ if (Meteor.isClient) {
     // A new frame has been added and rendered for the first time
     } else if (isLastFrame) {
       var jspInstance = this.parent().jspInstance;
-      jspInstance.draggable($frame);
+      jspInstance.draggable($frame, {
+          stop: function (e, ui) {
+            debugger
+            var frameId = ui.helper[0].id;
+            // var position = $('#' + ui.id).position();
+
+            //FIXME: THIS PROBABLY NEEDS TO BE IN %, not pixels
+            var position = ui.position;
+            Meteor.call("addFramePosition", frameId, position);
+          }
+        });
       jspInstance.makeSource($frame, commonSrcSettings);
       jspInstance.makeTarget($frame, commonTargetSettings);
     }
