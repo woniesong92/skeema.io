@@ -138,7 +138,8 @@ if (Meteor.isClient) {
     if (Session.get("showChoosingElementView")){
       $('.element-item')
             .attr('contenteditable', 'false')
-            .css('cursor', 'pointer');
+            .css('cursor', 'pointer')
+            .attr('data-tooltip', 'Select');
     } else {
       $('.frame-workspace-container span').attr('contenteditable', 'true');
     }
