@@ -58,6 +58,30 @@ if (Meteor.isClient) {
     return false;
   });
 
+  Template.registerHelper("path", function (event, template) {
+    var pathId = Session.get("pathId");
+    if (pathId != null){
+      return Paths.findOne({_id: pathId});
+    }
+    return false;
+  })
+
+  // Template.registerHelper("sourceId", function (event, template) {
+  //   var pathId = Session.get("pathId");
+  //   if (pathId != null){
+  //     return Paths.findOne({_id: path}).sourceId;
+  //   }
+  //   return false;
+  // });
+
+  // Template.registerHelper("targetId", function (event, template) {
+  //   var pathId = Session.get("pathId");
+  //   if (pathId != null){
+  //     return Paths.findOne({_id: path}).targetId;
+  //   }
+  //   return false;
+  // });
+
   Template.registerHelper("color", function (event, template) {
     var elementId = Session.get("elementId");
     return $('#' + elementId).css('color');

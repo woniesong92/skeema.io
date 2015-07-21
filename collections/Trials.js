@@ -59,9 +59,9 @@ Meteor.methods({
   },
 
   renameTrial: function (trialId, newName) {
-  Trials.update(trialId, {
-    $set: {'name': newName}
-  });
+    Trials.update(trialId, {
+      $set: {'name': newName}
+    });
   },
 
   //FIXME: MUST SHIFT THE INDECES OF THE OTHER TRIALS

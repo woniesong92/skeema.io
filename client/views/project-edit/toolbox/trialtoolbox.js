@@ -74,7 +74,7 @@ if (Meteor.isClient) {
     }
   });
 
-  Template.PathItem.helpers({
+  Template.TrialPaths.helpers({
     frameName: function (frameId) {
 
       // FIXME: this is called twice every time a path
@@ -88,10 +88,19 @@ if (Meteor.isClient) {
     }
   })
 
-  Template.PathItem.events({
+  Template.TrialPaths.events({
+
+    'change #pathname': function (e, template) { 
+      var newname = $('#pathname').val().trim();
+      var pathId = Session.get("pathId");
+      Meteor.call('renamePath', pathId, newname)
+    },
+
     "click .path-item-delete": function (e, template) {
-      Meteor.call("deletePaths", [this._id]);
-    }
+      var pathId = Session.get("pathId");
+      Meteor.call("deletePaths", [pathId]);
+    },
+
   });
 }
 

@@ -124,6 +124,9 @@ if (Meteor.isClient) {
 
   // TODO: add comments
   Template.TrialWorkSpace.onRendered(function() {
+
+    Session.set("pathId", null);
+
     var self = this;
 
     this.autorun(function() {
@@ -160,10 +163,10 @@ if (Meteor.isClient) {
 
         // bind event: click a connection to detach it
         jspInstance.bind("click", function (con) {
-          jspInstance.detach(con);
-
-          //FIXME: CHANGE THIS TO SHOW PATH SETTINGS IN TOOLBOX
-          Meteor.call("deletePaths", [con.id]);
+          // jspInstance.detach(con);
+          // Meteor.call("deletePaths", [con.id]);
+          debugger
+          Session.set("pathId", con.id);
         });
 
         // bind event: when a new connection is added, add it to DB too

@@ -23,6 +23,12 @@ Meteor.methods({
     return Paths.insert(path);
   },
 
+  renamePath: function(pathId, newname){
+    Paths.update(pathId, {
+      $set: {'name': newname}
+    });
+  },
+
   updatePathEvent: function (data) {
     Paths.update(data['pathId'], {
       $set: {
