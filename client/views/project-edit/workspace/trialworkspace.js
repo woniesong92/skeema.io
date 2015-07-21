@@ -150,6 +150,8 @@ if (Meteor.isClient) {
         // bind event: click a connection to detach it
         jspInstance.bind("click", function (con) {
           jspInstance.detach(con);
+
+          //FIXME: CHANGE THIS TO SHOW PATH SETTINGS IN TOOLBOX
           Meteor.call("deletePath", con.id);
         });
 
@@ -190,6 +192,16 @@ if (Meteor.isClient) {
       Session.set("currentView", "frameView");
       Session.set("frameId", this._id);
     },
+    "click .frame-remove-btn": function (e, template) {
+      Meteor.call("deleteFrame", this._id, function (e){
+        if (e) {
+          console.log("Deleting frame "+this._id+" failed");
+          return false;
+        }
+        Materialize.toast('Removed successfully', 4000);
+      });
+    },
+
   });
 
   Template.TrialWorkSpace.helpers({

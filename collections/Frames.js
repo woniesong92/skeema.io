@@ -30,5 +30,11 @@ Meteor.methods({
       $set: {position: position}
     });
     console.log("update frame position")
+  },
+
+  deleteFrame: function (frameId) {
+    Frames.remove(frameId);
+    Paths.remove({ sourceId: frameId });
+    Paths.remove({ targetId: frameId });
   }
 });

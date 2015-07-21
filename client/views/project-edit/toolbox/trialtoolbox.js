@@ -41,10 +41,7 @@ if (Meteor.isClient) {
         var position = $(frame).position();
         Meteor.call("addFramePosition", frame.id, position);
       });
-    }
-  });
-
-  Template.TrialPaths.events({
+    },
     'click .add-frame': function (e, template) {
       var projectId = this._id;
       var trialId = Session.get('trialId');
