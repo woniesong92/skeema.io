@@ -165,7 +165,6 @@ if (Meteor.isClient) {
         jspInstance.bind("click", function (con) {
           // jspInstance.detach(con);
           // Meteor.call("deletePaths", [con.id]);
-          debugger
           Session.set("pathId", con.id);
         });
 
