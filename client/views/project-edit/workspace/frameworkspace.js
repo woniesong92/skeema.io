@@ -151,6 +151,10 @@ if (Meteor.isClient) {
     }
  
     // make images resizable
+    // FIXME: eventually we might want to resize the images from the
+    // server side using imagemagick, and upload to S3 from the server
+    // instead of directly from the client side.
+
     $('.frame-image').load(function() {
       $(this).resizable();
     });

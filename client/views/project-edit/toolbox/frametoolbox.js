@@ -32,7 +32,7 @@ if (Meteor.isClient) {
             }
           });
       });
-      
+
       Materialize.toast('Saved successfully', 4000);
     },
 
@@ -44,6 +44,32 @@ if (Meteor.isClient) {
 
     'change input.file-upload-input': function (e, template) {
       var files = $("input.file-upload-input")[0].files;
+
+      // FIXME: eventually we might want to resize the images from the
+      // server side using imagemagick, and upload to S3 from the server
+      // instead of directly from the client side.
+
+      // FIXME: check file size from both the client and
+      // server side before uploading it to S3
+
+      var errMessage;
+      $.each(files, function (idx, file) {
+        var isImage = (file.type.indexOf('image') >= 0);
+        var isSmall = (file.size < 10000000); // 10MB
+
+        if (!isImage) {
+          errMessage = "You can only upload images";
+        } else if (!isSmall) {
+          errMessage = "File size should be less than 10MB"
+        }
+        if (errMessage) {
+          Materialize.toast(errMessage, 4000);
+          return false; // break out of loop
+        }
+      });
+
+      // execute no further if err exists
+      if (errMessage) { return; }
 
       S3.upload({
         files: files,
@@ -63,6 +89,9 @@ if (Meteor.isClient) {
 
     'click .remove-elt': function (e, template) {
       var elementId = Session.get("elementId");
+      // FIXME: some error when deleting an image?
+      // probably another div id, image id thing
+
       Meteor.call("deleteElement", elementId, function (e){
         if (e) {
           console.log("Deleting element "+elementId+" failed");
