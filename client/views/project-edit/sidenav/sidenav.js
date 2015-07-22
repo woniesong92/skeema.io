@@ -1,4 +1,12 @@
 if (Meteor.isClient) {
+  Template.SideNav.onRendered(function() {
+    // TODO: Have to make this persistent to the server.
+    var preventDragging = {
+      cancel: ".add-block, .add-trial"
+    };
+    this.$('.block-items').sortable(preventDragging);
+    this.$('.trial-items').sortable(preventDragging);
+  });
 
   Template.SideNav.helpers({
     projectName: function() {
