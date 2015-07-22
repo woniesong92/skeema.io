@@ -31,11 +31,8 @@ if (Meteor.isClient) {
     },
 
     "click .block-item": function (e, template) {
-      $(e.target).closest('.block-item').toggleClass('is-open');
+      $(e.currentTarget).toggleClass('is-open');
       Session.set("currentView", "blockView");
-
-      // FIXME: To avoid confusion, should we set it as "blokcId"?
-      // this is used in blockworkspace as well
       Session.set("blockId", this._id);
     },
 

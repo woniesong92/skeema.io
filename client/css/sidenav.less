@@ -5,6 +5,7 @@
 
 .sidenav-container .project-name {
   padding: 10px;
+  padding: 10px 0 10px 6px;
   margin-top: -2px;
 }
 
@@ -19,51 +20,69 @@
   padding-right: 6px;
 }
 
-.block-item {
-  text-indent: 20px;
-}
-
 .trial-item {
-  text-indent: 40px;
   z-index: 2;
 }
 
-.add-trial,
-.add-block {
-  cursor: pointer;
+.block-item {
+  position: relative;
+  padding: 5px;
 }
 
-.add-trial {
-  margin-left: 20px;
+.block-item-link {
+  margin-left: 25px;
 }
 
-.add-block {
-  margin-left: 10px;
+.block-item .fa-folder,
+.block-item .fa-folder-open {
+  position: absolute;
+  left: 5px;
+  top: 7px;
 }
 
 .block-item .trial-items,
-.block-item .block-item-link .fa-chevron-down,
-.block-item.is-open .block-item-link .fa-chevron-right {
+.block-item .fa-folder-open,
+.block-item.is-open .fa-folder {
   display: none;
+}
+
+.block-item.is-open .fa-folder-open {
+  display: inline-block;
+  color: #2196F3;
 }
 
 .block-item.is-open .trial-items {
   display: block;
 }
 
-.block-item.is-open .block-item-link .fa-chevron-down {
-  display: inline-block;
+.trial-item {
+  position: relative;
+  margin-left: 48px;
+  padding: 5px 5px 5px 0;
+  font-size: 13px;
+  line-height: 1;
 }
 
-.fa-chevron-down,
-.fa-chevron-left {
-  margin-left: -10px;
+.trial-item .fa-file-o {
+  position: absolute;
+  left: -25px;
+  top: 4px;
+}
+
+.trial-item-link {
+  display: inline-block;
+  width: 130px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .trial-delete-link {
-  // FIXME: click the right part of trial-item
-  // overlaps with the icon, invoking "delete"
-  // method when it shouldn't
-  margin-left: -18px;
+  position: absolute;
+  right: 0;
+}
+
+.collasped-left .block-items {
+  display: none;
 }
 

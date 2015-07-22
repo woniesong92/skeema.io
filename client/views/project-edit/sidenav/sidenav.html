@@ -8,27 +8,31 @@
   <ul class='block-items white'>
     {{#each blocks}}
       <li class='block-item'>
+        <i class="fa fa-fw fa-folder"></i>
+        <i class="fa fa-fw fa-folder-open"></i>
         <a href='#' class='block-item-link'>
-          {{name}}
-          <i class="fa fa-chevron-down"></i>
-          <i class="fa fa-chevron-right"></i>
+          {{name}}  
         </a>
         <ul class='trial-items'>
           {{#each trials _id}}
             <li class='trial-item'>
+              <i class="fa fa-fw fa-file-o"></i>
               <a href='#' class='trial-item-link'>{{name}}</a>
-              <!-- <a href='#' class='trial-edit-link'>
-                <i class="fa fa-pencil"></i>
-              </a> -->
               <a href='#' class='trial-delete-link'>
                 <i class="fa fa-remove fa-fw"></i>
               </a>
             </li>
           {{/each}}
-          <a class="add-trial">+ Add Trial</a>
+          <li class="trial-item">
+            <!-- not using an icon looks better IMO -->
+            <!-- <i class="fa fa-plus fa-fw"></i> -->
+            <a class="add-trial">+ Add Trial</a>
+          </li>
         </ul>
       </li>
     {{/each}}
-    <a class="add-block">+ Add Block</a>
+    <li class="block-item">
+      <a class="add-block">+ Add Block</a>
+    </li>
   </ul>
 </template>
