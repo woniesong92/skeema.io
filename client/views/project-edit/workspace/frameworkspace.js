@@ -72,7 +72,7 @@ if (Meteor.isClient) {
         $('.sidenav-container').removeClass("expanded-left").addClass("collasped-left-completely");
         $('.toolbox-container').removeClass("expanded-right").addClass("collasped-right-completely");
         
-        Materialize.toast('Choose an element to be clicked', 4000, 'click-toast')
+        // Materialize.toast('Choose an element to be clicked', 4000, 'click-toast')
 
         var choosingElementDeferred = $.Deferred();
         choosingElementDeferred.then(function (selector) {

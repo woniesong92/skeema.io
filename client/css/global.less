@@ -1,4 +1,5 @@
 @import "global.import.less";
+@import "colors.less";
 
 /* FONTS
 1. Lato
@@ -6,9 +7,8 @@
 3. Bukhari
 4. Kirvy
 5. Roboto
+6. OpenSans
  */
-
-
 
 @font-face {
 	font-family: Lato;
@@ -121,6 +121,78 @@
 	font-weight: bold;
 }
 
+@font-face {
+  font-family: OpenSans;
+  src: url("../fonts/OpenSans/OpenSansBold.ttf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: OpenSans;
+  src: url("../fonts/OpenSans/OpenSansItalic.ttf") format("opentype");
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: OpenSans;
+  src: url("../fonts/OpenSans/OpenSansBoldItalic.ttf") format("opentype");
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: OpenSans;
+  src: url("../fonts/OpenSans/OpenSansExtraBold.ttf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: OpenSans;
+  src: url("../fonts/OpenSans/OpenSansExtraBoldItalic.ttf") format("opentype");
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: OpenSans;
+  src: url("../fonts/OpenSans/OpenSansLight.ttf") format("opentype");
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: OpenSans;
+  src: url("../fonts/OpenSans/OpenSansLightItalic.ttf") format("opentype");
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: OpenSans;
+  src: url("../fonts/OpenSans/OpenSansSemibold.ttf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: OpenSans;
+  src: url("../fonts/OpenSans/OpenSansSemiboldItalic.ttf") format("opentype");
+  font-weight: 500;
+  font-style: italic;
+}
+
+/* body, html */
+
+body, html {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: OpenSans;
+}
 
 /* CUSTOM GRID STYLE */
 .container {
@@ -128,7 +200,7 @@
 }
 
 .row {
-	margin-bottom: 0;
+  margin: 0;
 }
 
 
@@ -136,6 +208,7 @@
 
 label {
 	color: #eee;
+  font-weight: normal;
 }
 
 input[type=text], input[type=password], input[type=email], input[type=url], input[type=time], input[type=date], input[type=datetime-local], input[type=tel], input[type=number], input[type=search], textarea.materialize-textarea {
@@ -143,12 +216,13 @@ input[type=text], input[type=password], input[type=email], input[type=url], inpu
   // border: 2px solid #fff;
   color: #000;
   border-radius: 3px;
+  border-width: 0;
   outline: none;
-  height: 1.5rem;
+  height: 1.5em;
   width: 100%;
-  font-size: 1rem;
+  // font-size: 1rem;
   margin: 0 0 15px 0;
-  padding: 0 3px;
+  padding: 1px 3px;
   box-shadow: none;
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
@@ -160,6 +234,7 @@ input[type=text], input[type=password], input[type=email], input[type=url], inpu
 input[type=text]:focus {
  // border-bottom: 1px solid #000;
  border-bottom: none;
+ border-width: 0;
  // box-shadow: 0 1px 0 0 #000;
  box-shadow: none;
 }
@@ -168,6 +243,7 @@ input[type=text]:focus {
 input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
     // border-bottom: 2px solid #fff;
     border-bottom: none;
+    border-width: 0;
     // box-shadow: 0 2px 0 0 #fff;
     box-shadow: none;
     // padding: 1px 3px;
@@ -180,7 +256,7 @@ input[type=text]:focus:not([readonly]) + label, input[type=password]:focus:not([
 
 [type="checkbox"] + label {
   line-height: 20px;
-  font-size: 0.9rem;
+  // font-size: 1rem;
 }
 
 [type="checkbox"].filled-in:not(:checked) + label:after {
@@ -239,6 +315,30 @@ ul.projects li:not(.ui-sortable-helper) {
 
 /* button */
 
+.btn {
+  font-size: 12px;
+}
+
+.btn i {
+  font-size: 13px;
+}
+
 .btn-no-hover:hover {
   box-shadow: none;
+}
+
+.btn-default {
+  border-radius: 0;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #F2F2F2;
+
+  /* CSS Transition */
+  -webkit-transition: background .2s ease-in-out, border .2s ease-in-out;
+  -moz-transition: background .2s ease-in-out, border .2s ease-in-out;
+  -ms-transition: background .2s ease-in-out, border .2s ease-in-out;
+  -o-transition: background .2s ease-in-out, border .2s ease-in-out;
+  transition: background .2s ease-in-out, border .2s ease-in-out;
 }
