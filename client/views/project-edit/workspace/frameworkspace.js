@@ -129,8 +129,7 @@ if (Meteor.isClient) {
   })
 
 
-  Template.FrameWorkSpace.rendered = function () {
-
+  Template.FrameWorkSpace.onRendered(function() {
     Session.set("elementId", null);
 
     var frameElts = Elements.find({"frameId": Session.get("frameId") });
@@ -159,6 +158,8 @@ if (Meteor.isClient) {
       }
     });
 
+    // make images resizable
+    $('.frame-workspace-container').resizable();
 
     this.autorun(function() {
       var addText = Session.get("addText");
@@ -168,8 +169,7 @@ if (Meteor.isClient) {
         $('.frame-workspace-container').css('cursor', 'copy');
       }
     });
-    
-  }
+  });
 
   Template.FrameWorkSpace.events({
 
@@ -299,10 +299,11 @@ if (Meteor.isClient) {
           var htmlStr = "<div id='" + elementId
                         + "' class='draggable element-item frame-image-container' "
                         + "style='position:absolute;"
+                        + "display: inline-block;"
                         + "top:" + top + "%;"
                         + "left:" + left + "%;'"
                         + ">"
-                        + "<img src='" + imageUrl + "'>"
+                        + "<img class='frame-image' src='" + imageUrl + "'>"
                         + "</div>";
 
           Meteor.call("setHTML", elementId, htmlStr, function(e) {
@@ -315,15 +316,23 @@ if (Meteor.isClient) {
             }
 
             var elt = Elements.findOne({_id: elementId});
-            $('.frame-workspace-container').append(elt.html);
-            $('#' + elementId).attr('contenteditable', 'true');
+            var $elt = $(elt.html);
+            $('.frame-workspace-container').append($elt);
 
-            $( ".draggable" ).draggable({
+            // You have to wait until the image is loaded
+            // before making it resziable
+            var $image = $elt.find('.frame-image');
+            $image.load(function() {
+              $image.resizable();
+            });
+
+            $elt.draggable({
               containment: ".frame-workspace-container",
               scroll: false,
+              // FIXME: why are you setting elementId again?
               stop: function (event, ui) {
                 Session.set("elementId", this.id);
-               }
+              }
             });
           });
         });
