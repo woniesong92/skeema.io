@@ -214,7 +214,7 @@ if (Meteor.isClient) {
           console.log("Deleting frame "+this._id+" failed");
           return false;
         }
-        Materialize.toast('Removed successfully', 4000);
+        Utils.toast('Removed successfully', 2000);
       });
     },
 

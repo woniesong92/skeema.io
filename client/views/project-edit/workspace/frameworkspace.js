@@ -72,7 +72,7 @@ if (Meteor.isClient) {
         $('.sidenav-container').removeClass("expanded-left").addClass("collasped-left-completely");
         $('.toolbox-container').removeClass("expanded-right").addClass("collasped-right-completely");
         
-        // Materialize.toast('Choose an element to be clicked', 4000, 'click-toast')
+        Utils.toast('Choose an element to be clicked', 2000);
 
         var choosingElementDeferred = $.Deferred();
         choosingElementDeferred.then(function (selector) {
@@ -183,13 +183,7 @@ if (Meteor.isClient) {
   Template.FrameWorkSpace.events({
 
     "click .element-item": function (e, template) {
-      var $target = $(e.target);
-      var elementId;
-      if ($target.prop("tagName") === "IMG") {
-        elementId = $target.closest('.frame-image-container').attr("id");
-      } else {
-        elementId = $target.attr("id");
-      }
+      var elementId = e.currentTarget.id;
       Session.set("elementId", elementId);
     },
 

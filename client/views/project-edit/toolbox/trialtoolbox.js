@@ -67,8 +67,6 @@ if (Meteor.isClient) {
         }
         Session.set("frameAdded", frameId);
       });
-
-      $('#modal').closeModal();
     }
   });
 

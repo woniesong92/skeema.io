@@ -1,3 +1,20 @@
+// Global util helpers
+Meteor.startup(function() {
+  if (Meteor.isClient) {
+    Utils = {};
+
+    Utils.toast = function (content, duration, selector) {
+      var duration = duration || 2000;
+
+      if (selector) {
+        $(selector).text(content).fadeIn().delay(duration).fadeOut();
+      } else {
+        $('.alert').text(content).fadeIn().delay(duration).fadeOut();
+      }
+    }
+  }
+});
+
 // Global helpers
 
 if (Meteor.isClient) {

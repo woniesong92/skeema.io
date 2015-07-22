@@ -38,7 +38,7 @@ if (Meteor.isClient) {
         });
       });
 
-      Materialize.toast('Saved successfully', 4000);
+      Utils.toast('Saved successfully', 2000);
     },
 
     'click .add-text-btn': function (e, template) {
@@ -86,7 +86,7 @@ if (Meteor.isClient) {
         // uploading finished
         if (err) {
           Session.set("addImage", false);
-          Materialize.toast(err, 4000);
+          Utils.toast(err, 2000);
         } else {
           Session.set("addImage", uploadedFile.url);  
         }
@@ -104,15 +104,15 @@ if (Meteor.isClient) {
 
     'click .remove-elt': function (e, template) {
       var elementId = Session.get("elementId");
-      // FIXME: some error when deleting an image?
-      // probably another div id, image id thing
 
       Meteor.call("deleteElement", elementId, function (e){
         if (e) {
           console.log("Deleting element "+elementId+" failed");
           return false;
         }
-        Materialize.toast('Removed successfully', 4000);
+
+        Utils.toast('Removed successfully', 2000);
+
         $('#'+elementId).remove();
       });
     },

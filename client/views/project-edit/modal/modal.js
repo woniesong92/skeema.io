@@ -17,9 +17,10 @@ if (Meteor.isClient) {
 
   });
 
-  Template.Modal.rendered = function () {
-     $('select').material_select();
-  }
+  Template.Modal.onRendered(function() {
+    // FIXME: is this necessary anymore?
+    // material_select()
+  });
 
   Template.Modal.events({
     'change #event-picker': function(e, template) { 
@@ -95,8 +96,6 @@ if (Meteor.isClient) {
         eventType: eventType,
         eventParam: eventParam
       });
-
-      $('#modal').closeModal();
     },
 
     'click .delete-path-btn': function (e, template) {
