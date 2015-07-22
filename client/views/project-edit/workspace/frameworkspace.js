@@ -176,6 +176,16 @@ if (Meteor.isClient) {
       scroll: false,
       stop: function (event, ui) {
         Session.set("elementId", this.id);
+
+        // save new html automatically
+        var currentHTML = $('#' + this.id).prop('outerHTML');
+        Meteor.call("setHTML", this.id, currentHTML, function (err){
+          if (err){
+            console.log("saving HTML changes failed for " + this.id);
+            return false;
+            }
+        });
+
       }
     });
 
@@ -197,6 +207,21 @@ if (Meteor.isClient) {
     "click .element-item": function (e, template) {
       var elementId = e.currentTarget.id;
       Session.set("elementId", elementId);
+    },
+
+    "blur .element-item[contenteditable='true']": function (e, template) {
+      var elementId = e.currentTarget.id;
+
+      // save html automatically
+      var currentHTML = $('#' + elementId).prop('outerHTML');
+      if (Elements.findOne({_id: elementId}).html != currentHTML) {
+        Meteor.call("setHTML", elementId, currentHTML, function (err){
+          if (err){
+            console.log("saving HTML changes failed for " + elementId);
+            return false;
+          }
+        });
+      }
     },
 
     "click .frame-workspace-container": function (e, template) {
@@ -249,6 +274,15 @@ if (Meteor.isClient) {
                 scroll: false,
                 stop: function (event, ui) {
                   Session.set("elementId", this.id);
+
+                  // save new html automatically
+                  var currentHTML = $('#' + this.id).prop('outerHTML');
+                  Meteor.call("setHTML", this.id, currentHTML, function (err){
+                    if (err){
+                      console.log("saving HTML changes failed for " + this.id);
+                      return false;
+                      }
+                  });
                  }
                });
           });
@@ -274,7 +308,7 @@ if (Meteor.isClient) {
                         + "style='font-family:Arial;"
                         + "font-size:18px;"
                         + "position:absolute;"
-                        + "background-color:blue;"
+                        + "background-color:#00b0f0;"
                         + "color:#fff;"
                         + "top:" + top +"%;"
                         + "left:" + left + "%;'"

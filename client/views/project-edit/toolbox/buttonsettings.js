@@ -28,6 +28,15 @@ if (Meteor.isClient) {
       var newcolor = $('#button-text-colorpicker').val().trim();
       var elementId = Session.get("elementId");
       $('#' + elementId).css('color', newcolor + ' !important');
+
+      // save new html automatically
+      var currentHTML = $('#' + elementId).prop('outerHTML');
+      Meteor.call("setHTML", elementId, currentHTML, function (err){
+        if (err){
+          console.log("saving HTML changes failed for " + elementId);
+          return false;
+          }
+      });
     },
 
     'change.color #button-bg-colorpicker': function(e, template) { 
@@ -35,6 +44,15 @@ if (Meteor.isClient) {
       var newcolor = $('#button-bg-colorpicker').val().trim();
       var elementId = Session.get("elementId");
       $('#' + elementId).css('background-color', newcolor + ' !important');
+
+      // save new html automatically
+      var currentHTML = $('#' + elementId).prop('outerHTML');
+      Meteor.call("setHTML", elementId, currentHTML, function (err){
+        if (err){
+          console.log("saving HTML changes failed for " + elementId);
+          return false;
+          }
+      });
     },
 
     'change #button-fontsize': function (e, template) { 
@@ -44,6 +62,15 @@ if (Meteor.isClient) {
       var elementId = Session.get("elementId");
       $('#' + elementId).css('font-size', newsize + 'px')
         .css('height', newheight + 'px').css('line-height', newlineheight + 'px');
+
+      // save new html automatically
+      var currentHTML = $('#' + elementId).prop('outerHTML');
+      Meteor.call("setHTML", elementId, currentHTML, function (err){
+        if (err){
+          console.log("saving HTML changes failed for " + elementId);
+          return false;
+          }
+      });
     },
 
   });

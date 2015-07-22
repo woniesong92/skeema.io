@@ -24,12 +24,31 @@ if (Meteor.isClient) {
       var newcolor = $('#text-colorpicker').val().trim();
       var elementId = Session.get("elementId");
       $('#' + elementId).css('color', newcolor + ' !important');
+
+      // save new html automatically
+      var currentHTML = $('#' + elementId).prop('outerHTML');
+      Meteor.call("setHTML", elementId, currentHTML, function (err){
+        if (err){
+          console.log("saving HTML changes failed for " + elementId);
+          return false;
+          }
+      });
     },
 
     'change #fontsize': function (e, template) { 
       var newsize = $('#fontsize').val().trim();
       var elementId = Session.get("elementId");
       $('#' + elementId).css('font-size', newsize + 'px');
+      
+      // save new html automatically
+      var currentHTML = $('#' + elementId).prop('outerHTML');
+      Meteor.call("setHTML", elementId, currentHTML, function (err){
+        if (err){
+          console.log("saving HTML changes failed for " + elementId);
+          return false;
+          }
+      });
+
     },
 
   });
