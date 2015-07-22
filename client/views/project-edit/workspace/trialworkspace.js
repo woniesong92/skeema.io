@@ -214,8 +214,14 @@ if (Meteor.isClient) {
           console.log("Deleting frame "+this._id+" failed");
           return false;
         }
-        Utils.toast('Removed successfully', 2000);
-      });
+        // Utils.toast('Removed successfully', 2000);
+        
+      $.simplyToast('Removed successfully', 'success');
+      $.extend(true, $.simplyToast.defaultOptions,
+          {
+             'customClass' : 'top-right-toast'
+          });
+        });
     },
 
   });
