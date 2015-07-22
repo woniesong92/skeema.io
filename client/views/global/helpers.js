@@ -34,26 +34,36 @@ if (Meteor.isClient) {
     return Elements.findOne({_id: elementId});
   });
 
+  // FIXME: there is no reason to have three functions for this.
   Template.registerHelper("selectedIsText", function (event, template) {
     var elementId = Session.get("elementId");
-    if (elementId != null){
-      return Elements.findOne({_id: elementId}).type == "text";
+    if (elementId != null) {
+      var element = Elements.findOne({_id: elementId});
+      if (element) {
+        return element.type === "text";
+      }
     }
     return false;
   });
 
   Template.registerHelper("selectedIsButton", function (event, template) {
     var elementId = Session.get("elementId");
-    if (elementId != null){
-      return Elements.findOne({_id: elementId}).type == "button";
+    if (elementId != null) {
+      var element = Elements.findOne({_id: elementId});
+      if (element) {
+        return element.type === "button";
+      }
     }
     return false;
   });
 
   Template.registerHelper("selectedIsImage", function (event, template) {
     var elementId = Session.get("elementId");
-    if (elementId != null){
-      return Elements.findOne({_id: elementId}).type == "image";
+    if (elementId != null) {
+      var element = Elements.findOne({_id: elementId});
+      if (element) {
+        return element.type === "image";
+      }
     }
     return false;
   });
