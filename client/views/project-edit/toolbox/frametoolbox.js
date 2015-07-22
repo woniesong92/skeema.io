@@ -22,15 +22,20 @@ if (Meteor.isClient) {
     },
 
     'click .save-btn': function (e, template) {
-      // for each .element-item
       $('.element-item').each(function (index) {
-          var newHTML = $(this).prop('outerHTML');
-          Meteor.call("setHTML", this.id, newHTML, function (err){
-            if (err){
-              console.log("saving HTML changes failed for " + this.id);
-              return false;
-            }
-          });
+        // Strip off resizable wrappers before saving the content
+        if (this.className.indexOf("frame-image-container") >= 0) {
+          var $image = $(this).find('.frame-image');
+          $(this).children().replaceWith($image);
+        }
+
+        var newHTML = $(this).prop('outerHTML');
+        Meteor.call("setHTML", this.id, newHTML, function (err){
+          if (err){
+            console.log("saving HTML changes failed for " + this.id);
+            return false;
+          }
+        });
       });
 
       Materialize.toast('Saved successfully', 4000);
@@ -71,11 +76,21 @@ if (Meteor.isClient) {
       // execute no further if err exists
       if (errMessage) { return; }
 
+      // start uploading
+      $('.frame-workspace-container').css('cursor', 'wait');
+
       S3.upload({
         files: files,
         path: "images"
       }, function (err, uploadedFile) {
-        Session.set("addImage", uploadedFile.url);
+        // uploading finished
+        if (err) {
+          Session.set("addImage", false);
+          Materialize.toast(err, 4000);
+        } else {
+          Session.set("addImage", uploadedFile.url);  
+        }
+        $('.frame-workspace-container').css('cursor', 'auto');      
         Session.set("addText", false);
         Session.set("addButton", false);
       });

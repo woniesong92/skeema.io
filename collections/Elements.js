@@ -25,6 +25,8 @@ Meteor.methods({
   },
 
   deleteElement: function (elementId) {
+    // FIXME: if we are removing an image,
+    // we should remove it from S3 storage as well.
     Elements.remove(elementId);
   },
 

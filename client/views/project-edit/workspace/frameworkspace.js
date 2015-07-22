@@ -155,8 +155,8 @@ if (Meteor.isClient) {
     // server side using imagemagick, and upload to S3 from the server
     // instead of directly from the client side.
 
-    $('.frame-image').load(function() {
-      $(this).resizable();
+    $('.frame-image').waitForImages(function() {
+      $('.frame-image').resizable();
     });
 
     $(".draggable").draggable({
@@ -164,7 +164,6 @@ if (Meteor.isClient) {
       scroll: false,
       stop: function (event, ui) {
         Session.set("elementId", this.id);
-        console.log(this.id);
       }
     });
 
