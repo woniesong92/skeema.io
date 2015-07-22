@@ -52,7 +52,7 @@ if (Meteor.isClient) {
 
     isImage: function () {
       return this.type == "image";
-    }
+    },
   });
 
   Template.FrameWorkSpace.onCreated(function() {

@@ -1,42 +1,23 @@
 @import "global.import.less";
 
-.modal {
-  min-height: 300px;
-  max-height: none;
-  width: 400px;
-}
 
 .modal input {
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.modal h4 {
-  font-size: 24px;
-}
-
-.modal-footer {
-  position: absolute;
-  bottom: 0;
-  padding: 10px;
-}
-
-.modal-footer a {
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-.modal .divider {
-  position: relative;
-  bottom: 5px;
+.modal-body {
+    width: 70%;
+    margin: 0 auto;
 }
 
 .modal-fields {
   margin-top: 20px;
+  width: 100%;
 }
 
 .modal-fields .row {
-  padding-bottom: 10px;
+  padding-bottom: 20px;
 }
 
 .time-options, .key-options, .click-error-msg {
@@ -60,17 +41,15 @@
 }
 
 .modal input[type=text]:not([readonly]),
-.modal input[type=number] {
-  background-color: transparent;
-  border: 1px solid #777;
+.modal input[type=text]:focus {
+  background-color: rgba(0, 0, 0, 0.1);
+  // border: 1px solid #777;
   color: #000;
   border-radius: 3px;
   outline: none;
-  height: 2rem;
-  width: 20%;
-  font-size: 1rem;
+  // width: 20%;
   margin: 0 0 15px 10px;
-  padding: 0 3px;
+  padding: 5px 10px;
   box-shadow: none;
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
@@ -81,16 +60,46 @@
  /* label underline focus color */
 .modal input[type=text]:focus,
 .modal input[type=number]:focus {
- border-bottom: 1px solid #777;
- box-shadow: 0 1px 0 0 #777;
+ // border-bottom: 1px solid #777;
+ // box-shadow: 0 1px 0 0 #777;
+}
+
+#duration {
+  // width: 20%;
+  border-radius: 3px;
+}
+
+.modal .addon {
+  padding-left: 30px;
+    line-height: 2em;
+}
+
+.modal input[type=number],
+.modal input[type=number]:focus,
+.modal input[type=number]:focus:not([readonly]),
+.input[type=number]:not([readonly]) {
+  background-color: rgba(0, 0, 0, 0.1);
+  // border: 1px solid #777;
+  color: #000;
+  border-radius: 3px;
+  outline: none;
+  // width: 20%;
+  margin: 0 0 15px 10px;
+  padding: 5px 10px;
+  box-shadow: none;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  transition: all .3s;
 }
 
 /* text field border */
 .modal input[type=text]:focus:not([readonly]),
 .modal input[type=number]:focus {
-    border-bottom: 2px solid #777;
-    box-shadow: 0 2px 0 0 #777;
-    padding: 1px 3px; }
+    // border-bottom: 2px solid #777;
+    // box-shadow: 0 2px 0 0 #777;
+    // padding: 1px 3px;
+  }
 
 .modal input[type=text]:focus:not([readonly]) + label,
 .modal input[type=number]:focus {
