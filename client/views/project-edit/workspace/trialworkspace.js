@@ -216,12 +216,17 @@ if (Meteor.isClient) {
         }
         // Utils.toast('Removed successfully', 2000);
         
-      $.simplyToast('Removed successfully', 'success');
-      $.extend(true, $.simplyToast.defaultOptions,
-          {
-             'customClass' : 'top-right-toast'
-          });
+        $.bootstrapGrowl("REMOVED SUCCESSFULLY", {
+            ele: '.toast-container', // which element to append to
+            type: 'success', // (null, 'info', 'danger', 'success')
+            offset: {from: 'top', amount: 97}, // 'top', or 'bottom'
+            align: 'right', // ('left', 'right', or 'center')
+            width: 220, // (integer, or 'auto')
+            delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+            allow_dismiss: true, // If true then will display a cross to close the popup.
+            stackup_spacing: 10 // spacing between consecutively stacked growls.
         });
+      });
     },
 
   });

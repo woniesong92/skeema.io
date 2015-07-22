@@ -13,7 +13,7 @@ jsplumb:jsplumb
 underscore
 reactive-var
 aldeed:template-extension
-lookback:tooltips
 fourseven:scss
 lepozepo:s3
 twbs:bootstrap
+duongthienduc:meteor-bootstrap-growl

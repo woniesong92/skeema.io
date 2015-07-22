@@ -18,8 +18,7 @@ if (Meteor.isClient) {
   });
 
   Template.Modal.onRendered(function() {
-    // FIXME: is this necessary anymore?
-    // material_select()
+    
   });
 
   Template.Modal.events({

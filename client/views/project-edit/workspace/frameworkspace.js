@@ -72,7 +72,6 @@ if (Meteor.isClient) {
         $('.sidenav-container').removeClass("expanded-left").addClass("collasped-left-completely");
         $('.toolbox-container').removeClass("expanded-right").addClass("collasped-right-completely");
         
-        Utils.toast('Choose an element to be clicked', 2000);
 
         var choosingElementDeferred = $.Deferred();
         choosingElementDeferred.then(function (selector) {
@@ -139,15 +138,28 @@ if (Meteor.isClient) {
     });
 
     if (Session.get("showChoosingElementView")){
+
+      // toast instructions
+      $.bootstrapGrowl("<center>CHOOSE AN ELEMENT TO BE CLICKED</center>", {
+            ele: '.frame-workspace-container', // which element to append to
+            type: 'info', // (null, 'info', 'danger', 'success')
+            offset: {from: 'bottom', amount: 80}, // 'top', or 'bottom'
+            align: 'center', // ('left', 'right', or 'center')
+            width: 800, // (integer, or 'auto')
+            delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+            allow_dismiss: true, // If true then will display a cross to close the popup.
+            stackup_spacing: 10 // spacing between consecutively stacked growls.
+        });
+
       $('.element-item')
             .attr('contenteditable', 'false')
             .css('cursor', 'pointer')
-            .attr('data-tooltip', 'Select');
+            .attr('title', 'Select')
+            .attr('data-toggle', 'tooltip')
+            .tooltip();
     } else {
       $('.frame-workspace-container span')
-          .attr('contenteditable', 'true')
-          .removeAttr('data-tooltip');
-      $('.show').removeClass('show').addClass('hide');
+          .attr('contenteditable', 'true');
     }
  
     // make images resizable

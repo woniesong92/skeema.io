@@ -37,7 +37,16 @@ if (Meteor.isClient) {
         });
       });
 
-      Utils.toast('Saved successfully', 2000);
+      $.bootstrapGrowl("SAVED SUCCESSFULLY", {
+            ele: '.toast-container', // which element to append to
+            type: 'success', // (null, 'info', 'danger', 'success')
+            offset: {from: 'top', amount: 97}, // 'top', or 'bottom'
+            align: 'right', // ('left', 'right', or 'center')
+            width: 220, // (integer, or 'auto')
+            delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+            allow_dismiss: true, // If true then will display a cross to close the popup.
+            stackup_spacing: 10 // spacing between consecutively stacked growls.
+        });
     },
 
     'click .add-text-btn': function (e, template) {
@@ -62,12 +71,23 @@ if (Meteor.isClient) {
         var isSmall = (file.size < 10000000); // 10MB
 
         if (!isImage) {
-          errMessage = "You can only upload images";
+          // errMessage = "You can only upload images";
+          errMessage = "YOU CAN ONLY UPLOAD IMAGES";
         } else if (!isSmall) {
-          errMessage = "File size should be less than 10MB"
+          // errMessage = "File size should be less than 10MB"
+          errMessage = "FILE SIZE SHOULD BE LESS THAN 10MB"
         }
         if (errMessage) {
-          Materialize.toast(errMessage, 4000);
+          $.bootstrapGrowl(errMessage, {
+            ele: '.toast-container', // which element to append to
+            type: 'danger', // (null, 'info', 'danger', 'success')
+            offset: {from: 'top', amount: 97}, // 'top', or 'bottom'
+            align: 'right', // ('left', 'right', or 'center')
+            width: 220, // (integer, or 'auto')
+            delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+            allow_dismiss: true, // If true then will display a cross to close the popup.
+            stackup_spacing: 10 // spacing between consecutively stacked growls.
+          });
           return false; // break out of loop
         }
       });
@@ -110,7 +130,17 @@ if (Meteor.isClient) {
           return false;
         }
 
-        Utils.toast('Removed successfully', 2000);
+        $.bootstrapGrowl('REMOVED SUCCESSFULLY', {
+            ele: '.toast-container', // which element to append to
+            type: 'success', // (null, 'info', 'danger', 'success')
+            offset: {from: 'top', amount: 97}, // 'top', or 'bottom'
+            align: 'right', // ('left', 'right', or 'center')
+            width: 220, // (integer, or 'auto')
+            delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+            allow_dismiss: true, // If true then will display a cross to close the popup.
+            stackup_spacing: 10 // spacing between consecutively stacked growls.
+          });
+
 
         $('#'+elementId).remove();
       });
