@@ -1,9 +1,9 @@
 if (Meteor.isClient) {
 
   Template.FrameToolBox.helpers({
-    // isMine: function(owner) {
-    //   return owner == Meteor.userId();
-    // }
+    "uploaded_files": function(){
+      return S3.collection.find();
+    }
   });
 
   Template.FrameToolBox.rendered = function () {
@@ -42,8 +42,17 @@ if (Meteor.isClient) {
       Session.set("addText", true);
     },
 
-    'click .add-img-btn': function (e, template) {
-      
+    'change input.file-upload-input': function (e, template) {
+      var files = $("input.file-upload-input")[0].files;
+
+      S3.upload({
+        files: files,
+        path: "images"
+      }, function (err, uploadedFile) {
+        Session.set("addImage", uploadedFile.url);
+        Session.set("addText", false);
+        Session.set("addButton", false);
+      });
     },
 
     'click .add-btn-btn': function (e, template) {
@@ -51,6 +60,7 @@ if (Meteor.isClient) {
       Session.set("addText", false);
       Session.set("addButton", true);
     },
+
     'click .remove-elt': function (e, template) {
       var elementId = Session.get("elementId");
       Meteor.call("deleteElement", elementId, function (e){

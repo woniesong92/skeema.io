@@ -22,7 +22,6 @@ Meteor.methods({
     Elements.update(elementId, {
        $set: {'html': html}
      });
-
   },
 
   deleteElement: function (elementId) {

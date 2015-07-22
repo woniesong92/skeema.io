@@ -178,24 +178,27 @@ if (Meteor.isClient) {
     },
 
     "click .frame-workspace-container": function (e, template) {
+      var doAddText = Session.get("addText");
+      var doAddButton = Session.get("addButton");
+      var doAddImage = Session.get("addImage");
+      var position = getPosition(e);
+      var top = position.top;
+      var left = position.left;
+      var projectId = this._id;
 
-      if (Session.get("addText")){
+      if (doAddText) {
         Session.set("addText", false);
-        var position = getPosition(e);
-        var top = position.top;
-        var left = position.left;
 
-        var projectId = this._id;
-      // Session.set("addText", true);
         Meteor.call("addElement", {
           projectId: projectId,
           frameId: Session.get("frameId"),
           type: "text",
         }, function (err, elementId) {
-         if (err) {
+          if (err) {
             console.log("Adding element failed", err);
             return false;
           }
+
           var htmlStr = "<span id= '" + elementId
                         + "' class='draggable element-item' "
                         + "style='font-family:Arial;"
@@ -205,6 +208,7 @@ if (Meteor.isClient) {
                         + "top:" + top + "%;"
                         + "left:" + left + "%;'"
                         +">Text</span>";
+
           Meteor.call("setHTML", elementId, htmlStr, function(e) {
             if (e) {
               console.log("Setting selector failed");
@@ -228,21 +232,15 @@ if (Meteor.isClient) {
           });
         });
         $('.frame-workspace-container').css('cursor', 'auto');
-      }
+      } else if (doAddButton) {
+        Session.set("addButton", false);
 
-      if (Session.get("addButton")){
-            Session.set("addButton", false);
-            var position = getPosition(e);
-            var top = position.top;
-            var left = position.left;
-            var projectId = this._id;
-        // Session.set("addText", true);
         Meteor.call("addElement", {
           projectId: projectId,
           frameId: Session.get("frameId"),
           type: "button",
         }, function (err, elementId){
-         if (err) {
+          if (err) {
             console.log("Adding element failed", err);
             return false;
           }
@@ -250,7 +248,7 @@ if (Meteor.isClient) {
           // removed the shadow on hover, but there's still lag when dragging
           var htmlStr = "<span id= '" + elementId
                         + "' class='btn btn-no-hover draggable element-item' "
-                        +"style='font-family:Arial;"
+                        + "style='font-family:Arial;"
                         + "font-size:18px;"
                         + "position:absolute;"
                         + "background-color:blue;"
@@ -258,6 +256,55 @@ if (Meteor.isClient) {
                         + "top:" + top +"%;"
                         + "left:" + left + "%;'"
                         +">Button</span>";
+
+          Meteor.call("setHTML", elementId, htmlStr, function (e) {
+            if (e) {
+              console.log("Setting selector failed");
+
+              // Delete the object if setting HTML fails
+              Meteor.call("deleteElement", elementId);
+              return false;
+            }
+
+            var elt = Elements.findOne({_id: elementId});
+            $('.frame-workspace-container').append(elt.html);
+
+            $('#' + elementId).attr('contenteditable', 'true');
+
+            $('#' + elementId).draggable({
+              containment: ".frame-workspace-container",
+              scroll: false,
+              stop: function (event, ui) {
+                Session.set("elementId", this.id);
+               }
+            });
+          });
+        });
+       $('.frame-workspace-container').css('cursor', 'auto');
+
+      } else if (doAddImage) {
+        Session.set("addImage", false);
+        var imageUrl = doAddImage;
+
+        Meteor.call("addElement", {
+          projectId: projectId,
+          frameId: Session.get("frameId"),
+          type: "image",
+        }, function (err, elementId) {
+          if (err) {
+            console.log("Adding element failed", err);
+            return false;
+          }
+
+          var htmlStr = "<div id='" + elementId
+                        + "' class='draggable element-item frame-image-container' "
+                        + "style='position:absolute;"
+                        + "top:" + top + "%;"
+                        + "left:" + left + "%;'"
+                        + ">"
+                        + "<img src='" + imageUrl + "'>"
+                        + "</div>";
+
           Meteor.call("setHTML", elementId, htmlStr, function(e) {
             if (e) {
               console.log("Setting selector failed");
@@ -268,28 +315,20 @@ if (Meteor.isClient) {
             }
 
             var elt = Elements.findOne({_id: elementId});
-              $('.frame-workspace-container').append(elt.html);
+            $('.frame-workspace-container').append(elt.html);
+            $('#' + elementId).attr('contenteditable', 'true');
 
-              $('#' + elementId).attr('contenteditable', 'true');
-
-              $('#' + elementId).draggable({
-                containment: ".frame-workspace-container",
-                scroll: false,
-                stop: function (event, ui) {
-                  Session.set("elementId", this.id);
-                 }
-               });
-
+            $( ".draggable" ).draggable({
+              containment: ".frame-workspace-container",
+              scroll: false,
+              stop: function (event, ui) {
+                Session.set("elementId", this.id);
+               }
+            });
           });
         });
-       $('.frame-workspace-container').css('cursor', 'auto');
+        $('.frame-workspace-container').css('cursor', 'auto');
       }
-
-      if (Session.get("addImage")){
-        Session.set("addImage", false);
-        //TODO
-      }
-
     },
 
     

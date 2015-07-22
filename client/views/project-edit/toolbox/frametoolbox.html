@@ -14,18 +14,27 @@
         </div>
       </div>
 
-       <label class="frame-elements-title">Add Element</label><br>
-          <a class="btn waves-effect waves-light grey darken-3 element-btn add-text-btn">
-            <i class="fa fa-font"></i>
-          </a>
-          <a class="btn waves-effect waves-light grey darken-3 element-btn add-img-btn">
-            <i class="fa fa-file-image-o"></i>
-          </a>
-          <a class="btn waves-effect waves-light grey darken-3 element-btn add-btn-btn">Button</a>
-          <a class="btn waves-effect waves-light blue lighten-5 accent-3 white-text save-btn">Save Changes</a>
+      <label class="frame-elements-title">Add Element</label><br>
+
+      <a class="btn waves-effect waves-light grey darken-3 element-btn add-text-btn"><i class="fa fa-font"></i></a>
+
+      <!-- using a label tag is necessary -->
+      <label class="file-upload-container">
+        <input class="file-upload-input" type="file" />
+        <a class="btn waves-effect waves-light grey darken-3 element-btn add-img-btn"><i class="fa fa-file-image-o"></i></a>
+      </label>
+
+      <a class="btn waves-effect waves-light grey darken-3 element-btn add-btn-btn">Button</a>
+
+      <a class="btn waves-effect waves-light blue lighten-5 accent-3 white-text save-btn">Save Changes</a>
+
+      {{#each uploaded_files}}
+        <p>{{percent_uploaded}}</p>
+      {{/each}}
+
     </div>
 
-</template> 
+</template>
 
 <!-- TODO: MAKE ANOTHER SECTION, MOVE THIS ONE UP -->
 <template name="ElementSettings">
@@ -35,7 +44,7 @@
       <div class="col s12">
 
       {{#if selectedIsText}}
-        
+
         {{> TextSettings}}
 
       {{/if}}
