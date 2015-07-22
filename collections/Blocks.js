@@ -35,20 +35,33 @@ Meteor.methods({
   },
 
   renameBlock: function (blockId, newName) {
-	Blocks.update(blockId, {
-		$set: {'name': newName}
-	});
+    Blocks.update(blockId, {
+      $set: {'name': newName}
+    });
   },
 
   changeBlockIndex: function (blockId, newIndex) {
-  	Blocks.update(blockId, {
-  		$set: {"index": newIndex}
-  	});
+    Blocks.update(blockId, {
+      $set: {"index": newIndex}
+    });
   },
 
   changeRandomize: function (blockId, randomizeBool) {
-  	Blocks.update(blockId, {
-  		$set: {"randomize": randomizeBool}
-  	});
+    Blocks.update(blockId, {
+      $set: {"randomize": randomizeBool}
+    });
   },
+
+  deleteBlocks: function (blockIds) {
+    Blocks.remove({
+      _id: { $in: blockIds }
+    });
+
+    // delete associated trials
+    _.each(blockIds, function (blockId) {
+      var trialIds = _.map(Trials.find({blockId: blockId}).fetch(),
+        function (trial) { return trial._id; });
+      Meteor.call("deleteTrials", trialIds);
+    });
+  }
 });

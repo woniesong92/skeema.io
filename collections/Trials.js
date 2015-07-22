@@ -49,13 +49,17 @@ Meteor.methods({
     });
   },
 
-  deleteTrial: function (trialId) {
-    Trials.remove(trialId);
+  deleteTrials: function (trialIds) {
+    Trials.remove({
+      _id: { $in: trialIds }
+    });
 
     // delete associated frames
-    var frameIds = _.map(Frames.find({trialId: trialId}).fetch(),
-      function (frame) { return frame._id; });
-    Meteor.call("deleteFrames", frameIds);
+    _.each(trialIds, function (trialId) {
+      var frameIds = _.map(Frames.find({trialId: trialId}).fetch(),
+        function (frame) { return frame._id; });
+      Meteor.call("deleteFrames", frameIds);
+    });
   },
 
   renameTrial: function (trialId, newName) {

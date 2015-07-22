@@ -74,6 +74,12 @@ if (Meteor.isClient) {
       });
     },
 
+    "click .block-delete-link": function (e, template) {
+      e.stopPropagation();
+      var blockId = this._id;
+      Meteor.call("deleteBlocks", [blockId]);
+    },
+
     "click .add-trial": function (e, template) {
       e.stopPropagation();
       var projectId = this.projectId;
@@ -94,7 +100,7 @@ if (Meteor.isClient) {
     "click .trial-delete-link": function (e, template) {
       e.stopPropagation();
       var trialId = this._id;
-      Meteor.call("deleteTrial", trialId);
+      Meteor.call("deleteTrials", [trialId]);
     }
   });
 }
