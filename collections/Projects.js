@@ -11,8 +11,13 @@ Meteor.methods({
   },
 
   deleteProject: function (projectId) {
-    var project = Projects.find({_id: projectId});
     Projects.remove({_id: projectId});
+
+    // FIXME: this doesn't work because publications.js must be
+    // edited to take userId into account first
+    // var blockIds = _.map(Blocks.find({projectId: projectId}).fetch(),
+    //   function (block) { return block._id; });
+    // Meteor.call("deleteBlocks", blockIds);
   }
 });
 

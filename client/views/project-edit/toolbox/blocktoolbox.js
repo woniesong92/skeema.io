@@ -6,14 +6,7 @@ if (Meteor.isClient) {
     // }
   });
 
-
-  Template.BlockToolBox.rendered = function () {
-    
-  }
-
-
   Template.BlockToolBox.events({
-
     'change #blockname': function(e, template) { 
         var newname = $('#blockname').val().trim();
         var blockId = Session.get("blockId");
@@ -21,11 +14,9 @@ if (Meteor.isClient) {
     },
 
     'change #randomize': function(e, template) { 
-        var randbool = $('#randomize').is(':checked');
-        var blockId = Session.get("blockId");
-        Meteor.call('changeRandomize', blockId, randbool);
+      var randbool = $('#randomize').is(':checked');
+      var blockId = Session.get("blockId");
+      Meteor.call('changeRandomize', blockId, randbool);
     }
   });
-
-
 }

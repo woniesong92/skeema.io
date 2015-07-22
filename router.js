@@ -22,7 +22,9 @@ Router.route('/', function () {
 
 Router.route('/projects', {
   waitOn: function() {
+    // FIXME(Important): subscribe project should be based on userId
     return Meteor.subscribe("projects");
+    // return Meteor.subscribe("projects", userId);
   },
 
   action: function() {
@@ -38,7 +40,7 @@ Router.route('/projects/:_id', {
     var projectId = this.params._id;
 
     return [
-      // TODO: subscribe project should be based on userId
+      // FIXME: subscribe project should be based on userId
       Meteor.subscribe("project", projectId),
       Meteor.subscribe("blocks", projectId),
       Meteor.subscribe("trials", projectId),

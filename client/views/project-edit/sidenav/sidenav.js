@@ -13,7 +13,7 @@ if (Meteor.isClient) {
       cancel: ".add-block, .add-trial",
       items: "> li",
       update: function (e, ui) {
-        // TODO: handle backend
+        // TODO: let me deal with it tomorrow
         console.log("trial item rearranged");
       }
     });

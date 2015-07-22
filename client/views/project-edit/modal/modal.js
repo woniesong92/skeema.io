@@ -40,7 +40,6 @@ if (Meteor.isClient) {
             if (pathInfo) {
              var numElts = Elements.find({frameId: pathInfo.sourceFrame}).count();
               if (numElts < 1) {
-                debugger
                 $('.click-error-msg').addClass('show');
               } else {
                 $('.create-path-btn').removeClass('disabled');

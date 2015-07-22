@@ -14,7 +14,6 @@ if (Meteor.isClient) {
   }
 
   Template.FrameToolBox.events({
-
     'change #framename': function (e, template) { 
       var newname = $('#framename').val().trim();
       var frameId = Session.get("frameId");
