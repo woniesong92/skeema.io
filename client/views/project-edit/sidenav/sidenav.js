@@ -1,11 +1,24 @@
 if (Meteor.isClient) {
   Template.SideNav.onRendered(function() {
-    // TODO: Have to make this persistent to the server.
-    var preventDragging = {
-      cancel: ".add-block, .add-trial"
-    };
-    this.$('.block-items').sortable(preventDragging);
-    this.$('.trial-items').sortable(preventDragging);
+    this.$('.block-items').sortable({
+      cancel: ".add-block, .add-trial",
+      items: "> li",
+      update: function (e, ui) {
+        // TODO: handle backend
+        console.log("block item rearranged");
+      }
+    });
+
+    this.$('.trial-items').sortable({
+      cancel: ".add-block, .add-trial",
+      items: "> li",
+      update: function (e, ui) {
+        // TODO: handle backend
+        console.log("trial item rearranged");
+      }
+    });
+
+    this.$('.block-items, .trial-items').disableSelection();
   });
 
   Template.SideNav.helpers({
