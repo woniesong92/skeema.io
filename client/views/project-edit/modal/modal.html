@@ -1,54 +1,63 @@
 <template name="Modal">
-  <div id="modal" class="modal">
-      {{> NewPath}}
-  </div>
+
+   <div id="modal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">New Path</h4>
+        </div>
+        <div class="modal-body">
+          
+        {{> NewPath}}
+          
+        </div>
+        <div class="modal-footer">
+          <span class="modal-action btn btn-primary disabled create-path-btn" data-dismiss="modal">Create</span>
+          <span href="" class="modal-action modal-close btn btn-default delete-path-btn" data-dismiss="modal">Cancel</span>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
 </template>
 
 
 <template name="NewPath">
-  <div class="modal-content modal-fixed-footer">
-    <h4>New Path</h4>
+  <div class="modalcontent">
 
-       <div class="modal-fields">
-        <div class="event-picker-options row">
-          <div class="input-field col s12">
-            <select id="event-picker">
-              <option value="" disabled selected>Choose an event type</option>
-              <option value="keypress">Keypress</option>
-              <option id="click-option" value="click">Click</option>
-              <option value="time">Time</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- initially hidden, until event type is selected -->
-        <div class="time-options row">
-          <div class="col s12">
-            <span>Time Duration</span>
-            <input value="" id="duration" type="number" step="50" min="50" placeholder="ex. 500"> ms
-          </div>
-        </div>
-
-        <div class="key-options row">
-          <div class="col s12">
-            <span>Key Pressed</span>
-            <input value="" id="key" type="text" placeholder="ex. a" minlength="1" maxlength="1">
-          </div>
-        </div>
-
-        <div class="click-error-msg row">
-          <div class="col s12">
-            <span>There are no elements to be clicked in the source frame.</span>
-          </div>
-        </div>
-        <!-- end initially hidden -->
+    <form class="form-horizontal">
+      <div class="form-group">
+        <select class="form-control" id="event-picker">
+          <option value="" disabled selected>Choose an event type</option>
+          <option value="keypress">Keypress</option>
+          <option id="click-option" value="click">Click</option>
+          <option value="time">Time</option>
+        </select>
       </div>
-  </div>
 
-  <div class="modal-footer">
-    <div class="divider"></div>
-    <a class="modal-action btn-flat disabled create-path-btn">Create</a>
-    <a href="" class="modal-action modal-close btn-flat delete-path-btn">Cancel</a>
+      <div class="form-group key-options">
+        <label class="control-label col-sm-6" for="key">Key Pressed</label>
+        <div class="col-sm-2">
+          <input class="form-control" value="" id="key" type="text" placeholder="ex. a" minlength="1" maxlength="1">
+        </div>
+      </div>
+
+      <div class="form-group time-options">
+        <label class="control-label col-sm-5" for="duration">Time Duration</label>
+        <div class="col-sm-3">
+          <input class="form-control" value="" id="duration" type="number" step="50" min="50" placeholder="ex. 500">
+        </div>
+        <div class="col-sm-2 addon">
+          <span>ms</span>
+        </div>
+      </div>
+
+      <div class="form-group click-error-msg">
+         <span>There are no elements to be clicked in the source frame.</span>
+      </div>
+    </form>
+
   </div>
 
 </template>

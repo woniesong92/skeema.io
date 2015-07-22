@@ -74,7 +74,7 @@ if (Meteor.isClient) {
       return Paths.findOne({_id: pathId});
     }
     return false;
-  })
+  });
 
   // Template.registerHelper("sourceId", function (event, template) {
   //   var pathId = Session.get("pathId");

@@ -5,6 +5,10 @@ if (Meteor.isClient) {
       return this.name;
     },
 
+    toUpperCase: function(str) {
+      return str.toUpperCase();
+    },
+
     blocks: function() {
       // "this" refers to what's returned
       // by iron router's data function: project object in this case

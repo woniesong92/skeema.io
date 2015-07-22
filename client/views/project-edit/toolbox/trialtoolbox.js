@@ -7,7 +7,7 @@ if (Meteor.isClient) {
     this.autorun(function() {
       var pathInfo = Session.get("pathInfo");
       if (pathInfo) {
-        $('#modal').openModal();
+        $('#modal').modal('show');
       }
     });
 

@@ -225,7 +225,14 @@ if (Meteor.isClient) {
       var trialId = Session.get('trialId');
       Template.instance().trialId = trialId;
       return Frames.find({trialId: trialId});
-    }
+    },
+  });
+
+  Template.FrameItem.helpers({
+    toUpperCase: function(str) {
+      return str.toUpperCase();
+    },
+
   });
 
   Template.FrameItem.onRendered(function() {
