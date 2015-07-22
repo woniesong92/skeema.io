@@ -23,16 +23,16 @@ if (Meteor.isClient) {
 
     'click .save-btn': function (e, template) {
       // for each .element-item
-      $('.element-item').each(function (index){
+      $('.element-item').each(function (index) {
           var newHTML = $(this).prop('outerHTML');
-          Meteor.call("setHTML", this.id, newHTML, function(err){
-            // debugger
+          Meteor.call("setHTML", this.id, newHTML, function (err){
             if (err){
-              console.log("saving HTML changes failed for "+ this.id);
+              console.log("saving HTML changes failed for " + this.id);
               return false;
             }
           });
       });
+      
       Materialize.toast('Saved successfully', 4000);
     },
 

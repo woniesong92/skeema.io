@@ -133,8 +133,9 @@ if (Meteor.isClient) {
     Session.set("elementId", null);
 
     var frameElts = Elements.find({"frameId": Session.get("frameId") });
+    
     frameElts.forEach(function(elt) {
-        $('.frame-workspace-container').append(elt.html);
+      $('.frame-workspace-container').append(elt.html);
     });
 
     if (Session.get("showChoosingElementView")){
@@ -148,8 +149,13 @@ if (Meteor.isClient) {
           .removeAttr('data-tooltip');
       $('.show').removeClass('show').addClass('hide');
     }
+ 
+    // make images resizable
+    $('.frame-image').load(function() {
+      $(this).resizable();
+    });
 
-    $( ".draggable" ).draggable({
+    $(".draggable").draggable({
       containment: ".frame-workspace-container",
       scroll: false,
       stop: function (event, ui) {
@@ -174,7 +180,14 @@ if (Meteor.isClient) {
   Template.FrameWorkSpace.events({
 
     "click .element-item": function (e, template) {
-      Session.set("elementId", e.target.id);
+      var $target = $(e.target);
+      var elementId;
+      if ($target.prop("tagName") === "IMG") {
+        elementId = $target.closest('.frame-image-container').attr("id");
+      } else {
+        elementId = $target.attr("id");
+      }
+      Session.set("elementId", elementId);
     },
 
     "click .frame-workspace-container": function (e, template) {
@@ -232,6 +245,7 @@ if (Meteor.isClient) {
           });
         });
         $('.frame-workspace-container').css('cursor', 'auto');
+
       } else if (doAddButton) {
         Session.set("addButton", false);
 
@@ -296,14 +310,14 @@ if (Meteor.isClient) {
             return false;
           }
 
-          var htmlStr = "<div id='" + elementId
-                        + "' class='draggable element-item frame-image-container' "
+          var htmlStr = "<div class='draggable element-item frame-image-container' "
+                        + "id='" + elementId + "'"
                         + "style='position:absolute;"
                         + "display: inline-block;"
                         + "top:" + top + "%;"
-                        + "left:" + left + "%;'"
-                        + ">"
-                        + "<img class='frame-image' src='" + imageUrl + "'>"
+                        + "left:" + left + "%;'>"
+                        + "<img class='frame-image' src='"
+                        + imageUrl + "'>"
                         + "</div>";
 
           Meteor.call("setHTML", elementId, htmlStr, function(e) {
@@ -329,7 +343,6 @@ if (Meteor.isClient) {
             $elt.draggable({
               containment: ".frame-workspace-container",
               scroll: false,
-              // FIXME: why are you setting elementId again?
               stop: function (event, ui) {
                 Session.set("elementId", this.id);
               }
@@ -339,7 +352,5 @@ if (Meteor.isClient) {
         $('.frame-workspace-container').css('cursor', 'auto');
       }
     },
-
-    
   });
 }

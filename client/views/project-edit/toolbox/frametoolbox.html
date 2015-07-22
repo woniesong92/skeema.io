@@ -56,6 +56,12 @@
 
       {{/if}}
 
+      {{#if selectedIsImage}}
+
+        {{> ImageSettings}}
+
+      {{/if}}
+
       </div>
     </div>
 
@@ -100,6 +106,17 @@
   <div class="fontsize-container">
     <label for="framename">Font Size</label><br>
     <input value="{{ fontSize }}" id="button-fontsize" type="number" step="1" min="1">
+  </div>
+
+  <button class="btn remove-elt grey darken-2 white-text">Remove Element</button>
+</template>
+
+<template name="ImageSettings">
+  <p class="frame-elements-title">Image Element</p>
+
+  <div class="image-name-container">
+    <label>Image Name</label><br>
+    <input value="{{ name }}" id="image-name-input">
   </div>
 
   <button class="btn remove-elt grey darken-2 white-text">Remove Element</button>
