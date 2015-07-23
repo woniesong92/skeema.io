@@ -51,6 +51,7 @@ if (Meteor.isClient) {
         Meteor.call("addFramePosition", frame.id, position);
       });
     },
+
     'click .add-frame': function (e, template) {
       var projectId = this._id;
       var trialId = Session.get('trialId');
@@ -67,6 +68,11 @@ if (Meteor.isClient) {
         }
         Session.set("frameAdded", frameId);
       });
+    },
+
+    'click .make-trial-duplicate': function (e, template) {
+      var trialId = Session.get("trialId");
+      Meteor.call("makeTrialDuplicate", trialId);
     }
   });
 

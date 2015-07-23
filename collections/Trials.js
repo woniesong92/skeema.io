@@ -94,4 +94,50 @@ Meteor.methods({
     })
   },
 
+  makeTrialDuplicate: function (trialId) {
+    var trial = Trials.findOne(trialId);
+    var frames = Frames.find({
+      trialId: trialId
+    }).fetch();
+    var paths = Paths.find({
+      trialId: trialId
+    }).fetch();
+
+    var allFramesInsertedDeferred = $.Deferred();
+    allFramesInsertedDeferred.then(function() {
+      _.each(paths, function (path) {
+        delete path._id;
+        Paths.insert(path);
+      });
+    });
+
+    var numFramesAdded = 0;
+    var numFrames = frames.length;
+
+    trial.name = trial.name + " Copy";
+    delete trial._id;
+    Trials.insert(trial, function (err, newTrialId) {
+      _.each(frames, function (frame) {
+        frame.trialId = newTrialId;
+        var oldFrameId = frame._id;
+        delete frame._id;
+        Frames.insert(frame, function (err, newFrameId) {
+          _.each(paths, function (path) {
+            if (path.sourceId === oldFrameId) {
+              path.sourceId = newFrameId;
+            } else if (path.targetId === oldFrameId) {
+              path.targetId = newFrameId;
+            }
+            path.trialId = newTrialId;
+          })
+
+          numFramesAdded += 1;
+          if (numFramesAdded === numFrames) {
+            allFramesInsertedDeferred.resolve();
+          }
+        });
+      });
+    });
+  }
+
 });
