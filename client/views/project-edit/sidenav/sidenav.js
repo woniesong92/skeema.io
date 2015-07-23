@@ -97,6 +97,11 @@ if (Meteor.isClient) {
       e.stopPropagation();
     },
 
+    "mouseover .trial-item-link": function (e, template) {
+      $('.sidenav-container').find('.show-inline-block').removeClass('show-inline-block');
+      $(e.target).parent().find('.trial-delete-link').addClass('show-inline-block');
+    },
+
     "click .trial-delete-link": function (e, template) {
       e.stopPropagation();
       var trialId = this._id;
