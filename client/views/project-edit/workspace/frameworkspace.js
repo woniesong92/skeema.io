@@ -224,6 +224,21 @@ if (Meteor.isClient) {
       }
     },
 
+    "mouseup .frame-image-container": function (e, template) {
+      var elementId = e.currentTarget.id;
+
+      // save html automatically
+      var currentHTML = $('#' + elementId).prop('outerHTML');
+      if (Elements.findOne({_id: elementId}).html != currentHTML) {
+        Meteor.call("setHTML", elementId, currentHTML, function (err){
+          if (err){
+            console.log("saving HTML changes failed for " + elementId);
+            return false;
+          }
+        });
+      }
+    },
+
     "click .frame-workspace-container": function (e, template) {
       var doAddText = Session.get("addText");
       var doAddButton = Session.get("addButton");
