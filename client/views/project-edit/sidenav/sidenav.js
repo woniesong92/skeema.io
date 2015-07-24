@@ -104,8 +104,10 @@ if (Meteor.isClient) {
       e.stopPropagation();
       Session.set("currentView", "trialView");
       Session.set("trialId", this._id);
-      var blockId = Trials.findOne({_id: this._id}).blockId;
-      Session.set("blockId", blockId);
+      var trial = Trials.findOne({_id: this._id});
+      if (trial) {
+        Session.set("blockId", trial.blockId);
+      }
       Session.set("frameId", null);
     },
 

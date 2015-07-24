@@ -20,34 +20,35 @@ if (Meteor.isClient) {
       Meteor.call('renameFrame', frameId, newname);
     },
 
-    'click .save-btn': function (e, template) {
-      $('.element-item').each(function (index) {
-        // Strip off resizable wrappers before saving the content
-        if (this.className.indexOf("frame-image-container") >= 0) {
-          var $image = $(this).find('.frame-image');
-          $(this).children().replaceWith($image);
-        }
+    //  we save everything automatically now
+    // 'click .save-btn': function (e, template) {
+    //   $('.element-item').each(function (index) {
+    //     // Strip off resizable wrappers before saving the content
+    //     if (this.className.indexOf("frame-image-container") >= 0) {
+    //       var $image = $(this).find('.frame-image');
+    //       $(this).children().replaceWith($image);
+    //     }
 
-        var newHTML = $(this).prop('outerHTML');
-        Meteor.call("setHTML", this.id, newHTML, function (err){
-          if (err){
-            console.log("saving HTML changes failed for " + this.id);
-            return false;
-          }
-        });
-      });
+    //     var newHTML = $(this).prop('outerHTML');
+    //     Meteor.call("setHTML", this.id, newHTML, function (err){
+    //       if (err){
+    //         console.log("saving HTML changes failed for " + this.id);
+    //         return false;
+    //       }
+    //     });
+    //   });
 
-      $.bootstrapGrowl("SAVED SUCCESSFULLY", {
-            ele: '.toast-container', // which element to append to
-            type: 'success', // (null, 'info', 'danger', 'success')
-            offset: {from: 'top', amount: 97}, // 'top', or 'bottom'
-            align: 'right', // ('left', 'right', or 'center')
-            width: 220, // (integer, or 'auto')
-            delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
-            allow_dismiss: true, // If true then will display a cross to close the popup.
-            stackup_spacing: 10 // spacing between consecutively stacked growls.
-        });
-    },
+    //   $.bootstrapGrowl("SAVED SUCCESSFULLY", {
+    //     ele: '.toast-container', // which element to append to
+    //     type: 'success', // (null, 'info', 'danger', 'success')
+    //     offset: {from: 'top', amount: 97}, // 'top', or 'bottom'
+    //     align: 'right', // ('left', 'right', or 'center')
+    //     width: 220, // (integer, or 'auto')
+    //     delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+    //     allow_dismiss: true, // If true then will display a cross to close the popup.
+    //     stackup_spacing: 10 // spacing between consecutively stacked growls.
+    //   });
+    // },
 
     'click .add-text-btn': function (e, template) {
       Session.set("addImage", false);
