@@ -93,6 +93,8 @@ Meteor.methods({
   },
 
   makeTrialDuplicate: function (trialId) {
+    // making a trial duplicate gets trikcy with
+    // so many children and children of children
     var trial = Trials.findOne(trialId);
     var frames = Frames.find({
       trialId: trialId
@@ -103,6 +105,7 @@ Meteor.methods({
 
     var allFramesInsertedDeferred = $.Deferred();
     allFramesInsertedDeferred.then(function() {
+      // copy paths when all the frames have been inserted
       _.each(paths, function (path) {
         delete path._id;
         Paths.insert(path);
@@ -119,7 +122,9 @@ Meteor.methods({
         frame.trialId = newTrialId;
         var oldFrameId = frame._id;
         delete frame._id;
+        
         Frames.insert(frame, function (err, newFrameId) {
+          // update paths
           _.each(paths, function (path) {
             if (path.sourceId === oldFrameId) {
               path.sourceId = newFrameId;
@@ -127,8 +132,20 @@ Meteor.methods({
               path.targetId = newFrameId;
             }
             path.trialId = newTrialId;
-          })
+          });
 
+          // copy elements
+          var elements = Elements.find({
+            frameId: oldFrameId
+          }).fetch();
+          _.each(elements, function (element) {
+            element.frameId = newFrameId;
+            delete element._id;
+            Elements.insert(element);
+          });
+
+          // check if all the frames have been added and
+          // resolve the Deferred object if they have
           numFramesAdded += 1;
           if (numFramesAdded === numFrames) {
             allFramesInsertedDeferred.resolve();
