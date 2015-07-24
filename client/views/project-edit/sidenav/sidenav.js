@@ -4,8 +4,11 @@ if (Meteor.isClient) {
       cancel: ".add-block, .add-trial",
       items: "> li",
       update: function (e, ui) {
-        // TODO: handle backend
-        console.log("block item rearranged");
+        $('.block-item').each(function (idx, el) {
+          var context = Blaze.getData(el);
+          var blockId = context._id;
+          Meteor.call("changeBlockIndex", blockId, idx);
+        });
       }
     });
 
@@ -13,8 +16,11 @@ if (Meteor.isClient) {
       cancel: ".add-block, .add-trial",
       items: "> li",
       update: function (e, ui) {
-        // TODO: let me deal with it tomorrow
-        console.log("trial item rearranged");
+        $('.trial-item').each(function (idx, el) {
+          var context = Blaze.getData(el);
+          var trialId = context._id;
+          Meteor.call("changeTrialIndex", trialId, idx);
+        });
       }
     });
 
