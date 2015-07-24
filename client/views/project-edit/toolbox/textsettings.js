@@ -23,6 +23,8 @@ if (Meteor.isClient) {
       // debugger
       var newcolor = $('#text-colorpicker').val().trim();
       var elementId = Session.get("elementId");
+
+      //FIXME: how to select without id?
       $('#' + elementId).css('color', newcolor + ' !important');
 
       // save new html automatically

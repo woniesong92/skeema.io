@@ -175,13 +175,14 @@ if (Meteor.isClient) {
       containment: ".frame-workspace-container",
       scroll: false,
       stop: function (event, ui) {
-        Session.set("elementId", this.id);
+        var elementId = Blaze.getData(this)._id;
+        Session.set("elementId", elementId);
 
         // save new html automatically
-        var currentHTML = $('#' + this.id).prop('outerHTML');
-        Meteor.call("setHTML", this.id, currentHTML, function (err){
+        var currentHTML = $(this).prop('outerHTML');
+        Meteor.call("setHTML", elementId, currentHTML, function (err){
           if (err){
-            console.log("saving HTML changes failed for " + this.id);
+            console.log("saving HTML changes failed for " + elementId);
             return false;
             }
         });
@@ -206,12 +207,12 @@ if (Meteor.isClient) {
   Template.FrameWorkSpace.events({
 
     "click .element-item": function (e, template) {
-      var elementId = e.currentTarget.id;
+      var elementId = Blaze.getData(e.currentTarget)._id;
       Session.set("elementId", elementId);
     },
 
     "blur .element-item[contenteditable='true']": function (e, template) {
-      var elementId = e.currentTarget.id;
+      var elementId = Blaze.getData(e.currentTarget)._id;
 
       // save html automatically
       var currentHTML = $('#' + elementId).prop('outerHTML');
@@ -226,7 +227,7 @@ if (Meteor.isClient) {
     },
 
     "mouseup .frame-image-container": function (e, template) {
-      var elementId = e.currentTarget.id;
+      var elementId = Blaze.getData(e.currentTarget)._id;
       var imageContainer = e.currentTarget;
       var $image = $(imageContainer).find('.frame-image');
 
@@ -269,8 +270,7 @@ if (Meteor.isClient) {
             return false;
           }
 
-          var htmlStr = "<span id= '" + elementId
-                        + "' class='draggable element-item' "
+          var htmlStr = "<span class='draggable element-item' "
                         + "style='font-family:Arial;"
                         + "font-size:18px;"
                         + "color:#000;"
@@ -290,19 +290,18 @@ if (Meteor.isClient) {
             
             // var elt = Elements.findOne({_id: elementId});
             //   $('.frame-workspace-container').append(elt.html);
-              $('.element-item').last().attr('contenteditable', 'true');
+              $('.element-item').last().get(0).attr('contenteditable', 'true');
 
               $( ".draggable" ).draggable({
                 containment: ".frame-workspace-container",
                 scroll: false,
                 stop: function (event, ui) {
-                  Session.set("elementId", this.id);
-
+                  Session.set("elementId", elementId);
                   // save new html automatically
-                  var currentHTML = $('#' + this.id).prop('outerHTML');
-                  Meteor.call("setHTML", this.id, currentHTML, function (err){
+                  var currentHTML = $(this).prop('outerHTML');
+                  Meteor.call("setHTML", elementId, currentHTML, function (err){
                     if (err){
-                      console.log("saving HTML changes failed for " + this.id);
+                      console.log("saving HTML changes failed for " + elementId);
                       return false;
                       }
                   });
@@ -326,8 +325,7 @@ if (Meteor.isClient) {
           }
 
           // removed the shadow on hover, but there's still lag when dragging
-          var htmlStr = "<span id= '" + elementId
-                        + "' class='btn btn-no-hover draggable element-item' "
+          var htmlStr = "<span class='btn btn-no-hover draggable element-item' "
                         + "style='font-family:Arial;"
                         + "font-size:18px;"
                         + "position:absolute;"
@@ -347,15 +345,23 @@ if (Meteor.isClient) {
             }
 
             var elt = Elements.findOne({_id: elementId});
-            $('.frame-workspace-container').append(elt.html);
+            // $('.frame-workspace-container').append(elt.html);
 
-            $('#' + elementId).attr('contenteditable', 'true');
+            $('.element-item').last().get(0).attr('contenteditable', 'true');
 
-            $('#' + elementId).draggable({
+            $('.element-item').last().get(0).draggable({
               containment: ".frame-workspace-container",
               scroll: false,
               stop: function (event, ui) {
-                Session.set("elementId", this.id);
+                Session.set("elementId", elementId);
+                  // save new html automatically
+                  var currentHTML = $(this).prop('outerHTML');
+                  Meteor.call("setHTML", elementId, currentHTML, function (err){
+                    if (err){
+                      console.log("saving HTML changes failed for " + elementId);
+                      return false;
+                      }
+                  });
                }
             });
           });
@@ -377,7 +383,6 @@ if (Meteor.isClient) {
           }
 
           var htmlStr = "<div class='draggable element-item frame-image-container' "
-                        + "id='" + elementId + "'"
                         + "style='position:absolute;"
                         + "display: inline-block;"
                         + "top:" + top + "%;"
@@ -397,7 +402,7 @@ if (Meteor.isClient) {
 
             var elt = Elements.findOne({_id: elementId});
             var $elt = $(elt.html);
-            $('.frame-workspace-container').append($elt);
+            // $('.frame-workspace-container').append($elt);
 
             // You have to wait until the image is loaded
             // before making it resziable
@@ -410,7 +415,15 @@ if (Meteor.isClient) {
               containment: ".frame-workspace-container",
               scroll: false,
               stop: function (event, ui) {
-                Session.set("elementId", this.id);
+                Session.set("elementId", elementId);
+                  // save new html automatically
+                  var currentHTML = $(this).prop('outerHTML');
+                  Meteor.call("setHTML", elementId, currentHTML, function (err){
+                    if (err){
+                      console.log("saving HTML changes failed for " + elementId);
+                      return false;
+                      }
+                  });
               }
             });
           });

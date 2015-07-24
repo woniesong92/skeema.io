@@ -143,7 +143,7 @@ if (Meteor.isClient) {
           });
 
 
-        $('#'+elementId).remove();
+        // $('#'+elementId).remove();
       });
     },
 
