@@ -55,7 +55,7 @@ Meteor.methods({
     // shift all blocks that were after the deleted block
     // forward
     if (blockIds.length === 1) {
-      var block = Blocks.findOne(trialIds[0]);
+      var block = Blocks.findOne(blockIds[0]);
       var blockIdx = blockIds[0].index;
       var blocks = Blocks.find({projectId: block.projectId}).fetch();
       _.each(blocks, function (b) {
