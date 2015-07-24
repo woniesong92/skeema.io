@@ -1,5 +1,5 @@
 if (Meteor.isClient) {
-  Template.SideNav.onRendered(function() {
+  var makeBlocksSortable = function() {
     this.$('.block-items').sortable({
       cancel: ".add-block, .add-trial",
       items: "> li",
@@ -11,8 +11,13 @@ if (Meteor.isClient) {
         });
       }
     });
+  };
 
-    this.$('.trial-items').sortable({
+  var makeTrialsSortable = function (trialItems) {
+    // must be called again when a new block has been created
+    var trialItems = trialItems || $('.trial-items');
+
+    trialItems.sortable({
       cancel: ".add-block, .add-trial",
       items: "> li",
       update: function (e, ui) {
@@ -23,6 +28,11 @@ if (Meteor.isClient) {
         });
       }
     });
+  }
+
+  Template.SideNav.onRendered(function() {
+    makeBlocksSortable();
+    makeTrialsSortable();
 
     this.$('.block-items, .trial-items').disableSelection();
   });
@@ -72,11 +82,12 @@ if (Meteor.isClient) {
     "click .add-block": function (e, template) {
       e.stopPropagation();
       var projectId = this._id;
-      var blockLength = Blocks.find({projectId: projectId}).count();
       Meteor.call("addBlock", {
         projectId: projectId,
-        name: "Block " + blockLength,
-        index: blockLength
+      }, function() {
+        var lastBlock = $('li.block-item').last();
+        var trialItems = lastBlock.children('.trial-items');
+        makeTrialsSortable(trialItems);
       });
     },
 
@@ -90,12 +101,9 @@ if (Meteor.isClient) {
       e.stopPropagation();
       var projectId = this.projectId;
       var blockId = this._id;
-      var trialLength = Trials.find({blockId: blockId}).count();
       Meteor.call("addTrial", {
         projectId: projectId,
-        blockId: blockId,
-        name: "Trial " + trialLength,
-        index: trialLength
+        blockId: blockId
       });
     },
 

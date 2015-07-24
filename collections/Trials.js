@@ -13,7 +13,7 @@ Meteor.methods({
       // NOT SURE WE NEED THIS
       // "nextTrialId": null,
 
-      "name": data["name"],
+      "name": "New Trial",
 
       // this is used when you re-order
       "index": Trials.find({blockId: blockId}).count(),

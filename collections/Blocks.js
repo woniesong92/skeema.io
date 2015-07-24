@@ -7,7 +7,7 @@ Meteor.methods({
 
     var block = {
       "projectId": projectId,
-      "name": data["name"],
+      "name": "New Block",
       "randomize": false,
 
       // this is used when you re-order
