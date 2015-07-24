@@ -31,7 +31,7 @@ Meteor.methods({
       // "pathTaken" might be a better name than response
       "response": null,
       "reactionTime": null,
-      "createdAt": Date.now()
+      "createdAt": Date.now(),
     };
 
     Trials.insert(trial, function (err, trialId) {
@@ -41,11 +41,23 @@ Meteor.methods({
         console.log(err, "Frame making failed");
         return;
       }
+
+      //FIXME: WHAT TO DO WITH INDEX?
       Meteor.call("addFrame", {
         projectId: projectId,
         trialId: trialId,
-        name: "Frame " + 0,
-        index: 0
+        name: "Enter",
+        type: "enter",
+        index: -1
+      });
+
+      //FIXME: WHAT TO DO WITH INDEX?
+       Meteor.call("addFrame", {
+        projectId: projectId,
+        trialId: trialId,
+        name: "Exit",
+        type: "exit",
+        index: -1
       });
     });
   },

@@ -21,12 +21,15 @@
 
 
 <template name="FrameItem">
-  <div id="{{_id}}" class="frame-preview-item">
-    <div class='frame-name'>{{toUpperCase name}}</div>
+  <div id="{{_id}}" class="frame-preview-item {{type}}">
+    <div class='frame-name'>{{name}}</div>
     <div class="ep"></div>
     <div class="btn-container">
       <button class="frame-edit-btn waves-effect waves-light blue lighten-5 accent-3 btn white-text"><i class="fa fa-pencil"></i></button>
       <button class="frame-remove-btn waves-effect waves-light blue lighten-5 accent-3 btn white-text"><i class="fa fa-trash"></i></button>
+
+      <span class="icon icon-enter"></span>
+      <span class="icon icon-exit"></span>
     </div>
   </div>
 </template>

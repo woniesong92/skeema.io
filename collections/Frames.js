@@ -6,13 +6,15 @@ Meteor.methods({
       "projectId": data["projectId"],
       "trialId": data["trialId"],
       "name": data["name"],
-      
+
+      // "normal", "enter", or "exit"
+      "type": data["type"],
       // User can place frame4 before frame3, so we need
       // an index field
       // FIXME: not sure how to deal with images yet
       "images": null,
       "createdAt": Date.now(),
-      "position": null
+      "position": null,
     };
 
     // new frameId will be returned to the caller
@@ -29,8 +31,14 @@ Meteor.methods({
     return Frames.update(frameId, {
       $set: {position: position}
     });
-    console.log("update frame position")
+    console.log("update frame position");
   },
+
+  // setType: function (frameId, newtype) {
+  //   return Frames.update(frameId, {
+  //     $set: {type: newtype}
+  //   });
+  // },
 
   deleteFrames: function (frameIds) {
     Frames.remove({

@@ -253,7 +253,7 @@ if (Meteor.isClient) {
     var position = Frames.findOne($frame.attr('id')).position;
     var frameIndex = this.data.index;
     var trialId = this.parent().trialId;
-    var numFrames = Frames.find({trialId: trialId}).count();
+    var numFrames = Frames.find({trialId: trialId}).count() - 2;
     var isLastFrame = (frameIndex + 1 === numFrames) ? true : false;
 
     if (position) {
