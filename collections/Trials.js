@@ -4,10 +4,11 @@ Meteor.methods({
 
   addTrial: function (data, callback) {
     var projectId = data["projectId"];
+    var blockId = data["blockId"];
 
     var trial = {
       "projectId": projectId,
-      "blockId": data["blockId"],
+      "blockId": blockId,
 
       // NOT SURE WE NEED THIS
       // "nextTrialId": null,
@@ -15,7 +16,7 @@ Meteor.methods({
       "name": data["name"],
 
       // this is used when you re-order
-      "index": data["index"],
+      "index": Trials.find({blockId: blockId}).count(),
 
       // number of times shown within its block
       "occurences": 1,
@@ -50,6 +51,22 @@ Meteor.methods({
   },
 
   deleteTrials: function (trialIds) {
+    // If multiple trialIds, then the whole block was
+    // deleted and we don't have to update indices. Otherwise,
+    // shift all trials that were after the deleted trial
+    // forward
+    if (trialIds.length === 1) {
+      var trialId = trialIds[0];
+      var trial = Trials.findOne(trialId);
+      var trialIdx = trial.index;
+      var trials = Trials.find({blockId: trial.blockId}).fetch();
+      _.each(trials, function (t) {
+        if (t.index > trialIdx) {
+          Trials.update(t._id, { $set: {'index': t.index-1 }});
+        }
+      });
+    }
+
     Trials.remove({
       _id: { $in: trialIds }
     });
