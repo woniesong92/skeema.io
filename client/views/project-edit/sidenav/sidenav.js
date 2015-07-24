@@ -4,8 +4,11 @@ if (Meteor.isClient) {
       cancel: ".add-block, .add-trial",
       items: "> li",
       update: function (e, ui) {
-        // TODO: handle backend
-        console.log("block item rearranged");
+        $('.block-item').each(function (idx, el) {
+          var context = Blaze.getData(el);
+          var blockId = context._id;
+          Meteor.call("changeBlockIndex", blockId, idx);
+        });
       }
     });
 
@@ -13,8 +16,11 @@ if (Meteor.isClient) {
       cancel: ".add-block, .add-trial",
       items: "> li",
       update: function (e, ui) {
-        // TODO: let me deal with it tomorrow
-        console.log("trial item rearranged");
+        $('.trial-item').each(function (idx, el) {
+          var context = Blaze.getData(el);
+          var trialId = context._id;
+          Meteor.call("changeTrialIndex", trialId, idx);
+        });
       }
     });
 
@@ -34,11 +40,11 @@ if (Meteor.isClient) {
       // "this" refers to what's returned
       // by iron router's data function: project object in this case
       var projectId = this._id;
-      return Blocks.find({projectId: projectId});
+      return Blocks.find({projectId: projectId}, {sort: {index: 1}});
     },
 
     trials: function (blockId) {
-      return Trials.find({blockId: blockId});
+      return Trials.find({blockId: blockId}, {sort: {index: 1}});
     }
   });
 

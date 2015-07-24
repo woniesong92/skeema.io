@@ -68,14 +68,12 @@ Meteor.methods({
     });
   },
 
-  //FIXME: MUST SHIFT THE INDECES OF THE OTHER TRIALS
   changeTrialIndex: function (trialId, newIndex) {
     Trials.update(trialId, {
       $set: {"index": newIndex}
     });
   },
 
-  //FIXME: MUST SHIFT THE INDECES OF THE OTHER TRIALS
   changeOccurences: function (trialId, newOcc) {
     Trials.update(trialId, {
       $set: {"occurences": newOcc}
