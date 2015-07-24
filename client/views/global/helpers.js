@@ -31,6 +31,8 @@ if (Meteor.isClient) {
     return Session.get("currentView") == "frameView";
   });
 
+  
+
   Template.registerHelper("block", function (event, template) {
     var blockId = Session.get("blockId");
     return Blocks.findOne({_id: blockId});
