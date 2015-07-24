@@ -5,6 +5,13 @@
     {{toUpperCase projectName}}
     <i class="fa fa-bars sidenav-toggle"></i>
   </div>
+  <div class="breadcrumb-container">
+    <ol class="breadcrumb">
+      <li class="{{#if isBlockView}}active{{/if}} block-breadcrumb"><a href="#">{{block.name}}</a></li>
+      <li class="{{#if isTrialView}}active{{/if}} trial-breadcrumb"><a href="#">{{trial.name}}</a></li>
+      <li class="{{#if isFrameView}}active{{/if}} frame-breadcrumb">{{frame.name}}</li>
+    </ol>
+  </div>
   <ul class='block-items white'>
     {{#each blocks}}
       <li class='block-item'>

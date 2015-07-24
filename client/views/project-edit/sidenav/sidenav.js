@@ -55,7 +55,32 @@ if (Meteor.isClient) {
 
     trials: function (blockId) {
       return Trials.find({blockId: blockId}, {sort: {index: 1}});
-    }
+    },
+
+    // blockName: function (){
+    //   var blockId = Session.get('blockId');
+    //   if (blockId){
+    //     return Blocks.findOne({_id: blockId}).name;
+    //   }
+    //   return "";
+    // },
+
+    // trialName: function (){
+    //   var trialId = Session.get('trialId');
+    //   if (trialId){
+    //     return Trials.findOne({_id: trialId}).name;
+    //   }
+    //   return "";
+    // },
+
+    // frameName: function (){
+    //   var frameId = Session.get('frameId');
+    //   if (frameId){
+    //     return Frames.findOne({_id: frameId}).name;
+    //   }
+    //   return "";
+    // },
+
   });
 
   Template.SideNav.events({
@@ -71,12 +96,17 @@ if (Meteor.isClient) {
       $(e.currentTarget).toggleClass('is-open');
       Session.set("currentView", "blockView");
       Session.set("blockId", this._id);
+      Session.set("frameId", null);
+      Session.set("trialId", null);
     },
 
     "click .trial-item": function (e, template) {
       e.stopPropagation();
       Session.set("currentView", "trialView");
       Session.set("trialId", this._id);
+      var blockId = Trials.findOne({_id: this._id}).blockId;
+      Session.set("blockId", blockId);
+      Session.set("frameId", null);
     },
 
     "click .add-block": function (e, template) {
@@ -124,6 +154,17 @@ if (Meteor.isClient) {
       e.stopPropagation();
       var trialId = this._id;
       Meteor.call("deleteTrials", [trialId]);
-    }
+    },
+
+    "click .block-breadcrumb": function (e, template) {
+      Session.set("currentView", "blockView");
+      Session.set("trialId", null);
+      Session.set("frameId", null);
+    },
+
+    "click .trial-breadcrumb": function (e, template) {
+      Session.set("currentView", "trialView");
+      Session.set("frameId", null);
+    },
   });
 }
