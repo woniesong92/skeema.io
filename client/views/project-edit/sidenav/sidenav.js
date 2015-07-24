@@ -40,11 +40,11 @@ if (Meteor.isClient) {
       // "this" refers to what's returned
       // by iron router's data function: project object in this case
       var projectId = this._id;
-      return Blocks.find({projectId: projectId});
+      return Blocks.find({projectId: projectId}, {sort: {index: 1}});
     },
 
     trials: function (blockId) {
-      return Trials.find({blockId: blockId});
+      return Trials.find({blockId: blockId}, {sort: {index: 1}});
     }
   });
 
