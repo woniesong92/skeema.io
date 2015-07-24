@@ -190,6 +190,7 @@ if (Meteor.isClient) {
     });
 
     // make images resizable
+    // why is workspace container resizalbe?
     $('.frame-workspace-container').resizable();
 
     this.autorun(function() {
@@ -226,9 +227,16 @@ if (Meteor.isClient) {
 
     "mouseup .frame-image-container": function (e, template) {
       var elementId = e.currentTarget.id;
+      var imageContainer = e.currentTarget;
+      var $image = $(imageContainer).find('.frame-image');
 
-      // save html automatically
-      var currentHTML = $('#' + elementId).prop('outerHTML');
+      // have to destroy the resizable wrapper before we store HTML
+      $image.resizable('destroy');
+      var currentHTML = imageContainer.outerHTML;
+      
+      // wrap the image with resizble wrapper again
+      $image.resizable();
+
       if (Elements.findOne({_id: elementId}).html != currentHTML) {
         Meteor.call("setHTML", elementId, currentHTML, function (err){
           if (err){
