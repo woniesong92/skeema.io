@@ -11,10 +11,7 @@ Meteor.methods({
       "randomize": false,
 
       // this is used when you re-order
-      "index": data["index"],
-
-      // number of trials
-      // "length": 0,
+      "index": Blocks.find({projectId: projectId}).count(),
       "createdAt": Date.now()
     };
 
@@ -53,6 +50,21 @@ Meteor.methods({
   },
 
   deleteBlocks: function (blockIds) {
+    // If multiple blockIds, then the whole project was
+    // deleted and we don't have to update indices. Otherwise,
+    // shift all blocks that were after the deleted block
+    // forward
+    if (blockIds.length === 1) {
+      var block = Blocks.findOne(trialIds[0]);
+      var blockIdx = blockIds[0].index;
+      var blocks = Blocks.find({projectId: block.projectId}).fetch();
+      _.each(blocks, function (b) {
+        if (b.index > blockIdx) {
+          Blocks.update(b._id, { $set: {'index': b.index-1 }});
+        }
+      });
+    }
+
     Blocks.remove({
       _id: { $in: blockIds }
     });

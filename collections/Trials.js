@@ -56,9 +56,8 @@ Meteor.methods({
     // shift all trials that were after the deleted trial
     // forward
     if (trialIds.length === 1) {
-      var trialId = trialIds[0];
-      var trial = Trials.findOne(trialId);
-      var trialIdx = trial.index;
+      var trial = Trials.findOne(trialIds[0]);
+      var trialIdx = trialIds[0].index;
       var trials = Trials.find({blockId: trial.blockId}).fetch();
       _.each(trials, function (t) {
         if (t.index > trialIdx) {
