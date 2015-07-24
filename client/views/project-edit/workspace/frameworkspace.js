@@ -133,9 +133,9 @@ if (Meteor.isClient) {
 
     var frameElts = Elements.find({"frameId": Session.get("frameId") });
     
-    frameElts.forEach(function(elt) {
-      $('.frame-workspace-container').append(elt.html);
-    });
+    // frameElts.forEach(function(elt) {
+    //   $('.frame-workspace-container').append(elt.html);
+    // });
 
     if (Session.get("showChoosingElementView")){
 
@@ -288,9 +288,9 @@ if (Meteor.isClient) {
               return false;
             }
             
-            var elt = Elements.findOne({_id: elementId});
-              $('.frame-workspace-container').append(elt.html);
-              $('#' + elementId).attr('contenteditable', 'true');
+            // var elt = Elements.findOne({_id: elementId});
+            //   $('.frame-workspace-container').append(elt.html);
+              $('.element-item').last().attr('contenteditable', 'true');
 
               $( ".draggable" ).draggable({
                 containment: ".frame-workspace-container",
