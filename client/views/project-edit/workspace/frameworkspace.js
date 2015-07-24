@@ -356,6 +356,15 @@ if (Meteor.isClient) {
               scroll: false,
               stop: function (event, ui) {
                 Session.set("elementId", this.id);
+
+                  // save new html automatically
+                  var currentHTML = $('#' + this.id).prop('outerHTML');
+                  Meteor.call("setHTML", this.id, currentHTML, function (err){
+                    if (err){
+                      console.log("saving HTML changes failed for " + this.id);
+                      return false;
+                      }
+                  });
                }
             });
           });
@@ -411,6 +420,15 @@ if (Meteor.isClient) {
               scroll: false,
               stop: function (event, ui) {
                 Session.set("elementId", this.id);
+
+                  // save new html automatically
+                  var currentHTML = $('#' + this.id).prop('outerHTML');
+                  Meteor.call("setHTML", this.id, currentHTML, function (err){
+                    if (err){
+                      console.log("saving HTML changes failed for " + this.id);
+                      return false;
+                      }
+                  });
               }
             });
           });
