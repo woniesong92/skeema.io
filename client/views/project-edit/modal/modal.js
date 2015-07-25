@@ -18,36 +18,57 @@ if (Meteor.isClient) {
   });
 
   Template.Modal.onRendered(function() {
-    
+
+    // FIXME: I want to set the selected state, but the modal event is not firing
+    // for some reason
+    // $('#modal').modal('shown.bs.modal', function (e) {
+    //   debugger
+    //   $('.default-option').prop("selected", true);
+    // });
+
+    this.autorun(function() {
+      var pathInfo = Session.get("pathInfo");
+      if (pathInfo) {
+        _.each(pathInfo.existingEventTypes, function (eventType) {
+          if (eventType) {
+            $('#event-picker option[value="'+eventType+'"]')
+              .attr('disabled', 'disabled')
+              .text(eventType +" - Path exists already");
+          }
+        })
+      }
+    });
   });
 
   Template.Modal.events({
-    'change #event-picker': function(e, template) { 
-        var pickedevent = $('#event-picker').val();
-        $('.show').removeClass('show');
-        $('.modal input').val("");
-        $('.create-path-btn').addClass('disabled');
-        switch (pickedevent) {
-          case "keypress":
-            $('.key-options').addClass('show');
-            break;
-          case "time":
-            $('.time-options').addClass('show');
-            break;
-          case "click":
-            var pathInfo = Session.get("pathInfo");
-            if (pathInfo) {
-             var numElts = Elements.find({frameId: pathInfo.sourceFrame}).count();
-              if (numElts < 1) {
-                $('.click-error-msg').addClass('show');
-              } else {
-                $('.create-path-btn').removeClass('disabled');
-              }
+    'change #event-picker': function(e, template) {
+      $('.create-path-btn').addClass('disabled');
+      $('.show').removeClass('show');
+      $('.modal input').val("");
+
+      var pathInfo = Session.get("pathInfo");
+      var pickedevent = $('#event-picker').val();
+
+      switch (pickedevent) {
+        case "keypress":
+          $('.key-options').addClass('show');
+          break;
+        case "time":
+          $('.time-options').addClass('show');
+          break;
+        case "click":
+          if (pathInfo) {
+           var numElts = Elements.find({frameId: pathInfo.sourceFrame}).count();
+            if (numElts < 1) {
+              $('.click-error-msg').addClass('show');
+            } else {
+              $('.create-path-btn').removeClass('disabled');
             }
-            break;
-          default:
-            break;
-        }
+          }
+          break;
+        default:
+          break;
+      }
     },
 
     'keyup #key': function (e, template) {

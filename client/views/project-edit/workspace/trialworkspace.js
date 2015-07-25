@@ -174,6 +174,16 @@ if (Meteor.isClient) {
         // bind event: when a new connection is added, add it to DB too
         jspInstance.bind("connection", function (info) {
           var trialId = self.trialId;
+
+          var existingPaths = Paths.find({
+            sourceId: info.sourceId,
+            targetId: info.targetId
+          }).fetch();
+
+          var existingEventTypes = _.map(existingPaths, function (path) {
+            return path.eventType;
+          });
+
           var numPaths = Paths.find({trialId: trialId}).count();
           var pathName = "Path " + numPaths;
           var path = {
@@ -189,7 +199,8 @@ if (Meteor.isClient) {
           Meteor.call("addPath", path, function (err, pathId) {
             var pathInfo = {
               pathId: pathId,
-              sourceFrame: info.source.id
+              sourceFrame: info.source.id,
+              existingEventTypes: existingEventTypes
             }
             Session.set("pathInfo", pathInfo);
             info.connection.id = pathId;
