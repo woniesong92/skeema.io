@@ -13,6 +13,10 @@ if (Meteor.isServer) {
     return Blocks.find({projectId: projectId});
   });
 
+  Meteor.publish("block", function (blockId) {
+    return Blocks.find({_id: blockId});
+  });
+
   Meteor.publish("trial", function (trialId) {
     return Trials.find({_id: trialId});
   });

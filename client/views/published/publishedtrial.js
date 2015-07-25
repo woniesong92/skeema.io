@@ -26,41 +26,67 @@ if (Meteor.isClient) {
 
 
 
-   if (isExit) {
-      var nextTrialIndex = trial.index + 1;
-      var blockId = trial.blockId;
+   // if (isExit) {
+   //    var nextTrialIndex = trial.index + 1;
+   //    var blockId = trial.blockId;
 
-      if (nextTrialIndex === Trials.find({blockId: blockId}).count()) {
-        alert("end of block!");
+   //    if (nextTrialIndex === Trials.find({blockId: blockId}).count()) {
+   //      alert("end of block!");
 
-        var nextBlockIndex = Blocks.findOne({_id: blockId}).index + 1;
-        var nextBlock = Blocks.findOne({index: nextBlockIndex});
-        var nextBlockId = nextBlock._id;
-        var nextTrialId = Trials.findOne({blockId: nextBlockId})._id;
-        Router.go('/preview/'+nextBlockId+'/'+nextTrialId);
-        return;
-      }
+   //      var nextBlockIndex = Blocks.findOne({_id: blockId}).index + 1;
+   //      var nextBlock = Blocks.findOne({index: nextBlockIndex});
+   //      var nextBlockId = nextBlock._id;
+   //      var nextTrialId = Trials.findOne({blockId: nextBlockId})._id;
+   //      Router.go('/preview/'+nextBlockId+'/'+nextTrialId);
+   //      return;
+   //    }
 
-      nextTrialIndex = trial.index + 1;
-      var nextTrialId = Trials.findOne({index: nextIndex})._id;
-      Router.go('/preview/'+trial.blockId+'/'+nextTrialId);
-      return;
-    }
+   //    nextTrialIndex = trial.index + 1;
+   //    var nextTrialId = Trials.findOne({index: nextIndex})._id;
+   //    Router.go('/preview/'+trial.blockId+'/'+nextTrialId);
+   //    return;
+   //  }
 
 
 
   Template.PublishedFrame.onRendered(function() {
+    debugger
     var frameDOM = this.$('.frame-container');
-    var isExit = this.data.type === "exit";
+    // var isExit = this.data.type === "exit";
     var isStart = this.data.type === "start";
     var currentTrial = Trials.findOne({_id: this.data.trialId});
+
     var sourceId = this.data._id;
     var paths = Paths.find({sourceId: sourceId}).fetch();
 
     _.each(paths, function (path) {
       var targetId = path.targetId;
-      var targetTrial = Trials.findOne({_id: targetId});
-      var isTargetExit = targetTrial.type === 'exit';
+      var targetFrame = Frames.findOne({_id: targetId});
+      var isTargetExit = targetFrame.type === 'exit';
+      debugger
+      //FIXME: feel weird to have this in the Frame template, not the Trial template...
+      // anyway to set a global variable?
+      var isLastTrial = currentTrial.index === Trials.find({blockId: currentTrial.blockId}).count() - 1;
+
+      var routerURL = "/preview/";
+      if (isLastTrial) {
+        debugger
+        var nextBlockIndex = Blocks.findOne({_id: currentTrial.blockId}).index + 1;
+        var nextBlockId = Blocks.findOne({index: nextBlockIndex})._id;
+        var nextTrialId = Trials.findOne({
+          blockId: nextBlockId,
+          index: 0
+        })._id;
+        routerURL += nextBlockId + "/" + nextTrialId;
+
+      } else {
+        debugger
+        var nextTrialId = Trials.findOne({
+          blockId: currentTrial.blockId,
+          index: currentTrial.index + 1
+        })._id;
+        routerURL += nextBlockId + "/" + nextTrialId;
+      }
 
       // if (isTargetExit) {
       //   var nextTrialIndex = targetTrial.index;
@@ -85,24 +111,9 @@ if (Meteor.isClient) {
       var scriptStr = (function() {
         return "<script>" +
 
-          'if (isTargetExit) {' +
-            'var nextTrialIndex = targetTrial.index;' +
-            var blockId = currentTrial.blockId;
-
-            if (nextTrialIndex === Trials.find({blockId: blockId}).count()) {
-              var nextBlockIndex = Blocks.findOne({_id: blockId}).index + 1;
-              var nextBlock = Blocks.findOne({index: nextBlockIndex});
-              var nextBlockId = nextBlock._id;
-              var nextTrialId = Trials.findOne({
-                blockId: nextBlockId,
-                index: 0
-              })._id;
-              Router.go('/preview/'+nextBlockId+'/'+nextTrialId);
-            } else {
-              var nextTrialId = targetId;
-              Router.go('/preview/'+blockId+'/'+nextTrialId);
-            }
-          } else {
+          'if (' + isTargetExit + ') {' +
+            'Router.go(\'' + routerURL + '\');' +
+          '} else {' +
             'if ("'+path.eventType+'" === "keypress") {' +
               '$(window).keypress(function(e) {' +
                 'debugger; \n' +
@@ -124,11 +135,7 @@ if (Meteor.isClient) {
                   '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
               '});' +
             '}' +
-          }
-
-
-
-
+          '}' +
         "</script>";
       });
 
