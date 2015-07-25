@@ -29,6 +29,13 @@ if (Meteor.isClient) {
     this.autorun(function() {
       var pathInfo = Session.get("pathInfo");
       if (pathInfo) {
+
+        // FIXME cont'd
+        // I feel like it'd be more appropriate put this clearing() code inside
+        // modal shown or hidden
+        $('.default-option').prop("selected", true);
+        $('.show').removeClass('show');
+
         _.each(pathInfo.existingEventTypes, function (eventType) {
           if (eventType) {
             $('#event-picker option[value="'+eventType+'"]')
