@@ -66,6 +66,7 @@ Router.route('/preview/:_projectid/:_blockid/:_trialid', {
     var trialId = this.params._trialid;
 
     return [
+      Meteor.subscribe("trial", trialId),
       Meteor.subscribe("frames", projectId, trialId),
       Meteor.subscribe("paths", projectId, trialId),
       Meteor.subscribe("elements", projectId, trialId)

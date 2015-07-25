@@ -25,32 +25,46 @@ if (Meteor.isClient) {
 
 
   Template.PublishedFrame.onRendered(function() {
-
     var frameDOM = this.$('.frame-container');
-
-    // console.log("frame rendered");
-
     var isExit = this.data.type === "exit";
+    var isStart = this.data.type === "start";
+    var trial = Trials.findOne({_id: this.data.trialId});
 
     if (isExit){
 
       //FIXME: when index is at end --> next block
-      var trial = Trials.findOne({_id: this.data.trialId});
-      var nextTrialId = Trials.findOne({index: trial.index + 1})._id;
+      var nextTrialIndex = trial.index + 1;
+      var blockId = trial.blockId;
+
+      if (nextTrialIndex === Trials.find({blockId: blockId}).count()) {
+        alert("end of block!");
+
+        var nextBlockIndex = Blocks.findOne({_id: blockId}).index + 1;
+        var nextBlock = Blocks.findOne({index: nextBlockIndex});
+        var nextBlockId = nextBlock._id;
+        var nextTrialId = Trials.findOne({blockId: nextBlockId})._id;
+        Router.go('/preview/'+nextBlockId+'/'+nextTrialId);
+        return;
+      }
+
+      nextTrialIndex = trial.index + 1;
+      var nextTrialId = Trials.findOne({index: nextIndex})._id;
       Router.go('/preview/'+trial.blockId+'/'+nextTrialId);
+      return;
     }
 
 
     var paths = Paths.find({sourceId: this.data._id}).fetch();
 
     _.each(paths, function (path) {
+      var sourceId = path.sourceId;
       var targetId = path.targetId;
       var targetIsExit = Frames.findOne({_id: targetId}).type === "exit";
 
       var scriptStr = "<script>" +
         "var stepFrame = function() {" +
           'if('+targetIsExit+') {' +
-            "frameDOM.hide();" +
+            '$(".frame-container[data-framdId=\''+ sourceId +'\']").hide();' +
             '$(".frame-container[data-framdId=\''+ targetId +'\']").show();' +
           "}" +
         "};\n"+
@@ -72,12 +86,12 @@ if (Meteor.isClient) {
         '}' +
       "</script>";
 
-      debugger
-
       frameDOM.append(scriptStr);
-      debugger
-
     });
+
+    if (trial.startFrameId !== this.data._id) {
+      frameDOM.hide();
+    }
 
   });
 
