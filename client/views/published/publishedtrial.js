@@ -24,15 +24,9 @@ if (Meteor.isClient) {
   });
 
 
-  Template.PublishedFrame.onRendered(function() {
-    var frameDOM = this.$('.frame-container');
-    var isExit = this.data.type === "exit";
-    var isStart = this.data.type === "start";
-    var trial = Trials.findOne({_id: this.data.trialId});
 
-    if (isExit){
 
-      //FIXME: when index is at end --> next block
+   if (isExit) {
       var nextTrialIndex = trial.index + 1;
       var blockId = trial.blockId;
 
@@ -54,37 +48,89 @@ if (Meteor.isClient) {
     }
 
 
-    var paths = Paths.find({sourceId: this.data._id}).fetch();
+
+  Template.PublishedFrame.onRendered(function() {
+    var frameDOM = this.$('.frame-container');
+    var isExit = this.data.type === "exit";
+    var isStart = this.data.type === "start";
+    var currentTrial = Trials.findOne({_id: this.data.trialId});
+    var sourceId = this.data._id;
+    var paths = Paths.find({sourceId: sourceId}).fetch();
 
     _.each(paths, function (path) {
-      var sourceId = path.sourceId;
       var targetId = path.targetId;
-      var targetIsExit = Frames.findOne({_id: targetId}).type === "exit";
+      var targetTrial = Trials.findOne({_id: targetId});
+      var isTargetExit = targetTrial.type === 'exit';
 
-      var scriptStr = "<script>" +
-        "var stepFrame = function() {" +
-          'if('+targetIsExit+') {' +
-            '$(".frame-container[data-framdId=\''+ sourceId +'\']").hide();' +
-            '$(".frame-container[data-framdId=\''+ targetId +'\']").show();' +
-          "}" +
-        "};\n"+
-        'if ("'+path.eventType+'" === "keypress") {' +
-          '$("document").keypress(function(e) {' +
-            'var code = e.keyCode || e.which;' +
-              'if (code === '+path.eventParam.charCodeAt(0)+') {' +
-                'stepFrame();' +
-              '}' +
-            '});' +
-        '} else if ("'+path.eventType+'" === "time") {' +
-          'setTimeout(function() {' +
-            'stepFrame();' +
-          '}, parseInt("'+path.eventParam+'"));' +
-        '} else if ("'+path.eventType+'" === "click") {' +
-          '$("#' + path.eventParam + '").click(function() {' +
-            "stepFrame();" +
-          '});' +
-        '}' +
-      "</script>";
+      // if (isTargetExit) {
+      //   var nextTrialIndex = targetTrial.index;
+      //   var blockId = currentTrial.blockId;
+
+      //   if (nextTrialIndex === Trials.find({blockId: blockId}).count()) {
+      //     var nextBlockIndex = Blocks.findOne({_id: blockId}).index + 1;
+      //     var nextBlock = Blocks.findOne({index: nextBlockIndex});
+      //     var nextBlockId = nextBlock._id;
+      //     var nextTrialId = Trials.findOne({
+      //       blockId: nextBlockId,
+      //       index: 0
+      //     })._id;
+      //     Router.go('/preview/'+nextBlockId+'/'+nextTrialId);
+      //   } else {
+      //     var nextTrialId = targetId;
+      //     Router.go('/preview/'+blockId+'/'+nextTrialId);
+      //   }
+      // }
+
+
+      var scriptStr = (function() {
+        return "<script>" +
+
+          'if (isTargetExit) {' +
+            'var nextTrialIndex = targetTrial.index;' +
+            var blockId = currentTrial.blockId;
+
+            if (nextTrialIndex === Trials.find({blockId: blockId}).count()) {
+              var nextBlockIndex = Blocks.findOne({_id: blockId}).index + 1;
+              var nextBlock = Blocks.findOne({index: nextBlockIndex});
+              var nextBlockId = nextBlock._id;
+              var nextTrialId = Trials.findOne({
+                blockId: nextBlockId,
+                index: 0
+              })._id;
+              Router.go('/preview/'+nextBlockId+'/'+nextTrialId);
+            } else {
+              var nextTrialId = targetId;
+              Router.go('/preview/'+blockId+'/'+nextTrialId);
+            }
+          } else {
+            'if ("'+path.eventType+'" === "keypress") {' +
+              '$(window).keypress(function(e) {' +
+                'debugger; \n' +
+                'var code = e.keyCode || e.which;' +
+                  'if (code === '+path.eventParam.charCodeAt(0)+') {' +
+                    '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
+                    '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
+                  '}' +
+                '});' +
+            '} else if ("'+path.eventType+'" === "time") {' +
+              'setTimeout(function() {' +
+                  'debugger; \n' +
+                  '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
+                  '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
+              '}, parseInt("'+path.eventParam+'"));' +
+            '} else if ("'+path.eventType+'" === "click") {' +
+              '$("#' + path.eventParam + '").click(function() {' +
+                  '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
+                  '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
+              '});' +
+            '}' +
+          }
+
+
+
+
+        "</script>";
+      });
 
       frameDOM.append(scriptStr);
     });
