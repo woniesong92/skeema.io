@@ -97,6 +97,12 @@ Meteor.methods({
     });
   },
 
+  setTrialStart: function (trialId, newStartFrameId) {
+    Trials.update(trialId, {
+      $set: {'startFrameId': newStartFrameId}
+    });
+  },
+
   renameTrial: function (trialId, newName) {
     Trials.update(trialId, {
       $set: {'name': newName}

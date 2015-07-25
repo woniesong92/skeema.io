@@ -1,8 +1,18 @@
 if (Meteor.isClient) {
 
   Template.FrameToolBox.helpers({
+
     "uploaded_files": function(){
       return S3.collection.find();
+    },
+
+  });
+
+  Template.FrameSettings.helpers({
+    "isStart": function() {
+      var frameId = Session.get("frameId");
+      var trialId = Session.get("trialId");
+      return Trials.findOne({_id: trialId}).startFrameId == frameId;
     }
   });
 
@@ -49,6 +59,13 @@ if (Meteor.isClient) {
     //     stackup_spacing: 10 // spacing between consecutively stacked growls.
     //   });
     // },
+
+    'change #isStart': function(e, template) { 
+      var startBool = $('#isStart').is(':checked');
+      var trialId = Session.get("trialId");
+      var frameId = Session.get("frameId");
+      Meteor.call('setTrialStart', trialId, frameId);
+    },
 
     'click .add-text-btn': function (e, template) {
       Session.set("addImage", false);

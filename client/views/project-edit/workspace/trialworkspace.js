@@ -240,8 +240,12 @@ if (Meteor.isClient) {
   });
 
   Template.FrameItem.helpers({
-    toUpperCase: function(str) {
-      return str.toUpperCase();
+    isStart: function() {
+      var trialId = Session.get('trialId');
+      if (Trials.findOne({_id: trialId}).startFrameId == this._id) {
+        return "startFrame";
+      }
+      return "";
     },
 
   });
