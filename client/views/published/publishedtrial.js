@@ -1,34 +1,41 @@
 if (Meteor.isClient) {
 
   Template.PublishedTrial.helpers({
-    // isMine: function(owner) {
-    //   return owner == Meteor.userId();
-    // }
+    frames: function() {
+      return Frames.find();
+    }
   });
 
 
-  Template.PublishedTrial.rendered = function () {
-    
-  }
+  Template.PublishedTrial.onRendered(function() {
+    console.log("trial rendered");
+  });
 
   Template.PublishedTrial.events({
 
-  });
 
+  });
 
 
   Template.PublishedFrame.helpers({
-    // isMine: function(owner) {
-    //   return owner == Meteor.userId();
-    // }
+    elements: function() {
+      return Elements.find({frameId: this._id});
+    }
   });
 
 
-  Template.PublishedFrame.rendered = function () {
-    
-  }
+  Template.PublishedFrame.onRendered(function() {
+    console.log("frame rendered");
+    // debugger
+  });
 
   Template.PublishedFrame.events({
 
+  });
+
+  Template.PublishedElement.onRendered(function() {
+    var htmlStr = this.data.html;
+    var element = $(htmlStr);
+    this.$('.element-container').append(element);
   });
 }

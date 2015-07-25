@@ -31,7 +31,10 @@ if (Meteor.isServer) {
     return Paths.find({projectId: projectId});
   });
 
-  Meteor.publish("elements", function (projectId) {
+  Meteor.publish("elements", function (projectId, trialId) {
+    if (trialId) {
+      return Elements.find({trialId: trialId});
+    }
     return Elements.find({projectId: projectId});
   });
 

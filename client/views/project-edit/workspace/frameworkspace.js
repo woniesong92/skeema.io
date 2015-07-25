@@ -259,8 +259,11 @@ if (Meteor.isClient) {
       if (doAddText) {
         Session.set("addText", false);
 
+        debugger
+
         Meteor.call("addElement", {
           projectId: projectId,
+          trialId: Session.get("trialId"),
           frameId: Session.get("frameId"),
           type: "text",
         }, function (err, elementId) {
@@ -315,8 +318,11 @@ if (Meteor.isClient) {
       } else if (doAddButton) {
         Session.set("addButton", false);
 
+        debugger
+
         Meteor.call("addElement", {
           projectId: projectId,
+          trialId: Session.get("trialId"),
           frameId: Session.get("frameId"),
           type: "button",
         }, function (err, elementId){
@@ -375,8 +381,11 @@ if (Meteor.isClient) {
         Session.set("addImage", false);
         var imageUrl = doAddImage;
 
+        debugger
+
         Meteor.call("addElement", {
           projectId: projectId,
+          trialId: Session.get("trialId"),
           frameId: Session.get("frameId"),
           type: "image",
         }, function (err, elementId) {

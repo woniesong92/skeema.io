@@ -4,6 +4,10 @@ Meteor.methods({
   addElement: function (data) {
     var element = {
       "projectId": data["projectId"],
+
+      // FIXME: We need trialId to use for subscribing
+      // can we get rid of it?
+      "trialId": data["trialId"],
       "frameId": data["frameId"],
 
       // button, image, or text

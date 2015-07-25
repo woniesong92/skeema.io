@@ -1,11 +1,18 @@
-
 <template name="PublishedTrial">
   {{#each frames}}
-    {{> PublishedFrame}}
+    <div class="frame-container">
+      {{> PublishedFrame}}
+    </div>
   {{/each}}
 </template>
 
-
 <template name="PublishedFrame">
-  {{html}}
+  {{#each elements}}
+    <!-- lets see if each html is correctly output -->
+    {{> PublishedElement}}
+  {{/each}}
+</template>
+
+<template name="PublishedElement">
+  <div class="element-container"></div>
 </template>

@@ -59,26 +59,32 @@ Router.route('/projects/:_id', {
   }
 });
 
-Router.route('/courses/:_projectid/:_blockid/:_trialid', {
+Router.route('/preview/:_projectid/:_blockid/:_trialid', {
   waitOn: function() {
     var projectId = this.params._projectid;
     var blockId = this.params._blockidid;
     var trialId = this.params._trialid;
 
-    return [Meteor.subscribe("frames", projectId, trialId), Meteor.subscribe("paths", projectId, trialId)];
+    return [
+      Meteor.subscribe("frames", projectId, trialId),
+      Meteor.subscribe("paths", projectId, trialId),
+      Meteor.subscribe("elements", projectId, trialId)
+    ];
   },
 
   action: function() {
-
+    // debugger
+    var trialId = this.params._trialid;
     var trial = Trials.findOne({_id: trialId});
     
     this.render('PublishedTrial', {
       to: 'content',
       data: function () {
-        return trial;
+        return {
+          trial: trial
+        }
       }
     });
-
   },
 });
 
