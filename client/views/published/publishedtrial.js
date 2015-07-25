@@ -8,7 +8,7 @@ if (Meteor.isClient) {
 
 
   Template.PublishedTrial.onRendered(function() {
-    console.log("trial rendered");
+    // console.log("trial rendered");
   });
 
   Template.PublishedTrial.events({
@@ -28,7 +28,7 @@ if (Meteor.isClient) {
 
     var frameDOM = this.$('.frame-container');
 
-    console.log("frame rendered");
+    // console.log("frame rendered");
 
     var isExit = this.data.type === "exit";
 
@@ -47,40 +47,32 @@ if (Meteor.isClient) {
       var targetId = path.targetId;
       var targetIsExit = Frames.findOne({_id: targetId}).type === "exit";
 
-
       var scriptStr = "<script>" +
         "var stepFrame = function() {" +
-          "if(targetIsExit){" +
+          'if('+targetIsExit+') {' +
             "frameDOM.hide();" +
-            "$('.frame-container[data-framdId="'+ targetId +'"]').show();" +
+            '$(".frame-container[data-framdId=\''+ targetId +'\']").show();' +
           "}" +
-        "}"+
-
-        "switch (path.eventType){" +
-          'case "keypress":' +
-            '$("document").keypress(function(e) {' +
-              'var code = e.keyCode || e.which;' +
-                'if (code === path.eventParam.charCodeAt(0)) {' +
-                  'stepFrame();' +
-                '}' +
-              '});' +
-            'break;' +
-
-          'case "time":' +
-
-            'setTimeout(function() {' +
-              'stepFrame();' +
-            '}, parseInt(path.eventParam));' +
-            'break;' +
-
-          'case "click":' +
-
-            "$('#' + path.eventParam).click(function() {" +
-              "stepFrame();" +
+        "};\n"+
+        'if ("'+path.eventType+'" === "keypress") {' +
+          '$("document").keypress(function(e) {' +
+            'var code = e.keyCode || e.which;' +
+              'if (code === '+path.eventParam.charCodeAt(0)+') {' +
+                'stepFrame();' +
+              '}' +
             '});' +
-            'break;' +
+        '} else if ("'+path.eventType+'" === "time") {' +
+          'setTimeout(function() {' +
+            'stepFrame();' +
+          '}, parseInt("'+path.eventParam+'"));' +
+        '} else if ("'+path.eventType+'" === "click") {' +
+          '$("#' + path.eventParam + '").click(function() {' +
+            "stepFrame();" +
+          '});' +
         '}' +
       "</script>";
+
+      debugger
 
       frameDOM.append(scriptStr);
       debugger
