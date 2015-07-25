@@ -9,6 +9,7 @@ if (Meteor.isClient) {
 
   Template.PublishedTrial.onRendered(function() {
     // console.log("trial rendered");
+    debugger
   });
 
   Template.PublishedTrial.events({
@@ -68,7 +69,7 @@ if (Meteor.isClient) {
       // anyway to set a global variable?
       var isLastTrial = currentTrial.index === Trials.find({blockId: currentTrial.blockId}).count() - 1;
 
-      var routerURL = "/preview/";
+      var routerURL = "/preview/" + currentTrial.projectId + "/";
       if (isLastTrial) {
         debugger
         var nextBlockIndex = Blocks.findOne({_id: currentTrial.blockId}).index + 1;
@@ -110,32 +111,37 @@ if (Meteor.isClient) {
 
       var scriptStr = (function() {
         return "<script>" +
-
-          'if (' + isTargetExit + ') {' +
-            'Router.go(\'' + routerURL + '\');' +
-          '} else {' +
             'if ("'+path.eventType+'" === "keypress") {' +
               '$(window).keypress(function(e) {' +
-                'debugger; \n' +
                 'var code = e.keyCode || e.which;' +
                   'if (code === '+path.eventParam.charCodeAt(0)+') {' +
-                    '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
-                    '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
+                    'if (' + isTargetExit + ') {' +
+                      'Router.go(\'' + routerURL + '\');' +
+                    '} else {' +
+                      '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
+                      '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
+                    '}' +
                   '}' +
                 '});' +
             '} else if ("'+path.eventType+'" === "time") {' +
               'setTimeout(function() {' +
-                  'debugger; \n' +
-                  '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
-                  '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
+                'if (' + isTargetExit + ') {' +
+                      'Router.go(\'' + routerURL + '\');' +
+                    '} else {' +
+                      '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
+                      '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
+                    '}' +
               '}, parseInt("'+path.eventParam+'"));' +
             '} else if ("'+path.eventType+'" === "click") {' +
               '$("#' + path.eventParam + '").click(function() {' +
-                  '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
-                  '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
+                  'if (' + isTargetExit + ') {' +
+                      'Router.go(\'' + routerURL + '\');' +
+                    '} else {' +
+                      '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
+                      '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
+                    '}' +
               '});' +
             '}' +
-          '}' +
         "</script>";
       });
 
