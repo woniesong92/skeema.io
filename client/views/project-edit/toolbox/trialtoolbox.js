@@ -55,12 +55,12 @@ if (Meteor.isClient) {
     'click .add-frame': function (e, template) {
       var projectId = this._id;
       var trialId = Session.get('trialId');
-      var numFrames = Frames.find({trialId: trialId}).count() - 2;
+      // var numFrames = Frames.find({trialId: trialId}).count() - 1;
 
       Meteor.call('addFrame', {
         projectId: projectId,
         trialId: trialId,
-        name: "Frame " + numFrames,
+        name: "New Frame",
         type: "normal"
       }, function (err, frameId) {
         if (err) {

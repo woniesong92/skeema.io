@@ -15,6 +15,9 @@ Meteor.methods({
 
       "name": "New Trial",
 
+      // starting frame
+      "startFrameId": null,
+
       // this is used when you re-order
       "index": Trials.find({blockId: blockId}).count(),
 
@@ -43,15 +46,6 @@ Meteor.methods({
       }
 
       //FIXME: WHAT TO DO WITH INDEX?
-      Meteor.call("addFrame", {
-        projectId: projectId,
-        trialId: trialId,
-        name: "Enter",
-        type: "enter",
-        index: -1
-      });
-
-      //FIXME: WHAT TO DO WITH INDEX?
        Meteor.call("addFrame", {
         projectId: projectId,
         trialId: trialId,
@@ -59,6 +53,19 @@ Meteor.methods({
         type: "exit",
         index: -1
       });
+
+       Meteor.call("addFrame", {
+        projectId: projectId,
+        trialId: trialId,
+        name: "New Frame",
+        type: "normal",
+        index: 0
+      }, function (err, frameId) {
+        Trials.update(trialId, {
+          $set: {'startFrameId': frameId}
+        });
+      });
+
     });
   },
 

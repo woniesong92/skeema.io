@@ -7,7 +7,7 @@ Meteor.methods({
       "trialId": data["trialId"],
       "name": data["name"],
 
-      // "normal", "enter", or "exit"
+      // "normal" or "exit"
       "type": data["type"],
       // User can place frame4 before frame3, so we need
       // an index field
