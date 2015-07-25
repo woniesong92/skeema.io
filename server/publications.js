@@ -17,11 +17,17 @@ if (Meteor.isServer) {
     return Trials.find({projectId: projectId});
   });
 
-  Meteor.publish("frames", function (projectId) {
+  Meteor.publish("frames", function (projectId, trialId) {
+    if (trialId) {
+      return Frames.find({trialId: trialId});
+    }
     return Frames.find({projectId: projectId});
   });
 
-  Meteor.publish("paths", function (projectId) {
+  Meteor.publish("paths", function (projectId, trialId) {
+    if (trialId) {
+      return Paths.find({trialId: trialId});
+    }
     return Paths.find({projectId: projectId});
   });
 
