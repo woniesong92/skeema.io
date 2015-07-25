@@ -1,16 +1,16 @@
 <template name="PublishedTrial">
   {{#each frames}}
-    <div class="frame-container">
       {{> PublishedFrame}}
-    </div>
   {{/each}}
 </template>
 
 <template name="PublishedFrame">
-  {{#each elements}}
-    <!-- lets see if each html is correctly output -->
-    {{> PublishedElement}}
-  {{/each}}
+  <div class="frame-container" data-frameId="{{_id}}">
+    {{#each elements}}
+      <!-- lets see if each html is correctly output -->
+      {{> PublishedElement}}
+    {{/each}}
+  </div>
 </template>
 
 <template name="PublishedElement">
