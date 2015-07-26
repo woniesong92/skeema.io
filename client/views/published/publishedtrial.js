@@ -85,7 +85,7 @@ if (Meteor.isClient) {
           blockId: currentTrial.blockId,
           index: currentTrial.index + 1
         })._id;
-        routerURL += nextBlockId + "/" + nextTrialId;
+        routerURL += currentTrial.blockId + "/" + nextTrialId;
       }
 
       // if (isTargetExit) {
