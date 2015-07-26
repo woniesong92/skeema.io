@@ -220,9 +220,31 @@ if (Meteor.isClient) {
       Session.set("frameId", this._id);
     },
     "click .frame-remove-btn": function (e, template) {
-      Meteor.call("deleteFrames", [this._id], function (e){
+      var trialId = Session.get("trialId");
+      var trial = Trials.findOne({_id: trialId});
+      // var numFrames = Frames.find({trialId: trialId}).count();
+      var frameId = this._id;
+
+      // if there are only start and exit frames or this is a start frame,
+      // you can't remove this frame
+      if (trial.startFrameId === frameId) {
+        var errMessage = "You cannot delete a start frame."
+        $.bootstrapGrowl(errMessage, {
+          ele: '.toast-container', // which element to append to
+          type: 'danger', // (null, 'info', 'danger', 'success')
+          offset: {from: 'top', amount: 97}, // 'top', or 'bottom'
+          align: 'right', // ('left', 'right', or 'center')
+          width: 220, // (integer, or 'auto')
+          delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+          allow_dismiss: true, // If true then will display a cross to close the popup.
+          stackup_spacing: 10 // spacing between consecutively stacked growls.
+        });
+        return false;
+      }
+
+      Meteor.call("deleteFrames", [frameId], function (e){
         if (e) {
-          console.log("Deleting frame "+this._id+" failed");
+          console.log("Deleting frame "+frameId+" failed");
           return false;
         }
         // Utils.toast('Removed successfully', 2000);
