@@ -2,17 +2,32 @@ if (Meteor.isClient) {
 
   Template.PublishedTrial.helpers({
     frames: function() {
-      return Frames.find({type: "normal"});
+      var trialId = Session.get("publishedTrialId");
+      return Frames.find({type: "normal", trialId: trialId});
     },
   });
 
 
   Template.PublishedTrial.onRendered(function() {
     // console.log("trial rendered");
+
+    var projectId = this.data._id;
+
+    var blockId = Blocks.findOne({projectId: projectId, index: 0})._id;
+    var trialId = Trials.findOne({projectId: projectId, index: 0})._id;
+
+    Session.set("publishedBlockId", blockId);
+    Session.set("publishedTrialId", trialId);
+
+    this.setUpFrames = Tracker.autorun(function() {
+      if (Session.get("publishedBlockId") && Session.get("publishedTrialId")){
+        console.log("changed trials");
+      }
+    });
+
   });
 
   Template.PublishedTrial.events({
-
 
   });
 
@@ -24,45 +39,21 @@ if (Meteor.isClient) {
   });
 
 
-
-
-   // if (isExit) {
-   //    var nextTrialIndex = trial.index + 1;
-   //    var blockId = trial.blockId;
-
-   //    if (nextTrialIndex === Trials.find({blockId: blockId}).count()) {
-   //      alert("end of block!");
-
-   //      var nextBlockIndex = Blocks.findOne({_id: blockId}).index + 1;
-   //      var nextBlock = Blocks.findOne({index: nextBlockIndex});
-   //      var nextBlockId = nextBlock._id;
-   //      var nextTrialId = Trials.findOne({blockId: nextBlockId})._id;
-   //      Router.go('/preview/'+nextBlockId+'/'+nextTrialId);
-   //      return;
-   //    }
-
-   //    nextTrialIndex = trial.index + 1;
-   //    var nextTrialId = Trials.findOne({index: nextIndex})._id;
-   //    Router.go('/preview/'+trial.blockId+'/'+nextTrialId);
-   //    return;
-   //  }
-
-
-
   Template.PublishedFrame.onRendered(function() {
 
-
+    var currentFrame = Frames.findOne({_id: Blaze.getData()._id});
 
     var frameDOM = this.$('.frame-container');
-    // var isExit = this.data.type === "exit";
-    var isStart = this.data.type === "start";
-    var currentTrial = Trials.findOne({_id: this.data.trialId});
 
-    var sourceId = this.data._id;
+    var currentTrial = Trials.findOne({_id: currentFrame.trialId});
+
+    var sourceId = currentFrame._id;
+
+    var isStart = sourceId === currentTrial.startFrameId;
+
     var paths = Paths.find({sourceId: sourceId}).fetch();
 
     _.each(paths, function (path) {
-      debugger
       var targetId = path.targetId;
       var targetFrame = Frames.findOne({_id: targetId});
       var isTargetExit = targetFrame.type === 'exit';
@@ -70,7 +61,8 @@ if (Meteor.isClient) {
       // anyway to set a global variable?
       var isLastTrial = currentTrial.index === Trials.find({blockId: currentTrial.blockId}).count() - 1;
 
-      var routerURL = "/preview/" + currentTrial.projectId + "/";
+      var nextBlockId;
+      var nextTrialId;
       if (isLastTrial) {
         var nextBlockIndex = Blocks.findOne({_id: currentTrial.blockId}).index + 1;
         var nextBlockId = Blocks.findOne({index: nextBlockIndex})._id;
@@ -78,34 +70,14 @@ if (Meteor.isClient) {
           blockId: nextBlockId,
           index: 0
         })._id;
-        routerURL += nextBlockId + "/" + nextTrialId;
 
       } else {
         var nextTrialId = Trials.findOne({
           blockId: currentTrial.blockId,
           index: currentTrial.index + 1
         })._id;
-        routerURL += currentTrial.blockId + "/" + nextTrialId;
+        var nextBlockId = currentTrial.blockId;
       }
-
-      // if (isTargetExit) {
-      //   var nextTrialIndex = targetTrial.index;
-      //   var blockId = currentTrial.blockId;
-
-      //   if (nextTrialIndex === Trials.find({blockId: blockId}).count()) {
-      //     var nextBlockIndex = Blocks.findOne({_id: blockId}).index + 1;
-      //     var nextBlock = Blocks.findOne({index: nextBlockIndex});
-      //     var nextBlockId = nextBlock._id;
-      //     var nextTrialId = Trials.findOne({
-      //       blockId: nextBlockId,
-      //       index: 0
-      //     })._id;
-      //     Router.go('/preview/'+nextBlockId+'/'+nextTrialId);
-      //   } else {
-      //     var nextTrialId = targetId;
-      //     Router.go('/preview/'+blockId+'/'+nextTrialId);
-      //   }
-      // }
 
       var scriptStr = (function() {
         return "<script>" +
@@ -114,7 +86,8 @@ if (Meteor.isClient) {
                 'var code = e.keyCode || e.which;' +
                   'if (code === '+path.eventParam.charCodeAt(0)+') {' +
                     'if (' + isTargetExit + ') {' +
-                      'Router.go(\'' + routerURL + '\');' +
+                      'Session.set(\'publishedBlockId\', \'' + nextBlockId + '\');' +
+                      'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
                     '} else {' +
                       '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
                       '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
@@ -125,7 +98,8 @@ if (Meteor.isClient) {
               'var startClock = function() {' +
                 'setTimeout(function() {' +
                   'if (' + isTargetExit + ') {' +
-                        'Router.go(\'' + routerURL + '\');' +
+                        'Session.set(\'publishedBlockId\', \'' + nextBlockId + '\');' +
+                        'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
                       '} else {' +
                         '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
                         '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
@@ -138,7 +112,8 @@ if (Meteor.isClient) {
             '} else if ("'+path.eventType+'" === "click") {' +
               '$("#' + path.eventParam + '").click(function() {' +
                   'if (' + isTargetExit + ') {' +
-                      'Router.go(\'' + routerURL + '\');' +
+                      'Session.set(\'publishedBlockId\', \'' + nextBlockId + '\');' +
+                      'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
                     '} else {' +
                       '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
                       '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
@@ -147,10 +122,8 @@ if (Meteor.isClient) {
             '}' +
         "</script>";
       });
-      debugger
       frameDOM.append(scriptStr);
     });
-  debugger
     if (currentTrial.startFrameId !== this.data._id) {
       frameDOM.hide();
     }
