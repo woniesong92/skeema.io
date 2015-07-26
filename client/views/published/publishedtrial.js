@@ -91,6 +91,7 @@ if (Meteor.isClient) {
                     '} else {' +
                       '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
                       '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
+                      '$(".frame-container[data-frameId=\''+ targetId +'\']").trigger("frameActivated");' +
                     '}' +
                   '}' +
                 '});' +
@@ -98,26 +99,26 @@ if (Meteor.isClient) {
               'var startClock = function() {' +
                 'setTimeout(function() {' +
                   'if (' + isTargetExit + ') {' +
-                        'Session.set(\'publishedBlockId\', \'' + nextBlockId + '\');' +
-                        'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
-                      '} else {' +
-                        '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
-                        '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
-                      '}' +
+                    'Session.set(\'publishedBlockId\', \'' + nextBlockId + '\');' +
+                    'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
+                  '} else {' +
+                    '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
+                    '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
+                    '$(".frame-container[data-frameId=\''+ targetId +'\']").trigger("frameActivated");' +
+                  '}' +
                 '}, parseInt("'+path.eventParam+'"));' +
               '};' +
-              'if ($(".frame-container[data-frameId=\''+ sourceId +'\']").css("display") !== "none") {' +
-                  'startClock();' +
-                '}' +
+              '$(".frame-container[data-frameId=\''+ sourceId +'\']").on("frameActivated", startClock)' +
             '} else if ("'+path.eventType+'" === "click") {' +
               '$("#' + path.eventParam + '").click(function() {' +
-                  'if (' + isTargetExit + ') {' +
-                      'Session.set(\'publishedBlockId\', \'' + nextBlockId + '\');' +
-                      'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
-                    '} else {' +
-                      '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
-                      '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
-                    '}' +
+                'if (' + isTargetExit + ') {' +
+                  'Session.set(\'publishedBlockId\', \'' + nextBlockId + '\');' +
+                  'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
+                '} else {' +
+                  '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
+                  '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
+                  '$(".frame-container[data-frameId=\''+ targetId +'\']").trigger("frameActivated");' +
+                '}' +
               '});' +
             '}' +
         "</script>";
