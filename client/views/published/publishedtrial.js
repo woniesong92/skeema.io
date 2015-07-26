@@ -57,26 +57,34 @@ if (Meteor.isClient) {
       var targetId = path.targetId;
       var targetFrame = Frames.findOne({_id: targetId});
       var isTargetExit = targetFrame.type === 'exit';
+      
       //FIXME: feel weird to have this in the Frame template, not the Trial template...
       // anyway to set a global variable?
+
       var isLastTrial = currentTrial.index === Trials.find({blockId: currentTrial.blockId}).count() - 1;
 
       var nextBlockId;
       var nextTrialId;
+
       if (isLastTrial) {
         var nextBlockIndex = Blocks.findOne({_id: currentTrial.blockId}).index + 1;
-        var nextBlockId = Blocks.findOne({index: nextBlockIndex})._id;
-        var nextTrialId = Trials.findOne({
-          blockId: nextBlockId,
-          index: 0
-        })._id;
+        var nextBlock = Blocks.findOne({index: nextBlockIndex});
 
+        if (nextBlock) {
+          nextTrialId = Trials.findOne({
+            blockId: nextBlock._id,
+            index: 0
+          })._id;
+        } else {
+          alert("this is the end of trial!")
+          return false;
+        }
       } else {
-        var nextTrialId = Trials.findOne({
+        nextTrialId = Trials.findOne({
           blockId: currentTrial.blockId,
           index: currentTrial.index + 1
         })._id;
-        var nextBlockId = currentTrial.blockId;
+        nextBlockId = currentTrial.blockId;
       }
 
       var scriptStr = (function() {
@@ -99,6 +107,7 @@ if (Meteor.isClient) {
           '} else if ("'+path.eventType+'" === "time") {' +
             'var startClock = function() {' +
               'setTimeout(function() {' +
+                'debugger;' +
                 'if (' + isTargetExit + ') {' +
                   'Session.set(\'publishedBlockId\', \'' + nextBlockId + '\');' +
                   'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
