@@ -79,6 +79,7 @@ if (Meteor.isClient) {
         var nextBlockId = currentTrial.blockId;
       }
 
+
       var scriptStr = (function() {
         return "<script>" +
             'if ("'+path.eventType+'" === "keypress") {' +
@@ -89,24 +90,26 @@ if (Meteor.isClient) {
                       'Session.set(\'publishedBlockId\', \'' + nextBlockId + '\');' +
                       'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
                     '} else {' +
-                      '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
-                      '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
+                      '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide().removeClass("active");' +
+                      '$(".frame-container[data-frameId=\''+ targetId +'\']").show().addClass("active");' +
                     '}' +
                   '}' +
                 '});' +
             '} else if ("'+path.eventType+'" === "time") {' +
               'var startClock = function() {' +
+                'debugger; \n' +
                 'setTimeout(function() {' +
                   'if (' + isTargetExit + ') {' +
                         'Session.set(\'publishedBlockId\', \'' + nextBlockId + '\');' +
                         'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
                       '} else {' +
-                        '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
-                        '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
+                        '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide().removeClass("active");' +
+                      '$(".frame-container[data-frameId=\''+ targetId +'\']").show().addClass("active");' +
                       '}' +
                 '}, parseInt("'+path.eventParam+'"));' +
               '};' +
-              'if ($(".frame-container[data-frameId=\''+ sourceId +'\']").css("display") !== "none") {' +
+              'if ($(".frame-container[data-frameId=\''+ sourceId +'\']").hasClass("active")) {' +
+                'debugger; \n' +
                   'startClock();' +
                 '}' +
             '} else if ("'+path.eventType+'" === "click") {' +
@@ -115,8 +118,8 @@ if (Meteor.isClient) {
                       'Session.set(\'publishedBlockId\', \'' + nextBlockId + '\');' +
                       'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
                     '} else {' +
-                      '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
-                      '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
+                      '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide().removeClass("active");' +
+                      '$(".frame-container[data-frameId=\''+ targetId +'\']").show().addClass("active");' +
                     '}' +
               '});' +
             '}' +
@@ -125,7 +128,7 @@ if (Meteor.isClient) {
       frameDOM.append(scriptStr);
     });
     if (currentTrial.startFrameId !== this.data._id) {
-      frameDOM.hide();
+      frameDOM.hide().addClass("active");
     }
 
   });
