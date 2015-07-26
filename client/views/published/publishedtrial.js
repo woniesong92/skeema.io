@@ -122,14 +122,19 @@ if (Meteor.isClient) {
                   '}' +
                 '});' +
             '} else if ("'+path.eventType+'" === "time") {' +
-              'setTimeout(function() {' +
-                'if (' + isTargetExit + ') {' +
-                      'Router.go(\'' + routerURL + '\');' +
-                    '} else {' +
-                      '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
-                      '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
-                    '}' +
-              '}, parseInt("'+path.eventParam+'"));' +
+              'var startClock = function() {' +
+                'setTimeout(function() {' +
+                  'if (' + isTargetExit + ') {' +
+                        'Router.go(\'' + routerURL + '\');' +
+                      '} else {' +
+                        '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
+                        '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
+                      '}' +
+                '}, parseInt("'+path.eventParam+'"));' +
+              '};' +
+              'if ($(".frame-container[data-frameId=\''+ sourceId +'\']").css("display") !== "none") {' +
+                  'startClock();' +
+                '}' +
             '} else if ("'+path.eventType+'" === "click") {' +
               '$("#' + path.eventParam + '").click(function() {' +
                   'if (' + isTargetExit + ') {' +
