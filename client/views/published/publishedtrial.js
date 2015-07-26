@@ -9,7 +9,6 @@ if (Meteor.isClient) {
 
   Template.PublishedTrial.onRendered(function() {
     // console.log("trial rendered");
-    debugger
   });
 
   Template.PublishedTrial.events({
@@ -51,7 +50,9 @@ if (Meteor.isClient) {
 
 
   Template.PublishedFrame.onRendered(function() {
-    debugger
+
+
+
     var frameDOM = this.$('.frame-container');
     // var isExit = this.data.type === "exit";
     var isStart = this.data.type === "start";
@@ -61,17 +62,16 @@ if (Meteor.isClient) {
     var paths = Paths.find({sourceId: sourceId}).fetch();
 
     _.each(paths, function (path) {
+      debugger
       var targetId = path.targetId;
       var targetFrame = Frames.findOne({_id: targetId});
       var isTargetExit = targetFrame.type === 'exit';
-      debugger
       //FIXME: feel weird to have this in the Frame template, not the Trial template...
       // anyway to set a global variable?
       var isLastTrial = currentTrial.index === Trials.find({blockId: currentTrial.blockId}).count() - 1;
 
       var routerURL = "/preview/" + currentTrial.projectId + "/";
       if (isLastTrial) {
-        debugger
         var nextBlockIndex = Blocks.findOne({_id: currentTrial.blockId}).index + 1;
         var nextBlockId = Blocks.findOne({index: nextBlockIndex})._id;
         var nextTrialId = Trials.findOne({
@@ -81,7 +81,6 @@ if (Meteor.isClient) {
         routerURL += nextBlockId + "/" + nextTrialId;
 
       } else {
-        debugger
         var nextTrialId = Trials.findOne({
           blockId: currentTrial.blockId,
           index: currentTrial.index + 1
@@ -107,7 +106,6 @@ if (Meteor.isClient) {
       //     Router.go('/preview/'+blockId+'/'+nextTrialId);
       //   }
       // }
-
 
       var scriptStr = (function() {
         return "<script>" +
@@ -144,11 +142,11 @@ if (Meteor.isClient) {
             '}' +
         "</script>";
       });
-
+      debugger
       frameDOM.append(scriptStr);
     });
-
-    if (trial.startFrameId !== this.data._id) {
+  debugger
+    if (currentTrial.startFrameId !== this.data._id) {
       frameDOM.hide();
     }
 
