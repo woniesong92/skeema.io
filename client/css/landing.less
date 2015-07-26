@@ -11,11 +11,16 @@ p {
 .landing {
 	// background-color: @blue-base;
 	text-align: center;
-	// color: @white;
 	min-height: 100vh;
 	padding-top: 200px;
 	// background-color: @gray;
 	// color: @white;
+	background: url('/images/landing-bg.jpg') no-repeat center center;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	background-attachment: fixed;
 }
 
 .landing h1 {
@@ -32,4 +37,19 @@ p {
 	margin-top: 25px;
 	padding: 15px 35px;
 	border-radius: 0;
+	color: #fff;
+	background-color: transparent;
+	border: #fff solid 2px;
+	font-size: 14px;
+	-webkit-transition: all .5s ease-in-out;
+    -moz-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+}
+
+.signin-btn.btn.btn-default:hover {
+	background-color: rgba(255,255,255,0.8);
+	color: #000;
+	-webkit-transition: all .5s ease-in-out;
+    -moz-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
 }
