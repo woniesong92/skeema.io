@@ -81,23 +81,11 @@ if (Meteor.isClient) {
 
       var scriptStr = (function() {
         return "<script>" +
-            'if ("'+path.eventType+'" === "keypress") {' +
-              '$(window).keypress(function(e) {' +
-                'var code = e.keyCode || e.which;' +
-                  'if (code === '+path.eventParam.charCodeAt(0)+') {' +
-                    'if (' + isTargetExit + ') {' +
-                      'Session.set(\'publishedBlockId\', \'' + nextBlockId + '\');' +
-                      'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
-                    '} else {' +
-                      '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
-                      '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
-                      '$(".frame-container[data-frameId=\''+ targetId +'\']").trigger("frameActivated");' +
-                    '}' +
-                  '}' +
-                '});' +
-            '} else if ("'+path.eventType+'" === "time") {' +
-              'var startClock = function() {' +
-                'setTimeout(function() {' +
+          '$(".element-container span").prop("contenteditable", false);' +
+          'if ("'+path.eventType+'" === "keypress") {' +
+            '$(window).keypress(function(e) {' +
+              'var code = e.keyCode || e.which;' +
+                'if (code === '+path.eventParam.charCodeAt(0)+') {' +
                   'if (' + isTargetExit + ') {' +
                     'Session.set(\'publishedBlockId\', \'' + nextBlockId + '\');' +
                     'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
@@ -106,11 +94,11 @@ if (Meteor.isClient) {
                     '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
                     '$(".frame-container[data-frameId=\''+ targetId +'\']").trigger("frameActivated");' +
                   '}' +
-                '}, parseInt("'+path.eventParam+'"));' +
-              '};' +
-              '$(".frame-container[data-frameId=\''+ sourceId +'\']").on("frameActivated", startClock)' +
-            '} else if ("'+path.eventType+'" === "click") {' +
-              '$("#' + path.eventParam + '").click(function() {' +
+                '}' +
+              '});' +
+          '} else if ("'+path.eventType+'" === "time") {' +
+            'var startClock = function() {' +
+              'setTimeout(function() {' +
                 'if (' + isTargetExit + ') {' +
                   'Session.set(\'publishedBlockId\', \'' + nextBlockId + '\');' +
                   'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
@@ -119,8 +107,21 @@ if (Meteor.isClient) {
                   '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
                   '$(".frame-container[data-frameId=\''+ targetId +'\']").trigger("frameActivated");' +
                 '}' +
-              '});' +
-            '}' +
+              '}, parseInt("'+path.eventParam+'"));' +
+            '};' +
+            '$(".frame-container[data-frameId=\''+ sourceId +'\']").on("frameActivated", startClock)' +
+          '} else if ("'+path.eventType+'" === "click") {' +
+            '$("#' + path.eventParam + '").click(function() {' +
+              'if (' + isTargetExit + ') {' +
+                'Session.set(\'publishedBlockId\', \'' + nextBlockId + '\');' +
+                'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
+              '} else {' +
+                '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
+                '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
+                '$(".frame-container[data-frameId=\''+ targetId +'\']").trigger("frameActivated");' +
+              '}' +
+            '});' +
+          '}' +
         "</script>";
       });
       frameDOM.append(scriptStr);
