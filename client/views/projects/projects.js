@@ -1,5 +1,4 @@
 if (Meteor.isClient) {
-
   Template.Projects.helpers({
     projects: function() {
       return UI.getData(); // is UI.getData() the right choice?

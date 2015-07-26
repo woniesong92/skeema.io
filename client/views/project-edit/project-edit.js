@@ -1,4 +1,12 @@
 if (Meteor.isClient) {
+  Template.ProjectEdit.onRendered(function() {
+    var projectId = this.data._id;
+    var firstBlock = Blocks.findOne({
+      projectId: projectId,
+      index: 0
+    });
+    Session.set("blockId", firstBlock._id);
+  });
 
   Template.ProjectEdit.helpers({
     project: function() {
