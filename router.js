@@ -59,31 +59,31 @@ Router.route('/projects/:_id', {
   }
 });
 
-Router.route('/preview/:_projectid/:_blockid/:_trialid', {
+Router.route('/preview/:_projectid/', {
   waitOn: function() {
     var projectId = this.params._projectid;
-    var blockId = this.params._blockidid;
-    var trialId = this.params._trialid;
 
     return [
       Meteor.subscribe("blocks", projectId),
       Meteor.subscribe("trials", projectId),
-      Meteor.subscribe("frames", projectId, trialId),
-      Meteor.subscribe("paths", projectId, trialId),
-      Meteor.subscribe("elements", projectId, trialId)
+      Meteor.subscribe("frames", projectId),
+      Meteor.subscribe("paths", projectId),
+      Meteor.subscribe("elements", projectId)
     ];
   },
 
   action: function() {
     // debugger
-    var trialId = this.params._trialid;
-    var trial = Trials.findOne({_id: trialId});
+    // var trialId = this.params._trialid;
+    // var trialId = Trials.findOne({projectId: projectId, index: 0})._id;
+    var projectId = this.params._projectid;
+    var project = Projects.findOne({_id: projectId});
     
     this.render('PublishedTrial', {
       to: 'content',
       data: function () {
         return {
-          trial: trial
+          project: project
         }
       }
     });

@@ -2,17 +2,24 @@ if (Meteor.isClient) {
 
   Template.PublishedTrial.helpers({
     frames: function() {
-      return Frames.find({type: "normal"});
+      var trialId = Session.get("publishedTrialId");
+      return Frames.find({type: "normal", trialId: trialId});
     },
   });
 
 
   Template.PublishedTrial.onRendered(function() {
     // console.log("trial rendered");
+
+    var blockId = Blocks.findOne({projectId: projectId, index: 0})._id;
+    var trialId = Trials.findOne({projectId: projectId, index: 0})._id;
+
+    Session.set("publishedBlockId", blockId);
+    Session.set("publishedTrialId", trialId);
+
   });
 
   Template.PublishedTrial.events({
-
 
   });
 
@@ -22,31 +29,6 @@ if (Meteor.isClient) {
       return Elements.find({frameId: this._id});
     }
   });
-
-
-
-
-   // if (isExit) {
-   //    var nextTrialIndex = trial.index + 1;
-   //    var blockId = trial.blockId;
-
-   //    if (nextTrialIndex === Trials.find({blockId: blockId}).count()) {
-   //      alert("end of block!");
-
-   //      var nextBlockIndex = Blocks.findOne({_id: blockId}).index + 1;
-   //      var nextBlock = Blocks.findOne({index: nextBlockIndex});
-   //      var nextBlockId = nextBlock._id;
-   //      var nextTrialId = Trials.findOne({blockId: nextBlockId})._id;
-   //      Router.go('/preview/'+nextBlockId+'/'+nextTrialId);
-   //      return;
-   //    }
-
-   //    nextTrialIndex = trial.index + 1;
-   //    var nextTrialId = Trials.findOne({index: nextIndex})._id;
-   //    Router.go('/preview/'+trial.blockId+'/'+nextTrialId);
-   //    return;
-   //  }
-
 
 
   Template.PublishedFrame.onRendered(function() {
@@ -70,7 +52,8 @@ if (Meteor.isClient) {
       // anyway to set a global variable?
       var isLastTrial = currentTrial.index === Trials.find({blockId: currentTrial.blockId}).count() - 1;
 
-      var routerURL = "/preview/" + currentTrial.projectId + "/";
+      var nextBlockId;
+      var nextTrialId;
       if (isLastTrial) {
         var nextBlockIndex = Blocks.findOne({_id: currentTrial.blockId}).index + 1;
         var nextBlockId = Blocks.findOne({index: nextBlockIndex})._id;
@@ -78,14 +61,13 @@ if (Meteor.isClient) {
           blockId: nextBlockId,
           index: 0
         })._id;
-        routerURL += nextBlockId + "/" + nextTrialId;
 
       } else {
         var nextTrialId = Trials.findOne({
           blockId: currentTrial.blockId,
           index: currentTrial.index + 1
         })._id;
-        routerURL += nextBlockId + "/" + nextTrialId;
+        var nextBlockId = currentTrial.blockId;
       }
 
       // if (isTargetExit) {
