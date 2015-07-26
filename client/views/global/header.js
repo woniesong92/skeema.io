@@ -11,6 +11,6 @@ Template.Header.events({
       blockId: block._id,
       index: 0
     });
-    Router.go('/preview/'+projectId+'/'+block._id+'/'+trial._id);
+    Router.go('/preview/'+projectId);
   }
 });
