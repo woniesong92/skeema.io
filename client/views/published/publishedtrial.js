@@ -68,7 +68,6 @@ if (Meteor.isClient) {
 
       var scriptStr = (function() {
         return "<script>" +
-          '$(".element-container span").prop("contenteditable", false);' +
           'if ("'+path.eventType+'" === "keypress") {' +
             '$(window).keypress(function(e) {' +
               'var code = e.keyCode || e.which;' +
@@ -85,7 +84,6 @@ if (Meteor.isClient) {
           '} else if ("'+path.eventType+'" === "time") {' +
             'var startClock = function() {' +
               'setTimeout(function() {' +
-                'debugger;' +
                 'if (' + isTargetExit + ') {' +
                   'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
                 '} else {' +
@@ -123,6 +121,7 @@ if (Meteor.isClient) {
   Template.PublishedElement.onRendered(function() {
     var htmlStr = this.data.html;
     var element = $(htmlStr);
+    element.prop("contenteditable", false);
     this.$('.element-container').append(element);
   });
 }
