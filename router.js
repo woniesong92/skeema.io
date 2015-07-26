@@ -64,6 +64,7 @@ Router.route('/preview/:_projectid/', {
     var projectId = this.params._projectid;
 
     return [
+      Meteor.subscribe("project", projectId),
       Meteor.subscribe("blocks", projectId),
       Meteor.subscribe("trials", projectId),
       Meteor.subscribe("frames", projectId),
@@ -81,11 +82,7 @@ Router.route('/preview/:_projectid/', {
     
     this.render('PublishedTrial', {
       to: 'content',
-      data: function () {
-        return {
-          project: project
-        }
-      }
+      data: project
     });
   },
 });

@@ -11,11 +11,19 @@ if (Meteor.isClient) {
   Template.PublishedTrial.onRendered(function() {
     // console.log("trial rendered");
 
+    var projectId = this.data._id;
+
     var blockId = Blocks.findOne({projectId: projectId, index: 0})._id;
     var trialId = Trials.findOne({projectId: projectId, index: 0})._id;
 
     Session.set("publishedBlockId", blockId);
     Session.set("publishedTrialId", trialId);
+
+    this.setUpFrames = Tracker.autorun(function() {
+      if (Session.get("publishedBlockId") && Session.get("publishedTrialId")){
+        console.log("changed trials");
+      }
+    });
 
   });
 
@@ -33,14 +41,16 @@ if (Meteor.isClient) {
 
   Template.PublishedFrame.onRendered(function() {
 
-
+    var currentFrame = Frames.findOne({_id: Blaze.getData()._id});
 
     var frameDOM = this.$('.frame-container');
-    // var isExit = this.data.type === "exit";
-    var isStart = this.data.type === "start";
-    var currentTrial = Trials.findOne({_id: this.data.trialId});
 
-    var sourceId = this.data._id;
+    var currentTrial = Trials.findOne({_id: currentFrame.trialId});
+
+    var sourceId = currentFrame._id;
+
+    var isStart = sourceId === currentTrial.startFrameId;
+
     var paths = Paths.find({sourceId: sourceId}).fetch();
 
     _.each(paths, function (path) {
@@ -70,25 +80,6 @@ if (Meteor.isClient) {
         var nextBlockId = currentTrial.blockId;
       }
 
-      // if (isTargetExit) {
-      //   var nextTrialIndex = targetTrial.index;
-      //   var blockId = currentTrial.blockId;
-
-      //   if (nextTrialIndex === Trials.find({blockId: blockId}).count()) {
-      //     var nextBlockIndex = Blocks.findOne({_id: blockId}).index + 1;
-      //     var nextBlock = Blocks.findOne({index: nextBlockIndex});
-      //     var nextBlockId = nextBlock._id;
-      //     var nextTrialId = Trials.findOne({
-      //       blockId: nextBlockId,
-      //       index: 0
-      //     })._id;
-      //     Router.go('/preview/'+nextBlockId+'/'+nextTrialId);
-      //   } else {
-      //     var nextTrialId = targetId;
-      //     Router.go('/preview/'+blockId+'/'+nextTrialId);
-      //   }
-      // }
-
       var scriptStr = (function() {
         return "<script>" +
             'if ("'+path.eventType+'" === "keypress") {' +
@@ -96,7 +87,8 @@ if (Meteor.isClient) {
                 'var code = e.keyCode || e.which;' +
                   'if (code === '+path.eventParam.charCodeAt(0)+') {' +
                     'if (' + isTargetExit + ') {' +
-                      'Router.go(\'' + routerURL + '\');' +
+                      'Session.set(\'publishedBlockId\', \'' + nextBlockId + '\');' +
+                      'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
                     '} else {' +
                       '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
                       '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
@@ -107,7 +99,8 @@ if (Meteor.isClient) {
               'var startClock = function() {' +
                 'setTimeout(function() {' +
                   'if (' + isTargetExit + ') {' +
-                        'Router.go(\'' + routerURL + '\');' +
+                        'Session.set(\'publishedBlockId\', \'' + nextBlockId + '\');' +
+                        'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
                       '} else {' +
                         '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
                         '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
@@ -120,7 +113,8 @@ if (Meteor.isClient) {
             '} else if ("'+path.eventType+'" === "click") {' +
               '$("#' + path.eventParam + '").click(function() {' +
                   'if (' + isTargetExit + ') {' +
-                      'Router.go(\'' + routerURL + '\');' +
+                      'Session.set(\'publishedBlockId\', \'' + nextBlockId + '\');' +
+                      'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
                     '} else {' +
                       '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
                       '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
