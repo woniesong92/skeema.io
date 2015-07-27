@@ -1,5 +1,26 @@
 if (Meteor.isClient) {
 
+  // function createGrid(size) {
+  //   var ratioW = Math.floor($(window).width()/size),
+  //       ratioH = Math.floor($(window).height()/size);
+    
+  //   var parent = $('<div />', {
+  //       class: 'grid', 
+  //       width: ratioW  * size, 
+  //       height: ratioH  * size
+  //   }).addClass('grid').appendTo('.frame-workspace-container');
+
+  //   for (var i = 0; i < ratioH; i++) {
+  //       for(var p = 0; p < ratioW; p++){
+  //           $('<div />', {
+  //               width: size - 1, 
+  //               height: size - 1
+  //           }).appendTo(parent);
+  //       }
+  //   }
+  // }
+
+
   /* Helper funcitons for adding elements */
   function toggleShadow() {
     $('.sidenav-container, .toolbox-container').toggleClass('shadow');
@@ -129,6 +150,9 @@ if (Meteor.isClient) {
 
 
   Template.FrameWorkSpace.onRendered(function() {
+
+    $('.frame-workspace-container').addClass('grid');
+
     Session.set("elementId", null);
 
     var frameElts = Elements.find({"frameId": Session.get("frameId") });
@@ -174,6 +198,8 @@ if (Meteor.isClient) {
     $(".draggable").draggable({
       containment: ".frame-workspace-container",
       scroll: false,
+      snap: true,
+      grid: [10, 10],
       stop: function (event, ui) {
         Session.set("elementId", this.id);
 
@@ -298,6 +324,8 @@ if (Meteor.isClient) {
               $( ".draggable" ).draggable({
                 containment: ".frame-workspace-container",
                 scroll: false,
+                snap: true,
+                grid: [10, 10],
                 stop: function (event, ui) {
                   Session.set("elementId", this.id);
 
@@ -427,6 +455,8 @@ if (Meteor.isClient) {
             $elt.draggable({
               containment: ".frame-workspace-container",
               scroll: false,
+              snap: true,
+              grid: [10, 10],
               stop: function (event, ui) {
                 Session.set("elementId", this.id);
 
