@@ -15,6 +15,8 @@ if (Meteor.isClient) {
     Session.set("pathId", null);
     Session.set("elementId", null);
 
+    $('[data-toggle="tooltip"]').tooltip();
+
   });
 
   Template.Projects.events({
