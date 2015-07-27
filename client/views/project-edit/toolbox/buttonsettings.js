@@ -56,9 +56,11 @@ if (Meteor.isClient) {
     },
 
     'change #button-fontsize': function (e, template) { 
+
+      //FIXME: NEED TO VERTICAL ALIGN BUTTON TEXT
       var newsize = $('#button-fontsize').val().trim();
       var newheight = parseFloat(newsize) * 2;
-      var newlineheight = newheight;
+      var newlineheight = parseFloat(newsize) * 1.5;
       var elementId = Session.get("elementId");
       $('#' + elementId).css('font-size', newsize + 'px')
         .css('height', newheight + 'px').css('line-height', newlineheight + 'px');
