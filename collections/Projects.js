@@ -18,6 +18,12 @@ Meteor.methods({
     // var blockIds = _.map(Blocks.find({projectId: projectId}).fetch(),
     //   function (block) { return block._id; });
     // Meteor.call("deleteBlocks", blockIds);
+  },
+
+  renameProject: function (projectId, newname){
+    Projects.update(projectId, {
+      $set: {'name': newname}
+    });
   }
 });
 

@@ -14,7 +14,7 @@ if (Meteor.isClient) {
     },
   });
 
-  Template.ProjectEdit.rendered = function () {
+  Template.ProjectEdit.onRendered(function() {
 
     // FIXME (LATER): NEED TO MAKE REACTIVE ONLY IN TEMPLATE (NOT GLOBAL); USE REACTIVE-VAR PACKAGE
     Session.set("currentView", "projectView");
@@ -27,7 +27,7 @@ if (Meteor.isClient) {
     Session.set("frameId", null);
     Session.set("pathId", null);
     Session.set("elementId", null);
-  }
+  });
 
   Template.ProjectEdit.events({
 
