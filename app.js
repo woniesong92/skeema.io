@@ -7,6 +7,6 @@ Meteor.startup(function() {
     // Do server side preparation
 
     //http://stackoverflow.com/questions/26708437/require-jquery-in-meteor-server-side
-    $ = Npm.require('jquery')(Npm.require('jsdom').jsdom().parentWindow);
+    $ = Meteor.npmRequire('jquery')(Meteor.npmRequire('jsdom').jsdom().parentWindow);
   }
 })
