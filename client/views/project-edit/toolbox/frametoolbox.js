@@ -30,6 +30,10 @@ if (Meteor.isClient) {
       Meteor.call('renameFrame', frameId, newname);
     },
 
+    'click .grid-btn': function (e, template) {
+      $('.frame-workspace-container').toggleClass('grid');
+    },
+
     //  we save everything automatically now
     // 'click .save-btn': function (e, template) {
     //   $('.element-item').each(function (index) {

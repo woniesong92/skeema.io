@@ -154,6 +154,10 @@ if (Meteor.isClient) {
     return $('#' + elementId).text();
   });
 
+  Template.registerHelper("isProjectView", function (event, template) {
+    return Session.get("currentView") == "projectView";
+  });
+
   // Template.registerHelper("getAddButton", function (event, template) {
   //   return Session.get("addButton");
   // });

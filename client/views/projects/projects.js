@@ -5,7 +5,27 @@ if (Meteor.isClient) {
     }
   });
 
+  Template.Projects.onRendered(function() {
+    Session.set("currentView", "projectListView");
+
+    Session.set("projectId", null);
+    Session.set("blockId", null);
+    Session.set("trialId", null);
+    Session.set("frameId", null);
+    Session.set("pathId", null);
+    Session.set("elementId", null);
+
+    $('[data-toggle="tooltip"]').tooltip();
+
+  });
+
   Template.Projects.events({
+    "change .project-name": function (e, template) {
+      var newname = $(e.target).val().trim();
+      var projectId = this._id;
+      Meteor.call('renameProject', projectId, newname);
+    },
+
     "click .add-project": function (e, template) {
       e.preventDefault();
       var numProjects = UI.getData().fetch().length;

@@ -13,20 +13,7 @@
       </div>
       {{#if projects}}
         {{#each projects}}
-          <div class="project-item blue lighten-5">
-            <div class="project-name">
-              {{name}}
-            </div>
-            <div class="project-settings">
-              <!-- <span class="rename">Rename</span> -->
-              <span class="edit">
-                <a href="/projects/{{_id}}">Edit</a>
-              </span>
-              <span class="delete">
-                <a href="#">Delete</a>
-              </span>
-            </div>
-          </div>
+          {{> ProjectPanel}}
         {{/each}}
       {{else}}
         <div class="no-projects">
@@ -36,4 +23,30 @@
     </div>
   </div>
 </div>
+</template>
+
+<template name="ProjectPanel">
+  <div class="project-item panel panel-default">
+    <div class="panel-body">
+
+      <div class="row">
+      
+        <div class="col-md-4">
+          <input type="text" class="project-name" value="{{name}}" />
+
+          <div class="project-date grey-text">
+            Created on {{formatDate createdAt}}
+          </div>
+        </div>
+
+        <div class="project-settings col-md-8">
+            <a class="project-delete btn btn-default" data-toggle="tooltip" title="Deleting is not supported yet!" href="#" disabled>DELETE</a>
+            <a class="project-preview btn btn-default" href="/preview/{{_id}}">PREVIEW</a>
+            <a class="project-edit btn btn-default" href="/projects/{{_id}}">EDIT</a>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
 </template>

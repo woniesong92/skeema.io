@@ -84,7 +84,13 @@ if (Meteor.isClient) {
   });
 
   Template.SideNav.events({
-    "click .project-name": function (e, template) {
+    "change #project-name-sidenav": function (e, template) {
+      var newname = $('#project-name-sidenav').val().trim();
+      var projectId = this._id;
+      Meteor.call('renameProject', projectId, newname);
+    },
+
+    "click .project-name i": function (e, template) {
       if ($('.sidenav-container').hasClass("collasped-left")){
         $('.sidenav-container').removeClass("collasped-left").addClass("expanded-left");
       } else {

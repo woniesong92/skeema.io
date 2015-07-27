@@ -18,6 +18,5 @@ lepozepo:s3
 twbs:bootstrap
 duongthienduc:meteor-bootstrap-growl
 meteorhacks:npm
-
-
 npm-container
+momentjs:moment
