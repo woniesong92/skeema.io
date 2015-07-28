@@ -1,23 +1,36 @@
 if (Meteor.isClient) {
-  Template.ProjectEdit.onRendered(function() {
-    Session.set("currentView", "trialView");
+  ProjectEditSession = new ReactiveDict('ProjectEditSession');
+  BLOCK_VIEW = "blockView";
+  TRIAL_VIEW = "trialView";
+  FRAME_VIEW = "frameView";
+
+  Template.ProjectEdit.onCreated(function() {
     var projectId = this.data._id;
+    
     var firstBlock = Blocks.findOne({
       projectId: projectId,
       index: 0
     });
+
+    // Fail fast: debugging purpose
+    if (!(firstBlock)) {
+      console.log("ERR: firstBlock doesn't exist");
+      return false;
+    }
 
     var firstTrial = Trials.findOne({
       projectId: projectId,
       blockId: firstBlock._id,
       index: 0
     });
-    Session.set("projectId", projectId);
-    Session.set("blockId", firstBlock._id);
-    Session.set("trialId", firstTrial._id);
-    Session.set("frameId", null);
-    Session.set("pathId", null);
-    Session.set("elementId", null);
+
+    ProjectEditSession.set("projectId", projectId);
+    ProjectEditSession.set("blockId", firstBlock._id);
+    ProjectEditSession.set("trialId", firstTrial._id);
+    ProjectEditSession.set("frameId", null);
+    ProjectEditSession.set("pathId", null);
+    ProjectEditSession.set("elementId", null);
+    ProjectEditSession.set("currentView", TRIAL_VIEW);
   });
 
   Template.ProjectEdit.helpers({

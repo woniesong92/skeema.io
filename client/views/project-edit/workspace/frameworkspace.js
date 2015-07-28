@@ -1,12 +1,12 @@
 if (Meteor.isClient) {
 
   /* Helper funcitons for adding elements */
-  function toggleShadow() {
+  var toggleShadow = function() {
     $('.sidenav-container, .toolbox-container').toggleClass('shadow');
     $('.overshadow').toggle();
   }
 
-  function getPosition (e) {
+  var getPosition = function (e) {
     var x;
     var y;
     if (e.pageX || e.pageY) { 
@@ -27,33 +27,6 @@ if (Meteor.isClient) {
     // debugger
     return {top: y, left: x};
   }
-
-
-  Template.FrameWorkSpace.helpers({
-    elements: function() {
-      var frameId = Session.get('frameId');
-
-      // check if new frame has just been added
-      // this reactive var will make sure that every time
-      // frameAdded value in Session changes, this function runs
-      // var elementId = Session.get("elementAdded");
-
-      // return all frames whose parent is this trial
-      return Elements.find({frameId: frameId});
-    },
-
-    isText: function() {
-      return this.type == "text";
-    },
-
-    isButton: function () {
-      return this.type == "button";
-    },
-
-    isImage: function () {
-      return this.type == "image";
-    },
-  });
 
   Template.FrameWorkSpace.onCreated(function() {
     // FIXME: is it okay to add it here?
@@ -202,6 +175,35 @@ if (Meteor.isClient) {
       }
     });
   });
+
+
+  Template.FrameWorkSpace.helpers({
+    elements: function() {
+      var frameId = Session.get('frameId');
+
+      // check if new frame has just been added
+      // this reactive var will make sure that every time
+      // frameAdded value in Session changes, this function runs
+      // var elementId = Session.get("elementAdded");
+
+      // return all frames whose parent is this trial
+      return Elements.find({frameId: frameId});
+    },
+
+    isText: function() {
+      return this.type == "text";
+    },
+
+    isButton: function () {
+      return this.type == "button";
+    },
+
+    isImage: function () {
+      return this.type == "image";
+    },
+  });
+
+  
 
   Template.FrameWorkSpace.events({
 

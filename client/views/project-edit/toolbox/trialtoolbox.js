@@ -2,6 +2,7 @@ if (Meteor.isClient) {
   Template.TrialToolBox.onRendered(function() {
     // To prevent the modal to open up when it shouldn't,
     // invalidate the pathInfo Session
+    // THIS FUCKING SUCKS
     Session.set("pathInfo", null);
 
     this.autorun(function() {
@@ -15,19 +16,19 @@ if (Meteor.isClient) {
   Template.TrialSettings.events({
     'change #trialname': function (e, template) { 
       var newname = $('#trialname').val().trim();
-      var trialId = Session.get("trialId");
+      var trialId = ProjectEditSession.get("trialId");
       Meteor.call('renameTrial', trialId, newname);
     },
 
     'change #exit-path-input': function (e, template) { 
       var respbool = $('#exit-path-input').is(':checked');
-      var trialId = Session.get("trialId");
+      var trialId = ProjectEditSession.get("trialId");
       Meteor.call('changeDoSaveResponse', trialId, respbool);
     },
 
     'change #time-elapsed-input': function (e, template) { 
       var reactbool = $('#time-elapsed-input').is(':checked');
-      var trialId = Session.get("trialId");
+      var trialId = ProjectEditSession.get("trialId");
       Meteor.call('changeDoSaveReactionTime', trialId, reactbool);
     },
 
@@ -35,7 +36,7 @@ if (Meteor.isClient) {
       var numoccur = $('#occurences').val().trim();
 
       //FIXME: VALIDATE THAT IT IS A POSITIVE INTEGER (> 0)
-      var trialId = Session.get("trialId");
+      var trialId = ProjectEditSession.get("trialId");
       Meteor.call('changeOccurences', trialId, numoccur);
     },
 
@@ -49,8 +50,7 @@ if (Meteor.isClient) {
 
     'click .add-frame': function (e, template) {
       var projectId = this._id;
-      var trialId = Session.get('trialId');
-      // var numFrames = Frames.find({trialId: trialId}).count() - 1;
+      var trialId = ProjectEditSession.get('trialId');
 
       Meteor.call('addFrame', {
         projectId: projectId,
@@ -67,14 +67,14 @@ if (Meteor.isClient) {
     },
 
     'click .make-trial-duplicate': function (e, template) {
-      var trialId = Session.get("trialId");
+      var trialId = ProjectEditSession.get("trialId");
       Meteor.call("makeTrialDuplicate", trialId);
     }
   });
 
   Template.TrialPaths.helpers({
     paths: function() {
-      var trialId = Session.get("trialId");
+      var trialId = ProjectEditSession.get("trialId");
       return Paths.find({trialId: trialId});
     }
   });
@@ -97,24 +97,24 @@ if (Meteor.isClient) {
 
     'change #pathname': function (e, template) { 
       var newname = $('#pathname').val().trim();
-      var pathId = Session.get("pathId");
+      var pathId = ProjectEditSession.get("pathId");
       Meteor.call('renamePath', pathId, newname)
     },
 
     "click .path-item-delete": function (e, template) {
-      var pathId = Session.get("pathId");
+      var pathId = ProjectEditSession.get("pathId");
       Meteor.call("deletePaths", [pathId]);
       
       $.bootstrapGrowl("REMOVED SUCCESSFULLY", {
-            ele: '.toast-container', // which element to append to
-            type: 'success', // (null, 'info', 'danger', 'success')
-            offset: {from: 'top', amount: 97}, // 'top', or 'bottom'
-            align: 'right', // ('left', 'right', or 'center')
-            width: 220, // (integer, or 'auto')
-            delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
-            allow_dismiss: true, // If true then will display a cross to close the popup.
-            stackup_spacing: 10 // spacing between consecutively stacked growls.
-        });
+        ele: '.toast-container', // which element to append to
+        type: 'success', // (null, 'info', 'danger', 'success')
+        offset: {from: 'top', amount: 97}, // 'top', or 'bottom'
+        align: 'right', // ('left', 'right', or 'center')
+        width: 220, // (integer, or 'auto')
+        delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+        allow_dismiss: true, // If true then will display a cross to close the popup.
+        stackup_spacing: 10 // spacing between consecutively stacked growls.
+      });
     },
 
   });

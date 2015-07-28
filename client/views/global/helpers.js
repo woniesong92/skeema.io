@@ -33,15 +33,15 @@ Meteor.startup(function() {
 if (Meteor.isClient) {
 
   Template.registerHelper("isBlockView", function (event, template) {
-    return Session.get("currentView") == "blockView";
+    return ProjectEditSession.get("currentView") == "blockView";
   });
 
   Template.registerHelper("isTrialView", function (event, template) {
-    return Session.get("currentView") == "trialView";
+    return ProjectEditSession.get("currentView") == "trialView";
   });
 
   Template.registerHelper("isFrameView", function (event, template) {
-    return Session.get("currentView") == "frameView";
+    return ProjectEditSession.get("currentView") == "frameView";
   });
 
   Template.registerHelper("block", function (event, template) {

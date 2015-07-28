@@ -6,9 +6,9 @@ if (Meteor.isClient) {
     // }
   });
 
-  Template.ToolBox.rendered = function () {
-    
-  }
+  Template.ToolBox.onRendered(function() {
+
+  });
 
   Template.ToolBox.events({
     "click .toolbox-tab": function (e, template) {
