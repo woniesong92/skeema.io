@@ -35,6 +35,12 @@ Router.route('/projects', {
   }
 });
 
+Router.route('/tutorial', function() {
+  this.render('Tutorial', {
+    to: 'content'
+  });
+});
+
 Router.route('/projects/:_id', {
   waitOn: function() {
     var projectId = this.params._id;
