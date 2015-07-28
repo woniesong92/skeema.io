@@ -10,11 +10,6 @@ if (Meteor.isClient) {
         $('#modal').modal('show');
       }
     });
-
-    // this.autorun(function() {
-    //   var pathInfo = Session.set("pathInfo", null);
-    // });
-    
   });
 
   Template.TrialSettings.events({

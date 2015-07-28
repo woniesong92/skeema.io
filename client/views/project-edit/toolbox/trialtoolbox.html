@@ -34,10 +34,7 @@
       <input value="{{ trial.occurences }}" id="occurences" type="number" step="1" min="1">
     </div>
 
-     <!--  <button class="save-changes-btn waves-effect waves-light blue lighten-5 accent-3 white-text btn">
-        Save Changes
-      </button> -->
-      <div clas="row">
+    <div clas="row">
       <div class="btn-container toolbox-btn-container">
         <button class="brown lighten-3 light-brown-btn white-text btn make-trial-duplicate toolbox-btn">
           Duplicate Trial
@@ -56,62 +53,31 @@
 </template> 
 
 <template name="TrialPaths">
-
   <div class="trial-paths-row grey darken-3 white-text">
     <div class="container">
-      <!-- <p class="path-title">Paths</p>
-
-      {{#each paths}}
-        {{> PathItem}}
-      {{/each}} -->
-
-    {{#if path}}
-
-     <div class="row">
-      <div class="col-xs-12">
-          <label for="trialname">Path Name</label>
-          <input value="{{ path.name }}" id="pathname" type="text">
-      </div>
-    </div>
-
-      <div class="path-info-row">
-        <span class="path-label">From:</span><span class="path-field">{{frameName path.sourceId}}</span><br>
-      </div>
-
-      <div class="path-info-row">
-        <span class="path-label">To:</span><span class="path-field">{{frameName path.targetId}}</span><br>
-      </div>
-      <div class="path-info-row">
-        <span class="path-label">Event Type:</span><span class="path-field">{{path.eventType}}</span><br>
-      </div>
-
-      <div class="path-info-row">
-        <span class="path-label">Event Param:</span><span class="path-field">{{path.eventParam}}</span><br>
-      </div>
-
-      <div class="btn-container">
-        <button class="btn path-item-delete grey darken-2 white-text toolbox-btn dark-purple-btn">REMOVE PATH</button>
-      </div>
-
-    {{/if}}
-
+      {{#if path}}
+        <div class="row">
+          <div class="col-xs-12">
+            <label for="trialname">Path Name</label>
+            <input value="{{ path.name }}" id="pathname" type="text">
+          </div>
+        </div>
+        <div class="path-info-row">
+          <span class="path-label">From:</span><span class="path-field">{{frameName path.sourceId}}</span><br>
+        </div>
+        <div class="path-info-row">
+          <span class="path-label">To:</span><span class="path-field">{{frameName path.targetId}}</span><br>
+        </div>
+        <div class="path-info-row">
+          <span class="path-label">Event Type:</span><span class="path-field">{{path.eventType}}</span><br>
+        </div>
+        <div class="path-info-row">
+          <span class="path-label">Event Param:</span><span class="path-field">{{path.eventParam}}</span><br>
+        </div>
+        <div class="btn-container">
+          <button class="btn path-item-delete grey darken-2 white-text toolbox-btn dark-purple-btn">REMOVE PATH</button>
+        </div>
+      {{/if}}
     </div>
   </div>
-
 </template>
-
-<!-- <template name="PathItem">
-  <div class="path-item">
-    <table class="path-item-table">
-      <tr>
-        <td>{{frameName sourceId}}</td>
-        <td>{{frameName targetId}}</td>
-      </tr>
-      <tr>
-        <td>{{eventType}}</td>
-        <td>{{eventParam}}</td>
-      </tr>
-    </table>
-    <i class="fa fa-times path-item-delete"></i>
-  </div>
-</template> -->

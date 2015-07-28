@@ -2,10 +2,8 @@
 {{> Header}}
 <div class="projects-container container">
   <div class="row">
-    <div class="col m12">
-      <h4>
-        My Projects
-      </h4>
+    <div class="col-sm-12">
+      <h4>My Projects</h4>
       <div class="add-project-container">
         <button class="add-project waves-effect waves-light btn light-blue accent-3 white-text">
           <i class="fa fa-plus plus-icon"></i> NEW PROJECT
@@ -28,26 +26,20 @@
 <template name="ProjectPanel">
   <div class="project-item panel panel-default">
     <div class="panel-body">
-
-      <div class="row">
-      
+      <div class="row">      
         <div class="col-md-4">
           <input type="text" class="project-name" value="{{name}}" />
-
           <div class="project-date grey-text">
             Created on {{formatDate createdAt}}
           </div>
         </div>
 
         <div class="project-settings col-md-8">
-<!--             <a class="project-delete btn btn-default" data-toggle="tooltip" title="Deleting is not supported yet!" href="#" disabled>DELETE</a> -->
-            <a class="project-delete btn btn-default" href="#">DELETE</a>
-            <a class="project-preview btn btn-default" href="/preview/{{_id}}">PREVIEW</a>
-            <a class="project-edit btn btn-default" href="/projects/{{_id}}">EDIT</a>
+          <a class="project-delete btn btn-default" href="#">DELETE</a>
+          <a class="project-preview btn btn-default" href="/preview/{{_id}}">PREVIEW</a>
+          <a class="project-edit btn btn-default" href="/projects/{{_id}}">EDIT</a>
         </div>
-
       </div>
-
     </div>
   </div>
 </template>

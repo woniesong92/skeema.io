@@ -46,36 +46,23 @@
 
 <!-- TODO: MAKE ANOTHER SECTION, MOVE THIS ONE UP -->
 <template name="ElementSettings">
-
   <div class="elt-settings-row grey darken-3 white-text">
     <div class="row">
       <div class="col-xs-12">
+        {{#if selectedIsText}}
+          {{> TextSettings}}
+        {{/if}}
 
-      {{#if selectedIsText}}
+        {{#if selectedIsButton}}
+          {{> ButtonSettings}}
+        {{/if}}
 
-        {{> TextSettings}}
-
-      {{/if}}
-
-
-      {{#if selectedIsButton}}
-
-        {{> ButtonSettings}}
-
-      {{/if}}
-
-      {{#if selectedIsImage}}
-
-        {{> ImageSettings}}
-
-      {{/if}}
-
+        {{#if selectedIsImage}}
+          {{> ImageSettings}}
+        {{/if}}
       </div>
     </div>
-
-
   </div>
-
 </template>
 
 
