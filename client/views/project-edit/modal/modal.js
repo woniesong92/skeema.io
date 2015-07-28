@@ -36,13 +36,13 @@ if (Meteor.isClient) {
         $('.default-option').prop("selected", true);
         $('.show').removeClass('show');
 
-        _.each(pathInfo.existingEventTypes, function (eventType) {
-          if (eventType) {
-            $('#event-picker option[value="'+eventType+'"]')
-              .attr('disabled', 'disabled')
-              .text(eventType +" - Path exists already");
-          }
-        })
+        // _.each(pathInfo.existingEventTypes, function (eventType) {
+        //   if (eventType) {
+        //     $('#event-picker option[value="'+eventType+'"]')
+        //       .attr('disabled', 'disabled')
+        //       .text(eventType +" - Path exists already");
+        //   }
+        // })
       }
     });
   });

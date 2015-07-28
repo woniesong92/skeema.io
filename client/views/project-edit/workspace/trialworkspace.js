@@ -175,14 +175,14 @@ if (Meteor.isClient) {
         jspInstance.bind("connection", function (info) {
           var trialId = self.trialId;
 
-          var existingPaths = Paths.find({
-            sourceId: info.sourceId,
-            targetId: info.targetId
-          }).fetch();
+          // var existingPaths = Paths.find({
+          //   sourceId: info.sourceId,
+          //   targetId: info.targetId
+          // }).fetch();
 
-          var existingEventTypes = _.map(existingPaths, function (path) {
-            return path.eventType;
-          });
+          // var existingEventTypes = _.map(existingPaths, function (path) {
+          //   return path.eventType;
+          // });
 
           var numPaths = Paths.find({trialId: trialId}).count();
           var pathName = "Path " + numPaths;
@@ -203,7 +203,7 @@ if (Meteor.isClient) {
             var pathInfo = {
               pathId: pathId,
               sourceFrame: info.source.id,
-              existingEventTypes: existingEventTypes
+              // existingEventTypes: existingEventTypes
             }
             Session.set("pathInfo", pathInfo);
             info.connection.id = pathId;
