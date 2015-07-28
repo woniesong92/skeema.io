@@ -155,7 +155,7 @@ if (Meteor.isClient) {
   });
 
   Template.registerHelper("isProjectView", function (event, template) {
-    return Session.get("currentView") == "projectView";
+    return Session.get("currentView") !== "projectListView";
   });
 
   // Template.registerHelper("getAddButton", function (event, template) {
