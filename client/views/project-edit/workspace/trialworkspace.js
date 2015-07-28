@@ -197,6 +197,9 @@ if (Meteor.isClient) {
           }
 
           Meteor.call("addPath", path, function (err, pathId) {
+            if (err) {
+              console.log(err);
+            }
             var pathInfo = {
               pathId: pathId,
               sourceFrame: info.source.id,
