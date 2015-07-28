@@ -12,7 +12,7 @@ if (Meteor.isClient) {
       blockId: firstBlock._id,
       index: 0
     });
-
+    Session.set("projectId", projectId);
     Session.set("blockId", firstBlock._id);
     Session.set("trialId", firstTrial._id);
     Session.set("frameId", null);
