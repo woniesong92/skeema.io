@@ -26,6 +26,14 @@ if (Meteor.isClient) {
       Meteor.call('renameProject', projectId, newname);
     },
 
+    "mouseover .project-name": function (e, template) {
+      $(e.currentTarget).addClass("is-hover");
+    },
+
+    "mouseout .project-name": function (e, template) {
+      $(e.currentTarget).removeClass("is-hover");
+    },
+
     "click .add-project": function (e, template) {
       e.preventDefault();
       var numProjects = UI.getData().fetch().length;
