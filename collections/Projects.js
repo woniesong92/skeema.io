@@ -7,7 +7,13 @@ Meteor.methods({
       "createdAt": Date.now()
     };
 
-    Projects.insert(project);
+    Projects.insert(project, function (err, projectId) {
+      if (err) {
+        console.log(err, "project couldn't be inserted.");
+        return;
+      }
+      Meteor.call("addBlock", {projectId: projectId});
+    });
   },
 
   deleteProject: function (projectId) {
@@ -20,7 +26,7 @@ Meteor.methods({
     // Meteor.call("deleteBlocks", blockIds);
   },
 
-  renameProject: function (projectId, newname){
+  renameProject: function (projectId, newname) {
     Projects.update(projectId, {
       $set: {'name': newname}
     });
