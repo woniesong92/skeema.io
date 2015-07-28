@@ -50,12 +50,19 @@ if (Meteor.isClient) {
         var nextBlock = Blocks.findOne({index: nextBlockIndex});
 
         if (nextBlock) {
-          nextTrialId = Trials.findOne({
+          var nextTrial = Trials.findOne({
             blockId: nextBlock._id,
             index: 0
-          })._id;
+          });
+
+          if (nextTrial) {
+            nextTrialId = nextTrial._id;
+          } else {
+            alert("You've reached the end of the experiment!")
+          }
+
         } else {
-          alert("this is the end of trial!")
+          alert("You've reached the end of the experiment!")
           return false;
         }
       } else {
