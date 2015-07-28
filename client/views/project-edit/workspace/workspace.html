@@ -1,17 +1,15 @@
 <template name="WorkSpace">
-	
-		{{#if isBlockView}}
-			{{> BlockWorkSpace}}
+	{{#if isBlockView}}
+		{{> BlockWorkSpace}}
+	{{else}}
+		{{#if isTrialView}}
+			{{> TrialWorkSpace}}
 		{{else}}
-			{{#if isTrialView}}
-				{{> TrialWorkSpace}}
+			{{#if isFrameView}}
+				{{> FrameWorkSpace}}
 			{{else}}
-				{{#if isFrameView}}
-					{{> FrameWorkSpace}}
-				{{else}}
-					<!-- PROJECT WORK SPACE ? -->
-				{{/if}}
+				<!-- PROJECT WORK SPACE ? -->
 			{{/if}}
 		{{/if}}
-	
+	{{/if}}
 </template>
