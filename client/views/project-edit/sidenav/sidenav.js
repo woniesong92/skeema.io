@@ -35,6 +35,9 @@ if (Meteor.isClient) {
     makeTrialsSortable();
 
     this.$('.block-items, .trial-items').disableSelection();
+
+    // open the first block, first trial
+    $(this.$('.block-item')[0]).addClass('is-open');
   });
 
   Template.SideNav.helpers({
