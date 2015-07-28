@@ -26,7 +26,12 @@ if (Meteor.isClient) {
     },
   });
 
-  Template.ProjectEdit.events({
-
+  Template.ProjectPanel.events({
+    // FIXME: delete all the associated trials,
+    // frames, elements, paths
+    'click .project-delete': function (e, template) {
+      var projectId = this._id;
+      Meteor.call('deleteProject', projectId);
+    }
   });
 }
