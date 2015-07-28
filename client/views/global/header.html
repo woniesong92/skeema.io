@@ -1,22 +1,21 @@
 <template name="Header">
-<header>
-  <div class="row white-text header-row">
-    <div class="col s2">
-      <span class="brand-name">
-        <a href='/'>Skeema</a>
-      </span>
-    </div>
-    <div class="col s8">
-      <!-- placeholder for now -->
-    </div>
-
-    {{#if isProjectView}}
-      <div class="col s2">
-        <div class="project-preview-btn-container">
-          <button class="btn btn-default project-preview-btn">Preview Project</button>
-        </div>
+  <header>
+    <div class="row white-text header-row">
+      <div class="col-sm-2">
+        <span class="brand-name">
+          <a href='/'>Skeema</a>
+        </span>
       </div>
-    {{/if}}
-  </div>
-</header>
+      <div class="col-sm-8">
+        <!-- placeholder for now -->
+      </div>
+      {{#if isProjectView}}
+        <div class="col-sm-2">
+          <div class="project-preview-btn-container">
+            <button class="btn btn-default project-preview-btn">Preview Project</button>
+          </div>
+        </div>
+      {{/if}}
+    </div>
+  </header>
 </template>

@@ -5,11 +5,13 @@ Template.Header.events({
       projectId: projectId,
       index: 0
     });
+
     var trial = Trials.findOne({
       projectId: projectId,
       blockId: block._id,
       index: 0
     });
+    
     Router.go('/preview/'+projectId);
   }
 });
