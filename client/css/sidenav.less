@@ -62,10 +62,11 @@
 
 .trial-item {
   z-index: 2;
+  width: 100%;
 }
 
 .block-items {
-  padding: 10px;
+  margin: 10px;
   padding-top: 0px;
   margin-top: -10px;
   background-color: #f2f2f2;
@@ -78,18 +79,18 @@
 
 .block-item {
   position: relative;
-  padding: 5px 0 5px 5px;
 }
 
 .block-item-link {
-  margin-left: 25px;
+  margin-left: 15px;
+
 }
 
 .block-item .fa-folder,
 .block-item .fa-folder-open {
-  position: absolute;
-  left: 5px;
-  top: 7px;
+  position: relative;
+  bottom: 2px;
+  font-size: 20px;
 }
 
 .block-item .trial-items,
@@ -102,11 +103,12 @@
 
 .block-item.is-open .fa-folder-open {
   display: inline-block;
-  color: #2196F3;
+  color: #fff;
 }
 
 .block-item.is-open .block-delete-link {
   display: inline-block;
+  margin-right: 7px;
 }
 
 .block-item.is-open .trial-items {
@@ -115,21 +117,18 @@
 
 .trial-item {
   position: relative;
-  margin-left: 48px;
-  padding: 5px 5px 5px 0;
   font-size: 13px;
   line-height: 1;
 }
 
 .trial-item .fa-file-o {
   position: absolute;
-  left: -25px;
-  top: 4px;
+  top: 10px;
 }
 
 .block-item-link {
   display: inline-block;
-  width: 158px;
+  width: 95px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -138,12 +137,12 @@
 .trial-item-link {
   display: inline-block;
   width: 130px;
+  margin-left: 40px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.trial-delete-link,
 .block-delete-link {
   position: absolute;
   right: 4px;
@@ -151,13 +150,15 @@
 
 .trial-delete-link {
   display: none;
+  position: absolute;
+  right: 10px;
+  top: 10px;
 }
 
 .add-block,
 .add-trial {
   cursor: pointer;
   padding: 5px 10px;
-  margin-top: 10px;
   // background-color: #eeece1;
   // border-color: #c4bd97;
   line-height: 16px;
@@ -166,12 +167,32 @@
 }
 
 .add-trial {
-  margin-left: 40px;
-  margin-top: 5px;
+  width: 100%;
+  cursor: pointer;
 }
 
 .add-block {
   margin-left: 20px;
+  margin-top: 10px;
 }
 
+
+/* show */
+.trial-delete-link.show-inline-block {
+  display: inline-block;
+}
+
+/* collapsible panels */
+.panel-default > .panel-heading {
+  background-color: transparent;
+  padding-bottom: 7px;
+}
+
+.is-open .panel-heading {
+  background-color: #448aff;
+}
+
+.is-open .panel-heading a, .is-open .panel-heading .sidenav-container a:link {
+  color: #fff;
+}
 

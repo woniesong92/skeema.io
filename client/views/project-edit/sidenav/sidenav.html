@@ -12,20 +12,22 @@
       <li class="{{#if isFrameView}}active{{/if}} frame-breadcrumb">{{frame.name}}</li>
     </ol>
   </div>
-  <ul class='block-items'>
+  <div class='block-items panel-group'>
     {{#each blocks}}
-      <li class='block-item'>
-        <i class="fa fa-fw fa-folder"></i>
-        <i class="fa fa-fw fa-folder-open"></i>
-        <a href='#' class='block-item-link'>
-          {{name}}  
-        </a>
-        <a href='#' class='block-delete-link'>
-          <i class="fa fa-remove fa-fw"></i>
-        </a>
-        <ul class='trial-items'>
+      <div class="block-item panel panel-default">
+        <div class="panel-heading">
+          <i class="fa fa-fw fa-folder"></i>
+          <i class="fa fa-fw fa-folder-open"></i>
+          <a href='#' class='block-item-link' data-toggle="collapse">
+            {{name}}  
+          </a>
+          <a href='#' class='block-delete-link'>
+            <i class="fa fa-remove fa-fw"></i>
+          </a>
+        </div>
+        <ul class='trial-items list-group'>
           {{#each trials _id}}
-            <li class='trial-item'>
+            <li class='trial-item list-group-item'>
               <i class="fa fa-fw fa-file-o"></i>
               <a href='#' class='trial-item-link'>{{name}}</a>
               <a href='#' class='trial-delete-link'>
@@ -33,14 +35,13 @@
               </a>
             </li>
           {{/each}}
-          
+          <div class="add-trial btn btn-default">+ ADD TRIAL</div>
+          </ul>
           <!-- not using an icon looks better IMO -->
           <!-- <i class="fa fa-plus fa-fw"></i> -->
-          <a class="add-trial btn btn-default">+ ADD TRIAL</a>
           
-        </ul>
-      </li>
+      </div>
     {{/each}}
     <a class="add-block btn btn-default">+ ADD BLOCK</a>
-  </ul>
+  </div>
 </template>
