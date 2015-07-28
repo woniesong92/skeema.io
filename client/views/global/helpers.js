@@ -3,16 +3,6 @@ Meteor.startup(function() {
   if (Meteor.isClient) {
     Utils = {};
 
-    Utils.toast = function (content, duration, selector) {
-      var duration = duration || 2000;
-
-      if (selector) {
-        $(selector).text(content).fadeIn().delay(duration).fadeOut();
-      } else {
-        $('.alert').text(content).fadeIn().delay(duration).fadeOut();
-      }
-    }
-
     // Fisher-Yates Shuffle
     Utils.shuffle = function (array) {
       var counter = array.length;
@@ -53,8 +43,6 @@ if (Meteor.isClient) {
   Template.registerHelper("isFrameView", function (event, template) {
     return Session.get("currentView") == "frameView";
   });
-
-  
 
   Template.registerHelper("block", function (event, template) {
     var blockId = Session.get("blockId");
@@ -118,22 +106,6 @@ if (Meteor.isClient) {
     return false;
   });
 
-  // Template.registerHelper("sourceId", function (event, template) {
-  //   var pathId = Session.get("pathId");
-  //   if (pathId != null){
-  //     return Paths.findOne({_id: path}).sourceId;
-  //   }
-  //   return false;
-  // });
-
-  // Template.registerHelper("targetId", function (event, template) {
-  //   var pathId = Session.get("pathId");
-  //   if (pathId != null){
-  //     return Paths.findOne({_id: path}).targetId;
-  //   }
-  //   return false;
-  // });
-
   Template.registerHelper("color", function (event, template) {
     var elementId = Session.get("elementId");
     return $('#' + elementId).css('color');
@@ -157,23 +129,6 @@ if (Meteor.isClient) {
   Template.registerHelper("isProjectView", function (event, template) {
     return Session.get("currentView") !== "projectListView";
   });
-
-  // Template.registerHelper("getAddButton", function (event, template) {
-  //   return Session.get("addButton");
-  // });
-
-  // Template.registerHelper("getAddText", function (event, template) {
-  //   return Session.get("addText");
-  // });
-
-  // Template.registerHelper("getAddImage", function (event, template) {
-  //   return Session.get("addImage");
-  // });
-  
-
-  // Template.registerHelper("isLoading", function() {
-  //   return CourseSearch.getStatus().loading;
-  // });
 
   Template.registerHelper('isAdmin', function() {
     return (Meteor.user() && Meteor.user().role == "admin");
