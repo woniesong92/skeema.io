@@ -1,8 +1,8 @@
-function isPositiveInteger (str) {
-    return /^\d+$/.test(str);
+var isPositiveInteger = function (str) {
+  return /^\d+$/.test(str);
 }
 
-function onDurationChange() {
+var _onDurationChange = function() {
   var duration = $.trim($('#duration').val());
   if (duration.length > 0 && isPositiveInteger(duration)) {
     $('.create-path-btn').removeClass('disabled');
@@ -12,27 +12,16 @@ function onDurationChange() {
 }
 
 if (Meteor.isClient) {
-
-  Template.Modal.helpers({
-
-  });
-
-  Template.Modal.onRendered(function() {
-
-    // FIXME: I want to set the selected state, but the modal event is not firing
-    // for some reason
-    // $('#modal').modal('shown.bs.modal', function (e) {
-    //   debugger
-    //   $('.default-option').prop("selected", true);
-    // });
+  Template.Modal.onCreated(function() {
+    var self = this;
+    this.pathInfo = null;
 
     this.autorun(function() {
-      var pathInfo = Session.get("pathInfo");
+      var pathInfo = ProjectEditSession.get("pathInfo");
       if (pathInfo) {
+        self.pathInfo = pathInfo;
 
-        // FIXME cont'd
-        // I feel like it'd be more appropriate put this clearing() code inside
-        // modal shown or hidden
+        // FIXME: should it be done as "modal shown" event callback instead?
         $('.default-option').prop("selected", true);
         $('.show').removeClass('show');
 
@@ -45,36 +34,30 @@ if (Meteor.isClient) {
         // })
       }
     });
-  });
+  })
 
   Template.Modal.events({
-    'change #event-picker': function(e, template) {
+    'change #event-picker': function (e, template) {
+      var pathInfo = template.pathInfo;
+      var pickedevent = $('#event-picker').val();
+
       $('.create-path-btn').addClass('disabled');
       $('.show').removeClass('show');
       $('.modal input').val("");
 
-      var pathInfo = Session.get("pathInfo");
-      var pickedevent = $('#event-picker').val();
-
-      switch (pickedevent) {
-        case "keypress":
-          $('.key-options').addClass('show');
-          break;
-        case "time":
-          $('.time-options').addClass('show');
-          break;
-        case "click":
-          if (pathInfo) {
-           var numElts = Elements.find({frameId: pathInfo.sourceFrame}).count();
-            if (numElts < 1) {
-              $('.click-error-msg').addClass('show');
-            } else {
-              $('.create-path-btn').removeClass('disabled');
-            }
+      if (pickedevent === "keypress") {
+        $('.key-options').addClass('show');
+      } else if (pickedevent === "time") {
+        $('.time-options').addClass('show');
+      } else { // click
+        if (pathInfo) {
+          var numElts = Elements.find({frameId: pathInfo.sourceFrame}).count();
+          if (numElts < 1) {
+            $('.click-error-msg').addClass('show');
+          } else {
+            $('.create-path-btn').removeClass('disabled');
           }
-          break;
-        default:
-          break;
+        }
       }
     },
 
@@ -88,17 +71,17 @@ if (Meteor.isClient) {
     },
 
     'change #duration': function (e, template) {
-      onDurationChange();
+      _onDurationChange();
     },
 
     'keyup #duration': function (e, template) {
-      onDurationChange();
+      _onDurationChange();
     },
 
     'click .create-path-btn': function (e, template) {
       var eventType = $('#event-picker').val();
       var eventParam;
-      var pathInfo = Session.get("pathInfo");
+      var pathInfo = template.pathInfo;
 
       if (eventType === 'keypress') {
         eventParam = $.trim($('#key').val());
@@ -125,7 +108,7 @@ if (Meteor.isClient) {
     },
 
     'click .delete-path-btn': function (e, template) {
-      var pathInfo = Session.get("pathInfo");
+      var pathInfo = template.pathInfo;
       Meteor.call("deletePaths", [pathInfo.pathId]);
     }
   });

@@ -3,10 +3,10 @@ if (Meteor.isClient) {
     // To prevent the modal to open up when it shouldn't,
     // invalidate the pathInfo Session
     // THIS FUCKING SUCKS
-    Session.set("pathInfo", null);
+    ProjectEditSession.set("pathInfo", null);
 
     this.autorun(function() {
-      var pathInfo = Session.get("pathInfo");
+      var pathInfo = ProjectEditSession.get("pathInfo");
       if (pathInfo) {
         $('#modal').modal('show');
       }
@@ -102,7 +102,6 @@ if (Meteor.isClient) {
     "click .path-item-delete": function (e, template) {
       var pathId = ProjectEditSession.get("pathId");
       Meteor.call("deletePaths", [pathId]);
-      
       Utils.toast("REMOVED SUCCESSFULLY");
     }
   });

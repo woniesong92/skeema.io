@@ -28,6 +28,7 @@ if (Meteor.isClient) {
     return {top: y, left: x};
   }
 
+  //FIXME: merge overlaps with other _addTextElement and _addImageElement
   var _addButtonElement = function (position, projectId) {
     var top = position.top;
     var left = position.left;
@@ -189,7 +190,7 @@ if (Meteor.isClient) {
                     + "left:" + left + "%;'"
                     +">Text</span>";
 
-      Meteor.call("setHTML", elementId, htmlStr, function(e) {
+      Meteor.call("setHTML", elementId, htmlStr, function (e) {
         if (e) {
           console.log("Setting selector failed");
 
