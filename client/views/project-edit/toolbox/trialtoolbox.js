@@ -62,7 +62,6 @@ if (Meteor.isClient) {
           console.log("Adding Frame failed", err);
           return false;
         }
-        Session.set("frameAdded", frameId);
       });
     },
 
@@ -94,7 +93,6 @@ if (Meteor.isClient) {
   })
 
   Template.TrialPaths.events({
-
     'change #pathname': function (e, template) { 
       var newname = $('#pathname').val().trim();
       var pathId = ProjectEditSession.get("pathId");
@@ -105,18 +103,8 @@ if (Meteor.isClient) {
       var pathId = ProjectEditSession.get("pathId");
       Meteor.call("deletePaths", [pathId]);
       
-      $.bootstrapGrowl("REMOVED SUCCESSFULLY", {
-        ele: '.toast-container', // which element to append to
-        type: 'success', // (null, 'info', 'danger', 'success')
-        offset: {from: 'top', amount: 97}, // 'top', or 'bottom'
-        align: 'right', // ('left', 'right', or 'center')
-        width: 220, // (integer, or 'auto')
-        delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
-        allow_dismiss: true, // If true then will display a cross to close the popup.
-        stackup_spacing: 10 // spacing between consecutively stacked growls.
-      });
-    },
-
+      Utils.toast("REMOVED SUCCESSFULLY");
+    }
   });
 }
 

@@ -24,19 +24,28 @@ if (Meteor.isClient) {
       index: 0
     });
 
+    // Fail fast: debugging purpose
+    if (!(firstTrial)) {
+      console.log("ERR: firstTrial doesn't exist");
+      return false;
+    }
+
     ProjectEditSession.set("projectId", projectId);
     ProjectEditSession.set("blockId", firstBlock._id);
     ProjectEditSession.set("trialId", firstTrial._id);
-    ProjectEditSession.set("frameId", null);
-    ProjectEditSession.set("pathId", null);
-    ProjectEditSession.set("elementId", null);
+    ProjectEditSession.set("frameId", undefined);
+    ProjectEditSession.set("pathId", undefined);
+    ProjectEditSession.set("elementId", undefined);
     ProjectEditSession.set("currentView", TRIAL_VIEW);
+    ProjectEditSession.set("addText", undefined);
+    ProjectEditSession.set("addButton", undefined);
+    ProjectEditSession.set("addImage", undefined);
   });
 
   Template.ProjectEdit.helpers({
     project: function() {
       return this;
-    },
+    }
   });
 
   Template.ProjectPanel.events({
