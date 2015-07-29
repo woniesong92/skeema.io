@@ -163,6 +163,14 @@ if (Meteor.isClient) {
 
     "click .trial-delete-link": function (e, template) {
       e.stopPropagation();
+      var numTrials = Trials.find().count();
+      if (numTrials <= 1) {
+        Utils.toast("You cannot delete the only trial", {
+          type: "danger"
+        });
+        return false;
+      }
+
       var trialId = this._id;
       Meteor.call("deleteTrials", [trialId]);
     },

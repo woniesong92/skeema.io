@@ -242,6 +242,12 @@ if (Meteor.isClient) {
   Template.FrameItem.helpers({
     isStart: function() {
       var trialId = ProjectEditSession.get('trialId');
+      var trial = Trials.findOne({_id: trialId});
+      if (!trial) {
+        console.log("ERR: startFrame of null");
+        return false;
+      }
+
       if (Trials.findOne({_id: trialId}).startFrameId == this._id) {
         return "startFrame"; // ???
       }

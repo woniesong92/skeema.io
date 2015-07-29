@@ -74,9 +74,10 @@ Meteor.methods({
     // deleted and we don't have to update indices. Otherwise,
     // shift all trials that were after the deleted trial
     // forward
+
     if (trialIds.length === 1) {
       var trial = Trials.findOne(trialIds[0]);
-      var trialIdx = trialIds[0].index;
+      var trialIdx = trial.index;
       var trials = Trials.find({blockId: trial.blockId}).fetch();
       _.each(trials, function (t) {
         if (t.index > trialIdx) {

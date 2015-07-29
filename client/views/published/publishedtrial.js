@@ -58,10 +58,13 @@ if (Meteor.isClient) {
           if (nextTrial) {
             nextTrialId = nextTrial._id;
           } else {
+            // FIXME: there is a bug here!
+            // JENNY~~
             alert("You've reached the end of the experiment!")
           }
 
         } else {
+          // FIXME: there is a bug here!
           alert("You've reached the end of the experiment!")
           return false;
         }
