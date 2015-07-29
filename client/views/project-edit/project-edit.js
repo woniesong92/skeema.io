@@ -27,6 +27,7 @@ if (Meteor.isClient) {
       return false;
     }
 
+    // List of all reactive vars used in this page
     ProjectEditSession.set("projectId", projectId);
     ProjectEditSession.set("blockId", firstBlock._id);
     ProjectEditSession.set("trialId", firstTrial._id);
@@ -37,6 +38,8 @@ if (Meteor.isClient) {
     ProjectEditSession.set("addText", undefined);
     ProjectEditSession.set("addButton", undefined);
     ProjectEditSession.set("addImage", undefined);
+    ProjectEditSession.set("shouldExpandToolbox", undefined);
+    ProjectEditSession.set("shouldExpandSideNav", undefined);
   });
 
   Template.ProjectEdit.helpers({
