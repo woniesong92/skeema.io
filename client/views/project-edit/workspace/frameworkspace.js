@@ -286,7 +286,7 @@ if (Meteor.isClient) {
         type: 'info',
         align: 'center',
         offset: {from: 'bottom', amount: 97},
-        width: 400, // (integer, or 'auto')
+        width: 400,
       });
       $('.element-item')
         .attr('contenteditable', 'false')

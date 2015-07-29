@@ -156,6 +156,17 @@ if (Meteor.isClient) {
     "click .block-delete-link": function (e, template) {
       e.stopPropagation();
       var blockId = this._id;
+      var numBlocks = Blocks.find().count();
+      if (numBlocks <= 1) {
+        Utils.toast("<center>YOU MUST HAVE AT LEAST ONE BLOCK</center>", {
+          type: "danger",
+          ele: '.workspace-container',
+          align: 'center',
+          offset: {from: 'bottom', amount: 97},
+          width: 400,
+        });
+        return false;
+      }
       Meteor.call("deleteBlocks", [blockId]);
     },
 
@@ -184,10 +195,15 @@ if (Meteor.isClient) {
 
     "click .trial-delete-link": function (e, template) {
       e.stopPropagation();
-      var numTrials = Trials.find().count();
+      debugger
+      var numTrials = Trials.find({blockId: this.blockId}).count();
       if (numTrials <= 1) {
-        Utils.toast("You cannot delete the only trial", {
-          type: "danger"
+        Utils.toast("<center>EACH BLOCK MUST HAVE AT LEAST ONE TRIAL</center>", {
+          type: "danger",
+          ele: '.workspace-container',
+          align: 'center',
+          offset: {from: 'bottom', amount: 97},
+          width: 400,
         });
         return false;
       }
