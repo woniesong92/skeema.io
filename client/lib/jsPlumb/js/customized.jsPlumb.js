@@ -20,7 +20,7 @@ if (Meteor.isClient) {
         cssClass: "aLabel"
       }]
     ],
-    Container: ".frame-items-container"
+    Container: "frame-items-container"
   };
   var commonAnchor = "Continuous";
   var commonStrokeStyle = {
@@ -32,7 +32,7 @@ if (Meteor.isClient) {
   var commonConnectorStyle = [ "StateMachine", { curviness: 20 } ];
   var commonSrcSettings = {
     filter: ".ep",
-    anchor: this.commonAnchor,
+    anchor: "Continuous",
     connector: commonConnectorStyle,
     connectorStyle: commonStrokeStyle,
     maxConnections: 10,
@@ -40,9 +40,10 @@ if (Meteor.isClient) {
       alert("Maximum connections (" + info.maxConnections + ") reached");
     }
   };
+
   var commonTargetSettings = {
     dropOptions: { hoverClass: "dragHover" },
-    anchor: commonAnchor,
+    anchor: "Continuous",
     allowLoopback: true
   }
 
@@ -55,5 +56,4 @@ if (Meteor.isClient) {
     commonSrcSettings: commonSrcSettings,
     commonTargetSettings: commonTargetSettings
   }
-
 }

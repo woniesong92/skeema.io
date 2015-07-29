@@ -24,6 +24,22 @@ Meteor.startup(function() {
       }
 
       return array;
+    };
+
+    Utils.toast = function (message, options) {
+      var defaultOpt = {
+        ele: '.toast-container', // which element to append to
+        type: 'success', // (null, 'info', 'danger', 'success')
+        offset: {from: 'top', amount: 97}, // 'top', or 'bottom'
+        align: 'right', // ('left', 'right', or 'center')
+        width: 220, // (integer, or 'auto')
+        delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+        allow_dismiss: true, // If true then will display a cross to close the popup.
+        stackup_spacing: 10
+      }
+
+      var newOpt = _.extend(defaultOpt, options);
+      $.bootstrapGrowl(message, newOpt);
     }
   }
 });

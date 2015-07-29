@@ -1,6 +1,11 @@
 if (Meteor.isClient) {
+  var allFramesReady = new ReactiveVar;
+  var jspInstance;
+  var doInitializeWorkspace;
+
   var drawPaths = function (instance, trialId) {
     var paths = Paths.find({trialId: trialId}).fetch();
+
     _.each(paths, function (path) {
       var con = instance.connect({
         source: path.sourceId,
@@ -10,42 +15,69 @@ if (Meteor.isClient) {
         anchor: jsPlumbSettings.commonAnchor,
         connector: jsPlumbSettings.commonConnectorStyle
       });
-
       // connection object is tied to Mongo's object by sharing the same id
       con.id = path._id;
       con.getOverlay("label").setLabel(path.name);
     });
 
-    // FIXME: a hacky way to solve a problem. Without this, when frames
-    // are moved and not saved, the paths are drawn in reference to the old
-    // frame positions. Maybe jsPlumb saves frames' position states separately?
+    // FIXME: might be a better way to do this
     instance.repaintEverything();
   }
 
+  var _showSidebars = function() {
+    //FIXME: this should be handled by Sidenav and toolbar files like below.
+    //Let Jenny handle it
+    //ProjectEditSession.set("hideToolbar", true)
+    //ProjectEditSession.set("hideSidnav", true)
+    $('.collasped-right-completely').removeClass("collasped-right-completely").addClass("expanded-right");
+    $('.collasped-left-completely').removeClass("collasped-left-completely").addClass("expanded-left");
+  }
+
+  var _addPathFromConnection = function (info) {
+    var path = {
+      projectId: ProjectEditSession.get("projectId"),
+      trialId: trialId,
+      name: "Path",
+      sourceId: info.sourceId,
+      targetId: info.targetId,
+      eventType: null,
+      eventParam: null
+    }
+
+    Meteor.call("addPath", path, function (err, pathId) {
+      if (err) {
+        console.log(err);
+      }
+      var pathInfo = {
+        pathId: pathId,
+        sourceFrame: info.source.id,
+        // existingEventTypes: existingEventTypes
+      }
+      ProjectEditSession.set("pathInfo", pathInfo);
+      info.connection.id = pathId;
+      info.connection.getOverlay("label").setLabel(pathName);
+    });
+  }
+
   Template.TrialWorkSpace.onCreated(function() {
-    // true when all frames are ready
-    this.allFramesReady = new ReactiveVar(false);
-
     var self = this;
-
-    // this is intentioally out of autorun scope
     var trialId = ProjectEditSession.get("trialId");
-    
+    allFramesReady.set(false);
+
     jsPlumb.ready(function () {
-      self.jspInstance = jsPlumb.getInstance(jsPlumbSettings.instanceSetting);
+      jspInstance = jsPlumb.getInstance(jsPlumbSettings.instanceSetting);
     });
 
-    // TODO: add comments
-    // HOWON: THESE ARE RUN FIRST WHEN THE TEMPLATE IS CREATED
-    // ANY WAY TO AVOID IT?
-    this.trialChanged = Tracker.autorun(function() {
+    Tracker.autorun(function() {
       var trialId = ProjectEditSession.get("trialId");
-      self.mustInitialize = true;
+
+      // initialize workspace
+      doInitializeWorkspace = true;
     });
 
     // This is another tracker for showing frameworkspace temporarily
     // HOWON: THIS IS A PLACE WHERE LOCAL REACTIVE VAR MUST BE USED.
-    this.chooseElementToClick = Tracker.autorun(function() {
+    Tracker.autorun(function() {
 
       // FIXME: usefulInfo contains sourceFrameId and pathId
       // think of a better name. Also, setting four session
@@ -59,6 +91,7 @@ if (Meteor.isClient) {
           pathId: frameAndPathIds.pathId,
           sourceFrame: frameAndPathIds.sourceFrame
         });
+
         ProjectEditSession.set("frameId", frameAndPathIds.sourceFrame);
         ProjectEditSession.set("currentView", FRAME_VIEW);
       }
@@ -66,14 +99,14 @@ if (Meteor.isClient) {
 
     // HOWON: THIS IS A PLACE WHERE LOCAL REACTIVE VAR MUST BE USED.
     // this session comes from Paths.js
-    this.pathDeleted = Tracker.autorun(function() {
+    Tracker.autorun(function() {
       // FIXME: learn how these trackers actually work and why
       // this is run in the beginning even when the session vars aren't set yet
       var deletedPathIds = Session.get("deletedPathIds");
       _.each(deletedPathIds, function (deletedPathId) {
-        self.jspInstance.select().each(function (con) {
+        jspInstance.select().each(function (con) {
           if (con.id === deletedPathId) {
-            self.jspInstance.detach(con);
+            jspInstance.detach(con);
           }
         });
       });
@@ -84,14 +117,14 @@ if (Meteor.isClient) {
   Template.TrialWorkSpace.onRendered(function() {
     ProjectEditSession.set("pathId", null);
 
-    $('.collasped-right-completely').removeClass("collasped-right-completely").addClass("expanded-right");
-    $('.collasped-left-completely').removeClass("collasped-left-completely").addClass("expanded-left");
+    // FIXME: this should belong to SideNav and Toolbar
+    _showSidebars();
 
     var self = this;
 
     this.autorun(function() {
-      if (self.allFramesReady.get()) {
-        var jspInstance = self.jspInstance;
+      var areAllFramesReady = allFramesReady.get();
+      if (areAllFramesReady) {
         var $frames = $('.frame-preview-item');
         
         // delete previous elements and unbind events
@@ -119,8 +152,6 @@ if (Meteor.isClient) {
 
         // bind event: click a connection to detach it
         jspInstance.bind("click", function (con) {
-          // jspInstance.detach(con);
-          // Meteor.call("deletePaths", [con.id]);
           ProjectEditSession.set("pathId", con.id);
         });
 
@@ -137,35 +168,11 @@ if (Meteor.isClient) {
           //   return path.eventType;
           // });
 
-          var numPaths = Paths.find({trialId: trialId}).count();
-          var pathName = "Path " + numPaths;
-          var path = {
-            projectId: ProjectEditSession.get("projectId"),
-            trialId: trialId,
-            name: pathName,
-            sourceId: info.sourceId,
-            targetId: info.targetId,
-            eventType: null,
-            eventParam: null
-          }
-
-          Meteor.call("addPath", path, function (err, pathId) {
-            if (err) {
-              console.log(err);
-            }
-            var pathInfo = {
-              pathId: pathId,
-              sourceFrame: info.source.id,
-              // existingEventTypes: existingEventTypes
-            }
-            ProjectEditSession.set("pathInfo", pathInfo);
-            info.connection.id = pathId;
-            info.connection.getOverlay("label").setLabel(pathName);
-          });
+          _addPathFromConnection(info);
         });
 
-        self.allFramesReady.set("allFramesReady", false);
-        self.mustInitialize = false;
+        allFramesReady.set(false);
+        doInitializeWorkspace = false;
       }
     });
   });
@@ -175,23 +182,14 @@ if (Meteor.isClient) {
       ProjectEditSession.set("currentView", FRAME_VIEW);
       ProjectEditSession.set("frameId", this._id);
     },
+
     "click .frame-remove-btn": function (e, template) {
       var trialId = ProjectEditSession.get("trialId");
       var trial = Trials.findOne({_id: trialId});
       var frameId = this._id;
 
       if (trial.startFrameId === frameId) {
-        var errMessage = "You cannot delete a start frame."
-        $.bootstrapGrowl(errMessage, {
-          ele: '.toast-container', // which element to append to
-          type: 'danger', // (null, 'info', 'danger', 'success')
-          offset: {from: 'top', amount: 97}, // 'top', or 'bottom'
-          align: 'right', // ('left', 'right', or 'center')
-          width: 220, // (integer, or 'auto')
-          delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
-          allow_dismiss: true, // If true then will display a cross to close the popup.
-          stackup_spacing: 10 // spacing between consecutively stacked growls.
-        });
+        Utils.toast("You cannot delete a start frame.");
         return false;
       }
 
@@ -200,26 +198,15 @@ if (Meteor.isClient) {
           console.log("Deleting frame "+frameId+" failed");
           return false;
         }
-        // Utils.toast('Removed successfully', 2000);
         
-        $.bootstrapGrowl("REMOVED SUCCESSFULLY", {
-            ele: '.toast-container', // which element to append to
-            type: 'success', // (null, 'info', 'danger', 'success')
-            offset: {from: 'top', amount: 97}, // 'top', or 'bottom'
-            align: 'right', // ('left', 'right', or 'center')
-            width: 220, // (integer, or 'auto')
-            delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
-            allow_dismiss: true, // If true then will display a cross to close the popup.
-            stackup_spacing: 10 // spacing between consecutively stacked growls.
-        });
+        Utils.toast("REMOVED SUCCESSFULLY");
       });
     },
-
   });
 
   Template.TrialWorkSpace.helpers({
     frames: function() {
-      var trialId = Session.get('trialId');
+      var trialId = ProjectEditSession.get('trialId');
       Template.instance().trialId = trialId;
       return Frames.find({trialId: trialId});
     },
@@ -227,15 +214,16 @@ if (Meteor.isClient) {
 
   Template.FrameItem.helpers({
     isStart: function() {
-      var trialId = Session.get('trialId');
+      var trialId = ProjectEditSession.get('trialId');
       if (Trials.findOne({_id: trialId}).startFrameId == this._id) {
-        return "startFrame";
+        return "startFrame"; // ???
       }
       return "";
     },
   });
 
   Template.FrameItem.onRendered(function() {
+    // FIXME: decide what to do to position frame items
     // position the frame item
     var $frame = this.$('.frame-preview-item');
     var position = Frames.findOne($frame.attr('id')).position;
@@ -269,24 +257,23 @@ if (Meteor.isClient) {
       });
     }
 
-    // All frames are rendered for the first time
-    if (isLastFrame && this.parent().mustInitialize) {
-      debugger
-      this.get('allFramesReady').set(true);
+    // All frames are rendered for the first time so
+    // the workspace should be initialized
+    if (isLastFrame && doInitializeWorkspace) {
+      allFramesReady.set(true);
 
     // A new frame has been added and rendered for the first time
     } else if (isLastFrame) {
-      var jspInstance = this.parent().jspInstance;
       jspInstance.draggable($frame, {
-          stop: function (e, ui) {
-            var frameId = ui.helper[0].id;
-            // var position = $('#' + ui.id).position();
+        stop: function (e, ui) {
+          var frameId = ui.helper[0].id;
 
-            //FIXME: THIS PROBABLY NEEDS TO BE IN %, not pixels
-            var position = ui.position;
-            Meteor.call("addFramePosition", frameId, position);
-          }
-        });
+          //FIXME: THIS PROBABLY NEEDS TO BE IN %, not pixels
+          var position = ui.position;
+          Meteor.call("addFramePosition", frameId, position);
+        }
+      });
+
       jspInstance.makeSource($frame, jsPlumbSettings.commonSrcSettings);
       jspInstance.makeTarget($frame, jsPlumbSettings.commonTargetSettings);
     }
