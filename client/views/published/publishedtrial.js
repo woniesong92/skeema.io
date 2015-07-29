@@ -42,12 +42,15 @@ if (Meteor.isClient) {
 
       var isLastTrial = currentTrial.index === Trials.find({blockId: currentTrial.blockId}).count() - 1;
 
-      var nextBlockId;
-      var nextTrialId;
+      // Either session change or end-of-experiment alert
+      var nextStep;
+
+      debugger
 
       if (isLastTrial) {
         var nextBlockIndex = Blocks.findOne({_id: currentTrial.blockId}).index + 1;
         var nextBlock = Blocks.findOne({index: nextBlockIndex});
+        // debugger
 
         if (nextBlock) {
           var nextTrial = Trials.findOne({
@@ -55,25 +58,17 @@ if (Meteor.isClient) {
             index: 0
           });
 
-          if (nextTrial) {
-            nextTrialId = nextTrial._id;
-          } else {
-            // FIXME: there is a bug here!
-            // JENNY~~
-            alert("You've reached the end of the experiment!")
-          }
-
+          nextStep = 'Session.set(\'publishedTrialId\', \'' + nextTrial._id + '\');';
+          
         } else {
-          // FIXME: there is a bug here!
-          alert("You've reached the end of the experiment!")
-          return false;
+          nextStep = 'alert(\"You\'ve reached the end of the experiment!\");';
         }
       } else {
-        nextTrialId = Trials.findOne({
+        var nextTrial = Trials.findOne({
           blockId: currentTrial.blockId,
           index: currentTrial.index + 1
-        })._id;
-        nextBlockId = currentTrial.blockId;
+        });
+        nextStep = 'Session.set(\'publishedTrialId\', \'' + nextTrial._id + '\');';
       }
 
       var scriptStr = (function() {
@@ -83,7 +78,7 @@ if (Meteor.isClient) {
               'var code = e.keyCode || e.which;' +
                 'if (code === '+path.eventParam.charCodeAt(0)+') {' +
                   'if (' + isTargetExit + ') {' +
-                    'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
+                    nextStep +
                   '} else {' +
                     '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
                     '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
@@ -95,7 +90,7 @@ if (Meteor.isClient) {
             'var startClock = function() {' +
               'setTimeout(function() {' +
                 'if (' + isTargetExit + ') {' +
-                  'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
+                  nextStep +
                 '} else {' +
                   '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
                   '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
@@ -107,7 +102,7 @@ if (Meteor.isClient) {
           '} else if ("'+path.eventType+'" === "click") {' +
             '$("#' + path.eventParam + '").click(function() {' +
               'if (' + isTargetExit + ') {' +
-                'Session.set(\'publishedTrialId\', \'' + nextTrialId + '\');' +
+                nextStep +
               '} else {' +
                 '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
                 '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +

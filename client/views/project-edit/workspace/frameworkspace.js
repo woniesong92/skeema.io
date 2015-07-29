@@ -280,10 +280,13 @@ if (Meteor.isClient) {
       $('.frame-workspace-container').append(elt.html);
     });
 
-    if (Session.get("showChoosingElementView")){
+    if (ProjectEditSession.get("startChoosingElementToClick")){
       Utils.toast("<center>CHOOSE AN ELEMENT TO BE CLICKED</center>", {
         ele: '.frame-workspace-container',
-        type: 'info'
+        type: 'info',
+        align: 'center',
+        offset: {from: 'bottom', amount: 97},
+        width: 400, // (integer, or 'auto')
       });
       $('.element-item')
         .attr('contenteditable', 'false')
