@@ -226,12 +226,14 @@ if (Meteor.isClient) {
   }
 
   Template.FrameWorkSpace.onCreated(function() {
+    
     // this view is only showing for the user to choose
     // an element from the frame. After the user picks
     // one, the view should revert to the past trialView
     Tracker.autorun(function() {
-      var infoForChoosing = Session.get("showChoosingElementView");
-      if (infoForChoosing) {
+      var pathInfo = ProjectEditSession.get("startChoosingElementToClick");
+      if (pathInfo) {
+        debugger;
 
         // collapse sidenav and toolbox
         // FIXME: this should be handled from Toolbar and leftbar
@@ -240,18 +242,16 @@ if (Meteor.isClient) {
         
         var choosingElementDeferred = $.Deferred();
         choosingElementDeferred.then(function (selector) {
+          debugger
 
-          $('.show').removeClass('show').addClass('hide');
-          Meteor.call('updatePathEvent', {
-            pathId: infoForChoosing.pathId,
-            eventType: 'click',
+          ProjectEditSession.set("doneChoosingElementToClick", {
+            pathInfo: pathInfo,
+            eventType: "click",
             eventParam: selector
-          }, function () {
-            Session.set("showChoosingElementView", undefined);
-            Session.set("showFrameWorkspace", undefined);
-            ProjectEditSession.set("trialId", infoForChoosing.trialId);
-            ProjectEditSession.set("currentView", "trialView");
           });
+
+          ProjectEditSession.set("startChoosingElementToClick", undefined);
+          $('.show').removeClass('show').addClass('hide');
 
         }, function (err) {
           // FIXME: handle when deferred is rejected for any reason
@@ -271,8 +271,8 @@ if (Meteor.isClient) {
           }
         });
       }
-    })
-  })
+    });
+  });
 
   Template.FrameWorkSpace.onRendered(function() {
     ProjectEditSession.set("elementId", null);

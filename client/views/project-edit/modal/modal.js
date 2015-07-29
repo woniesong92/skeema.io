@@ -1,40 +1,56 @@
-var isPositiveInteger = function (str) {
-  return /^\d+$/.test(str);
-}
-
-var _onDurationChange = function() {
-  var duration = $.trim($('#duration').val());
-  if (duration.length > 0 && isPositiveInteger(duration)) {
-    $('.create-path-btn').removeClass('disabled');
-  } else {
-    $('.create-path-btn').addClass('disabled');
-  }
-}
-
 if (Meteor.isClient) {
+
+  var isPositiveInteger = function (str) {
+    return /^\d+$/.test(str);
+  }
+
+  var _onDurationChange = function() {
+    var duration = $.trim($('#duration').val());
+    if (duration.length > 0 && isPositiveInteger(duration)) {
+      $('.create-path-btn').removeClass('disabled');
+    } else {
+      $('.create-path-btn').addClass('disabled');
+    }
+  }
+
+  var _addPath = function (pathInfo, eventType, eventParam) {
+    var updatedPathInfo = _.extend(pathInfo, {
+      eventType: eventType,
+      eventParam: eventParam
+    });
+    Meteor.call("addPath", updatedPathInfo, function (err, data) {
+      // FIXME: for some reason, paths are created but not persisted?
+    });
+  }
+
   Template.Modal.onCreated(function() {
     var self = this;
+    this.addPathDeferred = null;
     this.pathInfo = null;
 
     this.autorun(function() {
       var pathInfo = ProjectEditSession.get("pathInfo");
       if (pathInfo) {
         self.pathInfo = pathInfo;
-
-        // FIXME: should it be done as "modal shown" event callback instead?
-        $('.default-option').prop("selected", true);
-        $('.show').removeClass('show');
-
-        // _.each(pathInfo.existingEventTypes, function (eventType) {
-        //   if (eventType) {
-        //     $('#event-picker option[value="'+eventType+'"]')
-        //       .attr('disabled', 'disabled')
-        //       .text(eventType +" - Path exists already");
-        //   }
-        // })
       }
     });
-  })
+
+    Tracker.autorun(function() {
+      var info = ProjectEditSession.get("doneChoosingElementToClick");
+      if (info) {
+        _addPath(info.pathInfo, info.eventType, info.eventParam);
+        ProjectEditSession.set("currentView", TRIAL_VIEW);
+        ProjectEditSession.set("doneChoosingElementToClick", undefined);
+      }
+    });
+  });
+
+  Template.Modal.onRendered(function() {
+    $("#modal").on("shown.bs.modal", function() {
+      $('#modal .default-option').prop("selected", true);
+      $('#modal .show').removeClass('show');
+    });
+  });
 
   Template.Modal.events({
     'change #event-picker': function (e, template) {
@@ -51,7 +67,7 @@ if (Meteor.isClient) {
         $('.time-options').addClass('show');
       } else { // click
         if (pathInfo) {
-          var numElts = Elements.find({frameId: pathInfo.sourceFrame}).count();
+          var numElts = Elements.find({frameId: pathInfo.sourceId}).count();
           if (numElts < 1) {
             $('.click-error-msg').addClass('show');
           } else {
@@ -85,31 +101,30 @@ if (Meteor.isClient) {
 
       if (eventType === 'keypress') {
         eventParam = $.trim($('#key').val());
+        _addPath(pathInfo, eventType, eventParam);
+
       } else if (eventType === 'time') {
         eventParam = $.trim($('#duration').val());
-      } else {
-        // since this is a click event, we have to show
-        // the frame workspace temporarily for him to
-        // choose an element
+        _addPath(pathInfo, eventType, eventParam);
 
-        Session.set("showFrameWorkspace", {
-          sourceFrame: pathInfo.sourceFrame,
-          pathId: pathInfo.pathId
-        });
-
-        eventParam = null;
+      } else if (eventType === 'click') {
+        // We have to show the frame workspace temporarily
+        // to let the user choose an element
+        debugger
+        ProjectEditSession.set("startChoosingElementToClick", pathInfo);
       }
 
-      Meteor.call("updatePathEvent", {
-        pathId: pathInfo.pathId,
-        eventType: eventType,
-        eventParam: eventParam
-      });
+
+      // Meteor.call("updatePathEvent", {
+      //   pathId: pathInfo._id,
+      //   eventType: eventType,
+      //   eventParam: eventParam
+      // });
     },
 
     'click .delete-path-btn': function (e, template) {
       var pathInfo = template.pathInfo;
-      Meteor.call("deletePaths", [pathInfo.pathId]);
+      Meteor.call("deletePaths", [pathInfo._id]);
     }
   });
 }

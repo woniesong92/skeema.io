@@ -34,8 +34,10 @@ if (Meteor.isClient) {
   }
 
   var _addPathFromConnection = function (info, trialId) {
+    var pathId = Random.id();
 
     var path = {
+      _id: pathId,
       projectId: ProjectEditSession.get("projectId"),
       trialId: trialId,
       name: "Path",
@@ -45,19 +47,32 @@ if (Meteor.isClient) {
       eventParam: null
     }
 
-    Meteor.call("addPath", path, function (err, pathId) {
-      if (err) {
-        console.log(err);
-      }
-      var pathInfo = {
-        pathId: pathId,
-        sourceFrame: info.source.id,
-        // existingEventTypes: existingEventTypes
-      }
-      ProjectEditSession.set("pathInfo", pathInfo);
-      info.connection.id = pathId;
-      info.connection.getOverlay("label").setLabel("Path");
-    });
+    // Open the modal to select an event for the path
+    ProjectEditSession.set("pathInfo", path);
+
+    // Make a jsPlumb connection. However, the actual
+    // path hasn't been created yet.
+    info.connection.id = pathId;
+    info.connection.getOverlay("label").setLabel("Path");
+
+
+    // Meteor.call("createPath", path, function (err, pathId) {
+    //   if (err) {
+    //     console.log(err);
+    //   }
+      
+    //   var pathInfo = {
+    //     pathId: pathId,
+    //     sourceFrame: info.source.id,
+    //     // existingEventTypes: existingEventTypes
+    //   }
+
+    //   debugger
+
+    //   ProjectEditSession.set("pathInfo", pathInfo);
+    //   info.connection.id = pathId;
+    //   info.connection.getOverlay("label").setLabel("Path");
+    // });
   }
 
   Template.TrialWorkSpace.onCreated(function() {
@@ -76,27 +91,38 @@ if (Meteor.isClient) {
       doInitializeWorkspace = true;
     });
 
-    // This is another tracker for showing frameworkspace temporarily
-    // HOWON: THIS IS A PLACE WHERE LOCAL REACTIVE VAR MUST BE USED.
+    // User is trying to create a path between two frames when this is run.
+    // Show FrameView so the user can choose an element to click for the path he is creating
     Tracker.autorun(function() {
-
-      // FIXME: usefulInfo contains sourceFrameId and pathId
-      // think of a better name. Also, setting four session
-      // values feels wrong
-      var frameAndPathIds = Session.get("showFrameWorkspace");
-      if (frameAndPathIds) {
-
-        //FIXME
-        Session.set("showChoosingElementView", {
-          trialId: trialId,
-          pathId: frameAndPathIds.pathId,
-          sourceFrame: frameAndPathIds.sourceFrame
-        });
-
-        ProjectEditSession.set("frameId", frameAndPathIds.sourceFrame);
+      var pathInfo = ProjectEditSession.get("startChoosingElementToClick");
+      if (pathInfo) {
+        debugger
+        ProjectEditSession.set("frameId", pathInfo.sourceId);
         ProjectEditSession.set("currentView", FRAME_VIEW);
       }
-    })
+    });
+
+    // This is another tracker for showing frameworkspace temporarily
+    // HOWON: THIS IS A PLACE WHERE LOCAL REACTIVE VAR MUST BE USED.
+    // Tracker.autorun(function() {
+
+    //   // FIXME: usefulInfo contains sourceFrameId and pathId
+    //   // think of a better name. Also, setting four session
+    //   // values feels wrong
+    //   var frameAndPathIds = Session.get("showFrameWorkspace");
+    //   if (frameAndPathIds) {
+
+    //     //FIXME
+    //     Session.set("showChoosingElementView", {
+    //       trialId: trialId,
+    //       pathId: frameAndPathIds.pathId,
+    //       sourceFrame: frameAndPathIds.sourceFrame
+    //     });
+
+    //     ProjectEditSession.set("frameId", frameAndPathIds.sourceFrame);
+    //     ProjectEditSession.set("currentView", FRAME_VIEW);
+    //   }
+    // })
 
     // HOWON: THIS IS A PLACE WHERE LOCAL REACTIVE VAR MUST BE USED.
     // this session comes from Paths.js

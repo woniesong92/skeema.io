@@ -1,9 +1,15 @@
 Paths = new Mongo.Collection("paths");
 
 Meteor.methods({
-
   addPath: function (data) {
     var path = {
+
+      // Manually created _id because I need it
+      // before inserting the doc to DB. If
+      // the user cancels the modal, the path
+      // shouldn't be created
+      "_id": data["_id"],
+      
       "projectId": data["projectId"],
       "trialId": data["trialId"],
       "name": data["name"],
