@@ -234,9 +234,8 @@ if (Meteor.isClient) {
       var pathInfo = ProjectEditSession.get("startChoosingElementToClick");
       if (pathInfo) {
         // collapse sidenav and toolbox
-        // FIXME: this should be handled from Toolbar and leftbar
-        $('.sidenav-container').removeClass("expanded-left").addClass("collasped-left-completely");
-        $('.toolbox-container').removeClass("expanded-right").addClass("collasped-right-completely");
+        ProjectEditSession.set("shouldExpandSideNav", false);
+        ProjectEditSession.set("shouldExpandToolbox", false);
         
         var choosingElementDeferred = $.Deferred();
         choosingElementDeferred.then(function (selector) {

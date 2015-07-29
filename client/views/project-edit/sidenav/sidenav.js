@@ -1,4 +1,12 @@
 if (Meteor.isClient) {
+  var _expandSidenav = function() {
+    $('.sidenav-container').removeClass("collasped-left").addClass("expanded-left");
+  };
+
+  var _collapseSidenav = function() {
+    $('.sidenav-container').removeClass("expanded-left").addClass("collasped-left");
+  }
+
   var makeBlocksSortable = function() {
     this.$('.block-items').sortable({
       cancel: ".add-block, .add-trial",
@@ -29,6 +37,19 @@ if (Meteor.isClient) {
       }
     });
   }
+
+  Template.SideNav.onCreated(function() {
+    this.autorun(function() {
+      var shouldExpandSideNav = ProjectEditSession.get("shouldExpandSideNav");
+      if (shouldExpandSideNav) {
+        _expandSidenav();
+
+        //to prevent undefined session variable from invoking function, use "false"
+      } else if (shouldExpandSideNav === false) {
+        _collapseSidenav();
+      }
+    });
+  })
 
   Template.SideNav.onRendered(function() {
     makeBlocksSortable();
@@ -95,9 +116,9 @@ if (Meteor.isClient) {
 
     "click .project-name i": function (e, template) {
       if ($('.sidenav-container').hasClass("collasped-left")){
-        $('.sidenav-container').removeClass("collasped-left").addClass("expanded-left");
+        _expandSidenav();
       } else {
-        $('.sidenav-container').removeClass("expanded-left").addClass("collasped-left");
+        _collapseSidenav();
       }
     },
 

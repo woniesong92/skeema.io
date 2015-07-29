@@ -99,7 +99,6 @@ if (Meteor.isClient) {
                 '} else {' +
                   '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
                   '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
-                  'debugger;' +
                   '$(".frame-container[data-frameId=\''+ targetId +'\']").trigger("frameActivated");' +
                 '}' +
               '}, parseInt("'+path.eventParam+'"));' +

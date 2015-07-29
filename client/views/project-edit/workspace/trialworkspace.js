@@ -25,12 +25,8 @@ if (Meteor.isClient) {
   }
 
   var _showSidebars = function() {
-    //FIXME: this should be handled by Sidenav and toolbar files like below.
-    //Let Jenny handle it
-    //ProjectEditSession.set("hideToolbar", true)
-    //ProjectEditSession.set("hideSidnav", true)
-    $('.collasped-right-completely').removeClass("collasped-right-completely").addClass("expanded-right");
-    $('.collasped-left-completely').removeClass("collasped-left-completely").addClass("expanded-left");
+    ProjectEditSession.set("shouldExpandToolbox", true);
+    ProjectEditSession.set("shouldExpandSideNav", true);
   }
 
   var _addPathFromConnection = function (info, trialId) {
@@ -54,25 +50,6 @@ if (Meteor.isClient) {
     // path hasn't been created yet.
     info.connection.id = pathId;
     info.connection.getOverlay("label").setLabel("Path");
-
-
-    // Meteor.call("createPath", path, function (err, pathId) {
-    //   if (err) {
-    //     console.log(err);
-    //   }
-      
-    //   var pathInfo = {
-    //     pathId: pathId,
-    //     sourceFrame: info.source.id,
-    //     // existingEventTypes: existingEventTypes
-    //   }
-
-    //   debugger
-
-    //   ProjectEditSession.set("pathInfo", pathInfo);
-    //   info.connection.id = pathId;
-    //   info.connection.getOverlay("label").setLabel("Path");
-    // });
   }
 
   Template.TrialWorkSpace.onCreated(function() {
@@ -96,36 +73,11 @@ if (Meteor.isClient) {
     Tracker.autorun(function() {
       var pathInfo = ProjectEditSession.get("startChoosingElementToClick");
       if (pathInfo) {
-        debugger
         ProjectEditSession.set("frameId", pathInfo.sourceId);
         ProjectEditSession.set("currentView", FRAME_VIEW);
       }
     });
 
-    // This is another tracker for showing frameworkspace temporarily
-    // HOWON: THIS IS A PLACE WHERE LOCAL REACTIVE VAR MUST BE USED.
-    // Tracker.autorun(function() {
-
-    //   // FIXME: usefulInfo contains sourceFrameId and pathId
-    //   // think of a better name. Also, setting four session
-    //   // values feels wrong
-    //   var frameAndPathIds = Session.get("showFrameWorkspace");
-    //   if (frameAndPathIds) {
-
-    //     //FIXME
-    //     Session.set("showChoosingElementView", {
-    //       trialId: trialId,
-    //       pathId: frameAndPathIds.pathId,
-    //       sourceFrame: frameAndPathIds.sourceFrame
-    //     });
-
-    //     ProjectEditSession.set("frameId", frameAndPathIds.sourceFrame);
-    //     ProjectEditSession.set("currentView", FRAME_VIEW);
-    //   }
-    // })
-
-    // HOWON: THIS IS A PLACE WHERE LOCAL REACTIVE VAR MUST BE USED.
-    // this session comes from Paths.js
     Tracker.autorun(function() {
       // FIXME: learn how these trackers actually work and why
       // this is run in the beginning even when the session vars aren't set yet
