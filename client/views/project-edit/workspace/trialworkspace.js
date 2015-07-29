@@ -33,7 +33,8 @@ if (Meteor.isClient) {
     $('.collasped-left-completely').removeClass("collasped-left-completely").addClass("expanded-left");
   }
 
-  var _addPathFromConnection = function (info) {
+  var _addPathFromConnection = function (info, trialId) {
+
     var path = {
       projectId: ProjectEditSession.get("projectId"),
       trialId: trialId,
@@ -55,7 +56,7 @@ if (Meteor.isClient) {
       }
       ProjectEditSession.set("pathInfo", pathInfo);
       info.connection.id = pathId;
-      info.connection.getOverlay("label").setLabel(pathName);
+      info.connection.getOverlay("label").setLabel("Path");
     });
   }
 
@@ -168,7 +169,7 @@ if (Meteor.isClient) {
           //   return path.eventType;
           // });
 
-          _addPathFromConnection(info);
+          _addPathFromConnection(info, trialId);
         });
 
         allFramesReady.set(false);

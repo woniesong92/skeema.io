@@ -1,55 +1,23 @@
 if (Meteor.isClient) {
-
-  Template.TextSettings.helpers({
-    // isMine: function(owner) {
-    //   return owner == Meteor.userId();
-    // }
-  });
-
-
-  Template.TextSettings.rendered = function () {
+  Template.TextSettings.onRendered(function() {
     $('#text-colorpicker').colorpicker({
       displayIndicator: false
     });
-  }
+  });
 
   Template.TextSettings.events({
-    // 'change #element-content': function(e, template) { 
-    //   var newcontent = $('#element-content').val().trim();
-    //   var elementId = Session.get("elementId");
-    //   $('#' + elementId).text(newcontent);
-    // },
     'change.color #text-colorpicker': function(e, template) { 
-      // debugger
       var newcolor = $('#text-colorpicker').val().trim();
-      var elementId = Session.get("elementId");
+      var elementId = ProjectEditSession.get("elementId");
       $('#' + elementId).css('color', newcolor + ' !important');
-
-      // save new html automatically
-      var currentHTML = $('#' + elementId).prop('outerHTML');
-      Meteor.call("setHTML", elementId, currentHTML, function (err){
-        if (err){
-          console.log("saving HTML changes failed for " + elementId);
-          return false;
-          }
-      });
+      saveNewHTML(elementId);
     },
 
     'change #fontsize': function (e, template) { 
       var newsize = $('#fontsize').val().trim();
-      var elementId = Session.get("elementId");
+      var elementId = ProjectEditSession.get("elementId");
       $('#' + elementId).css('font-size', newsize + 'px');
-      
-      // save new html automatically
-      var currentHTML = $('#' + elementId).prop('outerHTML');
-      Meteor.call("setHTML", elementId, currentHTML, function (err){
-        if (err){
-          console.log("saving HTML changes failed for " + elementId);
-          return false;
-          }
-      });
-
+      saveNewHTML(elementId);
     },
-
   });
 }

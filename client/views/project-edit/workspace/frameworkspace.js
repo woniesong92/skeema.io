@@ -308,7 +308,7 @@ if (Meteor.isClient) {
       containment: ".frame-workspace-container",
       scroll: false,
       stop: function (event, ui) {
-        Session.set("elementId", this.id);
+        ProjectEditSession.set("elementId", this.id);
 
         // save new html automatically
         var currentHTML = $('#' + this.id).prop('outerHTML');
@@ -365,7 +365,7 @@ if (Meteor.isClient) {
 
     "click .element-item": function (e, template) {
       var elementId = e.currentTarget.id;
-      Session.set("elementId", elementId);
+      ProjectEditSession.set("elementId", elementId);
     },
 
     "blur .element-item[contenteditable='true']": function (e, template) {

@@ -1,8 +1,5 @@
 if (Meteor.isClient) {
   ProjectEditSession = new ReactiveDict('ProjectEditSession');
-  BLOCK_VIEW = "blockView";
-  TRIAL_VIEW = "trialView";
-  FRAME_VIEW = "frameView";
 
   Template.ProjectEdit.onCreated(function() {
     var projectId = this.data._id;
