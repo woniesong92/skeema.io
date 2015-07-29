@@ -46,9 +46,10 @@ if (Meteor.isClient) {
   });
 
   Template.Modal.onRendered(function() {
-    $("#modal").on("shown.bs.modal", function() {
+    $("#modal").on("show.bs.modal", function() {
       $('#modal .default-option').prop("selected", true);
       $('#modal .show').removeClass('show');
+      ProjectEditSession.set("pathInfo", null);
     });
   });
 
@@ -110,16 +111,8 @@ if (Meteor.isClient) {
       } else if (eventType === 'click') {
         // We have to show the frame workspace temporarily
         // to let the user choose an element
-        debugger
         ProjectEditSession.set("startChoosingElementToClick", pathInfo);
       }
-
-
-      // Meteor.call("updatePathEvent", {
-      //   pathId: pathInfo._id,
-      //   eventType: eventType,
-      //   eventParam: eventParam
-      // });
     },
 
     'click .delete-path-btn': function (e, template) {

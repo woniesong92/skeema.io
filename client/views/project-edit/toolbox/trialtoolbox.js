@@ -1,10 +1,5 @@
 if (Meteor.isClient) {
   Template.TrialToolBox.onRendered(function() {
-    // To prevent the modal to open up when it shouldn't,
-    // invalidate the pathInfo Session
-    // THIS FUCKING SUCKS
-    ProjectEditSession.set("pathInfo", null);
-
     this.autorun(function() {
       var pathInfo = ProjectEditSession.get("pathInfo");
       if (pathInfo) {
