@@ -1,13 +1,5 @@
 if (Meteor.isClient) {
-
-  Template.ButtonSettings.helpers({
-    // isMine: function(owner) {
-    //   return owner == Meteor.userId();
-    // }
-  });
-
-  Template.ButtonSettings.rendered = function () {
-
+  Template.ButtonSettings.onRendered(function() {
     $('#button-text-colorpicker').colorpicker({
       displayIndicator: false
     });
@@ -15,65 +7,33 @@ if (Meteor.isClient) {
     $('#button-bg-colorpicker').colorpicker({
       displayIndicator: false
     });
-  }
+  });
 
   Template.ButtonSettings.events({
-    // 'change #element-content': function(e, template) { 
-    //   var newcontent = $('#element-content').val().trim();
-    //   var elementId = Session.get("elementId");
-    //   $('#' + elementId).text(newcontent);
-    // },
     'change.color #button-text-colorpicker': function(e, template) { 
-      // debugger
       var newcolor = $('#button-text-colorpicker').val().trim();
-      var elementId = Session.get("elementId");
+      var elementId = ProjectEditSession.get("elementId");
       $('#' + elementId).css('color', newcolor + ' !important');
-
-      // save new html automatically
-      var currentHTML = $('#' + elementId).prop('outerHTML');
-      Meteor.call("setHTML", elementId, currentHTML, function (err){
-        if (err){
-          console.log("saving HTML changes failed for " + elementId);
-          return false;
-          }
-      });
+      saveNewHTML(elementId);
     },
 
     'change.color #button-bg-colorpicker': function(e, template) { 
       // debugger
       var newcolor = $('#button-bg-colorpicker').val().trim();
-      var elementId = Session.get("elementId");
+      var elementId = ProjectEditSession.get("elementId");
       $('#' + elementId).css('background-color', newcolor + ' !important');
-
-      // save new html automatically
-      var currentHTML = $('#' + elementId).prop('outerHTML');
-      Meteor.call("setHTML", elementId, currentHTML, function (err){
-        if (err){
-          console.log("saving HTML changes failed for " + elementId);
-          return false;
-          }
-      });
+      saveNewHTML(elementId);
     },
 
-    'change #button-fontsize': function (e, template) { 
-
+    'change #button-fontsize': function (e, template) {
       //FIXME: NEED TO VERTICAL ALIGN BUTTON TEXT
       var newsize = $('#button-fontsize').val().trim();
       var newheight = parseFloat(newsize) * 2;
       var newlineheight = parseFloat(newsize) * 1.5;
-      var elementId = Session.get("elementId");
+      var elementId = ProjectEditSession.get("elementId");
       $('#' + elementId).css('font-size', newsize + 'px')
         .css('height', newheight + 'px').css('line-height', newlineheight + 'px');
-
-      // save new html automatically
-      var currentHTML = $('#' + elementId).prop('outerHTML');
-      Meteor.call("setHTML", elementId, currentHTML, function (err){
-        if (err){
-          console.log("saving HTML changes failed for " + elementId);
-          return false;
-          }
-      });
+      saveNewHTML(elementId);
     },
-
   });
 }

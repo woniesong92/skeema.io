@@ -1,4 +1,12 @@
 if (Meteor.isClient) {
+  var _expandSidenav = function() {
+    $('.sidenav-container').removeClass("collasped-left").addClass("expanded-left");
+  };
+
+  var _collapseSidenav = function() {
+    $('.sidenav-container').removeClass("expanded-left").addClass("collasped-left");
+  }
+
   var makeBlocksSortable = function() {
     this.$('.block-items').sortable({
       cancel: ".add-block, .add-trial",
@@ -29,6 +37,19 @@ if (Meteor.isClient) {
       }
     });
   }
+
+  Template.SideNav.onCreated(function() {
+    this.autorun(function() {
+      var shouldExpandSideNav = ProjectEditSession.get("shouldExpandSideNav");
+      if (shouldExpandSideNav) {
+        _expandSidenav();
+
+        //to prevent undefined session variable from invoking function, use "false"
+      } else if (shouldExpandSideNav === false) {
+        _collapseSidenav();
+      }
+    });
+  })
 
   Template.SideNav.onRendered(function() {
     makeBlocksSortable();
@@ -61,7 +82,7 @@ if (Meteor.isClient) {
     },
 
     // blockName: function (){
-    //   var blockId = Session.get('blockId');
+    //   var blockId = ProjectEditSession.get('blockId');
     //   if (blockId){
     //     return Blocks.findOne({_id: blockId}).name;
     //   }
@@ -69,7 +90,7 @@ if (Meteor.isClient) {
     // },
 
     // trialName: function (){
-    //   var trialId = Session.get('trialId');
+    //   var trialId = ProjectEditSession.get('trialId');
     //   if (trialId){
     //     return Trials.findOne({_id: trialId}).name;
     //   }
@@ -77,7 +98,7 @@ if (Meteor.isClient) {
     // },
 
     // frameName: function (){
-    //   var frameId = Session.get('frameId');
+    //   var frameId = ProjectEditSession.get('frameId');
     //   if (frameId){
     //     return Frames.findOne({_id: frameId}).name;
     //   }
@@ -95,29 +116,29 @@ if (Meteor.isClient) {
 
     "click .project-name i": function (e, template) {
       if ($('.sidenav-container').hasClass("collasped-left")){
-        $('.sidenav-container').removeClass("collasped-left").addClass("expanded-left");
+        _expandSidenav();
       } else {
-        $('.sidenav-container').removeClass("expanded-left").addClass("collasped-left");
+        _collapseSidenav();
       }
     },
 
     "click .block-item": function (e, template) {
       $(e.currentTarget).toggleClass('is-open');
-      Session.set("currentView", "blockView");
-      Session.set("blockId", this._id);
-      Session.set("frameId", null);
-      Session.set("trialId", null);
+      ProjectEditSession.set("currentView", "blockView");
+      ProjectEditSession.set("blockId", this._id);
+      ProjectEditSession.set("frameId", null);
+      ProjectEditSession.set("trialId", null);
     },
 
     "click .trial-item": function (e, template) {
       e.stopPropagation();
-      Session.set("currentView", "trialView");
-      Session.set("trialId", this._id);
+      ProjectEditSession.set("currentView", "trialView");
+      ProjectEditSession.set("trialId", this._id);
       var trial = Trials.findOne({_id: this._id});
       if (trial) {
-        Session.set("blockId", trial.blockId);
+        ProjectEditSession.set("blockId", trial.blockId);
       }
-      Session.set("frameId", null);
+      ProjectEditSession.set("frameId", null);
     },
 
     "click .add-block": function (e, template) {
@@ -163,19 +184,27 @@ if (Meteor.isClient) {
 
     "click .trial-delete-link": function (e, template) {
       e.stopPropagation();
+      var numTrials = Trials.find().count();
+      if (numTrials <= 1) {
+        Utils.toast("You cannot delete the only trial", {
+          type: "danger"
+        });
+        return false;
+      }
+
       var trialId = this._id;
       Meteor.call("deleteTrials", [trialId]);
     },
 
     "click .block-breadcrumb": function (e, template) {
-      Session.set("currentView", "blockView");
-      Session.set("trialId", null);
-      Session.set("frameId", null);
+      ProjectEditSession.set("currentView", "blockView");
+      ProjectEditSession.set("trialId", null);
+      ProjectEditSession.set("frameId", null);
     },
 
     "click .trial-breadcrumb": function (e, template) {
-      Session.set("currentView", "trialView");
-      Session.set("frameId", null);
+      ProjectEditSession.set("currentView", "trialView");
+      ProjectEditSession.set("frameId", null);
     },
   });
 }

@@ -1,14 +1,15 @@
 if (Meteor.isClient) {
-
   Template.WorkSpace.helpers({
-    // projects: function() {
-    //   return UI.getData();
-    // }
+
   });
 
-  Template.WorkSpace.rendered = function () {
+  Template.WorkSpace.onCreated(function() {
     
-  }
+  });
+
+  Template.WorkSpace.onRendered(function() {
+
+  });
 
   Template.WorkSpace.events({
     

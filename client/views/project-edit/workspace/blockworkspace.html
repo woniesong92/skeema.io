@@ -1,15 +1,15 @@
 <template name="BlockWorkSpace">
 	<div class="block-workspace-container">
     <div class="row">
-    {{#each trials}}
-      <div class='col-sm-4 trial-preview-item-container'>
-        <div class="trial-preview-item cyan lighten-5">
-          <div class='trial-name'>{{name}}</div>
-          <div class='trial-frames'><strong>{{numFrames _id}}</strong> frames</div>
-          <div class='trial-occurences'><strong>{{occurences}}</strong> occurences</div>
+      {{#each trials}}
+        <div class='col-sm-4 trial-preview-item-container'>
+          <div class="trial-preview-item cyan lighten-5">
+            <div class='trial-name'>{{name}}</div>
+            <div class='trial-frames'><strong>{{numFrames _id}}</strong> frames</div>
+            <div class='trial-occurences'><strong>{{occurences}}</strong> occurences</div>
+          </div>
         </div>
-      </div>
-    {{/each}}
+      {{/each}}
     </div>
 	</div>
 </template>

@@ -1,21 +1,31 @@
 if (Meteor.isClient) {
+  var _expandToolbox = function() {
+    $('.toolbox-container').removeClass("collasped-right").addClass("expanded-right");
+  };
 
-  Template.ToolBox.helpers({
-    // isMine: function(owner) {
-    //   return owner == Meteor.userId();
-    // }
-  });
+  var _collapseToolbox = function() {
+    $('.toolbox-container').removeClass("expanded-right").addClass("collasped-right");
+  };
 
-  Template.ToolBox.rendered = function () {
-    
-  }
+  Template.ToolBox.onCreated(function() {
+    this.autorun(function() {
+      var shouldExpandToolbox = ProjectEditSession.get("shouldExpandToolbox");
+      if (shouldExpandToolbox) {
+        _expandToolbox();
+
+        //to prevent undefined session variable from invoking function, use "false"
+      } else if (shouldExpandToolbox === false) {
+        _collapseToolbox();
+      }
+    });
+  })
 
   Template.ToolBox.events({
     "click .toolbox-tab": function (e, template) {
       if ($('.toolbox-container').hasClass("collasped-right")){
-        $('.toolbox-container').removeClass("collasped-right").addClass("expanded-right");
+        _expandToolbox();
       } else {
-        $('.toolbox-container').removeClass("expanded-right").addClass("collasped-right");
+        _collapseToolbox();
       }
     },
   });

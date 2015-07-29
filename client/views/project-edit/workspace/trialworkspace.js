@@ -1,121 +1,91 @@
 if (Meteor.isClient) {
+  var allFramesReady = new ReactiveVar;
+  var jspInstance;
+  var doInitializeWorkspace;
 
-  // FIXME: find a better place for all these settings for jsPlumb
-  var instanceSetting = {
-    Endpoint: ["Dot", {radius: 2}],
-    HoverPaintStyle: {strokeStyle: "#1e8151", lineWidth: 2 },
-    ConnectionOverlays: [
-      [ "Arrow", {
-        location: 1,
-        id: "arrow",
-        length: 14,
-        foldback: 0.8
-      } ],
-      [ "Label", {
-        // label: "FOO",
-        id: "label",
-        cssClass: "aLabel"
-      }]
-    ],
-    Container: "frame-items-container"
-  };
-  var commonStrokeStyle = {
-    strokeStyle: "#5c96bc",
-    lineWidth: 2,
-    outlineColor: "transparent",
-    outlineWidth: 4
-  };
-  var commonAnchor = "Continuous";
-  var commonConnectorStyle = [ "StateMachine", { curviness: 20 } ];
-  var commonSrcSettings = {
-    filter: ".ep",
-    anchor: commonAnchor,
-    connector: commonConnectorStyle,
-    connectorStyle: commonStrokeStyle,
-    maxConnections: 10,
-    onMaxConnections: function (info, e) {
-      alert("Maximum connections (" + info.maxConnections + ") reached");
-    }
-  }
-  var commonTargetSettings = {
-    dropOptions: { hoverClass: "dragHover" },
-    anchor: commonAnchor,
-    allowLoopback: true
-  }
-
-  function drawPaths (instance, trialId) {
+  var drawPaths = function (instance, trialId) {
     var paths = Paths.find({trialId: trialId}).fetch();
+
     _.each(paths, function (path) {
       var con = instance.connect({
         source: path.sourceId,
         target: path.targetId
       }, {
-        paintStyle: commonStrokeStyle,
-        anchor: commonAnchor,
-        connector: commonConnectorStyle
+        paintStyle: jsPlumbSettings.commonStrokeStyle,
+        anchor: jsPlumbSettings.commonAnchor,
+        connector: jsPlumbSettings.commonConnectorStyle
       });
-
       // connection object is tied to Mongo's object by sharing the same id
       con.id = path._id;
       con.getOverlay("label").setLabel(path.name);
     });
 
-
-    // FIXME: a hacky way to solve a problem. Without this, when frames
-    // are moved and not saved, the paths are drawn in reference to the old
-    // frame positions. Maybe jsPlumb saves frames' position states separately?
+    // FIXME: might be a better way to do this
     instance.repaintEverything();
+  }
+
+  var _showSidebars = function() {
+    ProjectEditSession.set("shouldExpandToolbox", true);
+    ProjectEditSession.set("shouldExpandSideNav", true);
+  }
+
+  var _addPathFromConnection = function (info, trialId) {
+    var pathId = Random.id();
+
+    var path = {
+      _id: pathId,
+      projectId: ProjectEditSession.get("projectId"),
+      trialId: trialId,
+      name: "Path",
+      sourceId: info.sourceId,
+      targetId: info.targetId,
+      eventType: null,
+      eventParam: null
+    }
+
+    // Open the modal to select an event for the path
+    ProjectEditSession.set("pathInfo", path);
+
+    // Make a jsPlumb connection. However, the actual
+    // path hasn't been created yet.
+    info.connection.id = pathId;
+    info.connection.getOverlay("label").setLabel("Path");
   }
 
   Template.TrialWorkSpace.onCreated(function() {
     var self = this;
+    var trialId = ProjectEditSession.get("trialId");
+    allFramesReady.set(false);
 
-    // this is intentioally out of autorun scope
-    var trialId = Session.get("trialId");
-    
     jsPlumb.ready(function () {
-      self.jspInstance = jsPlumb.getInstance(instanceSetting);
+      jspInstance = jsPlumb.getInstance(jsPlumbSettings.instanceSetting);
     });
 
-    // TODO: add comments
-    // HOWON: THESE ARE RUN FIRST WHEN THE TEMPLATE IS CREATED
-    // ANY WAY TO AVOID IT?
-    this.trialChanged = Tracker.autorun(function() {
-      var trialId = Session.get("trialId");
-      self.mustInitialize = true;
+    Tracker.autorun(function() {
+      var trialId = ProjectEditSession.get("trialId");
+
+      // initialize workspace
+      doInitializeWorkspace = true;
     });
 
-    // This is another tracker for showing frameworkspace temporarily
-    this.chooseElementToClick = Tracker.autorun(function() {
-
-      // FIXME: usefulInfo contains sourceFrameId and pathId
-      // think of a better name. Also, setting four session
-      // values feels wrong
-      var frameAndPathIds = Session.get("showFrameWorkspace");
-
-      if (frameAndPathIds) {
-        Session.set("showChoosingElementView", {
-          trialId: trialId,
-          pathId: frameAndPathIds.pathId,
-          sourceFrame: frameAndPathIds.sourceFrame
-        });
-        Session.set("frameId", frameAndPathIds.sourceFrame);
-        Session.set("currentView", "frameView");
+    // User is trying to create a path between two frames when this is run.
+    // Show FrameView so the user can choose an element to click for the path he is creating
+    Tracker.autorun(function() {
+      var pathInfo = ProjectEditSession.get("startChoosingElementToClick");
+      if (pathInfo) {
+        ProjectEditSession.set("frameId", pathInfo.sourceId);
+        ProjectEditSession.set("currentView", FRAME_VIEW);
       }
-      // Blaze.render
-    })
+    });
 
-    // this session comes from Paths.js
-    this.pathDeleted = Tracker.autorun(function() {
-
+    Tracker.autorun(function() {
       // FIXME: learn how these trackers actually work and why
       // this is run in the beginning even when the session vars aren't set yet
-      // debugger
       var deletedPathIds = Session.get("deletedPathIds");
       _.each(deletedPathIds, function (deletedPathId) {
-        self.jspInstance.select().each(function (con) {
+        jspInstance.select().each(function (con) {
           if (con.id === deletedPathId) {
-            self.jspInstance.detach(con);
+            jspInstance.detach(con);
           }
         });
       });
@@ -124,20 +94,14 @@ if (Meteor.isClient) {
 
   // TODO: add comments
   Template.TrialWorkSpace.onRendered(function() {
-
-    Session.set("pathId", null);
-
-    $('.collasped-right-completely').removeClass("collasped-right-completely").addClass("expanded-right");
-    $('.collasped-left-completely').removeClass("collasped-left-completely").addClass("expanded-left");
-
     var self = this;
+    ProjectEditSession.set("pathId", null);
+
+    _showSidebars();
 
     this.autorun(function() {
-      var allFramesReady = Session.get("allFramesReady");
-      // debugger
-
-      if (allFramesReady) {
-        var jspInstance = self.jspInstance;
+      var areAllFramesReady = allFramesReady.get();
+      if (areAllFramesReady) {
         var $frames = $('.frame-preview-item');
         
         // delete previous elements and unbind events
@@ -147,7 +111,6 @@ if (Meteor.isClient) {
         jspInstance.draggable($frames, {
           stop: function (e, ui) {
             var frameId = ui.helper[0].id;
-            // var position = $('#' + ui.id).position();
 
             //FIXME: THIS PROBABLY NEEDS TO BE IN %, not pixels
             var position = ui.position;
@@ -157,8 +120,8 @@ if (Meteor.isClient) {
 
         // make frames sources and sinks so they can be connected
         jspInstance.batch(function () {
-          jspInstance.makeSource($frames, commonSrcSettings);
-          jspInstance.makeTarget($frames, commonTargetSettings);
+          jspInstance.makeSource($frames, jsPlumbSettings.commonSrcSettings);
+          jspInstance.makeTarget($frames, jsPlumbSettings.commonTargetSettings);
         });
 
         // draw existing paths
@@ -166,9 +129,7 @@ if (Meteor.isClient) {
 
         // bind event: click a connection to detach it
         jspInstance.bind("click", function (con) {
-          // jspInstance.detach(con);
-          // Meteor.call("deletePaths", [con.id]);
-          Session.set("pathId", con.id);
+          ProjectEditSession.set("pathId", con.id);
         });
 
         // bind event: when a new connection is added, add it to DB too
@@ -184,64 +145,28 @@ if (Meteor.isClient) {
           //   return path.eventType;
           // });
 
-          var numPaths = Paths.find({trialId: trialId}).count();
-          var pathName = "Path " + numPaths;
-          var path = {
-            projectId: Session.get("projectId"),
-            trialId: trialId,
-            name: pathName,
-            sourceId: info.sourceId,
-            targetId: info.targetId,
-            eventType: null,
-            eventParam: null
-          }
-
-          Meteor.call("addPath", path, function (err, pathId) {
-            if (err) {
-              console.log(err);
-            }
-            var pathInfo = {
-              pathId: pathId,
-              sourceFrame: info.source.id,
-              // existingEventTypes: existingEventTypes
-            }
-            Session.set("pathInfo", pathInfo);
-            info.connection.id = pathId;
-            info.connection.getOverlay("label").setLabel(pathName);
-          });
+          _addPathFromConnection(info, trialId);
         });
 
-        Session.set("allFramesReady", false);
-        self.mustInitialize = false;
+        allFramesReady.set(false);
+        doInitializeWorkspace = false;
       }
     });
   });
 
   Template.TrialWorkSpace.events({
     "click .frame-edit-btn": function (e, template) {
-      Session.set("currentView", "frameView");
-      Session.set("frameId", this._id);
+      ProjectEditSession.set("currentView", FRAME_VIEW);
+      ProjectEditSession.set("frameId", this._id);
     },
+
     "click .frame-remove-btn": function (e, template) {
-      var trialId = Session.get("trialId");
+      var trialId = ProjectEditSession.get("trialId");
       var trial = Trials.findOne({_id: trialId});
-      // var numFrames = Frames.find({trialId: trialId}).count();
       var frameId = this._id;
 
-      // if there are only start and exit frames or this is a start frame,
-      // you can't remove this frame
       if (trial.startFrameId === frameId) {
-        var errMessage = "You cannot delete a start frame."
-        $.bootstrapGrowl(errMessage, {
-          ele: '.toast-container', // which element to append to
-          type: 'danger', // (null, 'info', 'danger', 'success')
-          offset: {from: 'top', amount: 97}, // 'top', or 'bottom'
-          align: 'right', // ('left', 'right', or 'center')
-          width: 220, // (integer, or 'auto')
-          delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
-          allow_dismiss: true, // If true then will display a cross to close the popup.
-          stackup_spacing: 10 // spacing between consecutively stacked growls.
-        });
+        Utils.toast("You cannot delete a start frame.");
         return false;
       }
 
@@ -250,26 +175,15 @@ if (Meteor.isClient) {
           console.log("Deleting frame "+frameId+" failed");
           return false;
         }
-        // Utils.toast('Removed successfully', 2000);
         
-        $.bootstrapGrowl("REMOVED SUCCESSFULLY", {
-            ele: '.toast-container', // which element to append to
-            type: 'success', // (null, 'info', 'danger', 'success')
-            offset: {from: 'top', amount: 97}, // 'top', or 'bottom'
-            align: 'right', // ('left', 'right', or 'center')
-            width: 220, // (integer, or 'auto')
-            delay: 3000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
-            allow_dismiss: true, // If true then will display a cross to close the popup.
-            stackup_spacing: 10 // spacing between consecutively stacked growls.
-        });
+        Utils.toast("REMOVED SUCCESSFULLY");
       });
     },
-
   });
 
   Template.TrialWorkSpace.helpers({
     frames: function() {
-      var trialId = Session.get('trialId');
+      var trialId = ProjectEditSession.get('trialId');
       Template.instance().trialId = trialId;
       return Frames.find({trialId: trialId});
     },
@@ -277,18 +191,23 @@ if (Meteor.isClient) {
 
   Template.FrameItem.helpers({
     isStart: function() {
-      var trialId = Session.get('trialId');
+      var trialId = ProjectEditSession.get('trialId');
+      var trial = Trials.findOne({_id: trialId});
+      if (!trial) {
+        console.log("ERR: startFrame of null");
+        return false;
+      }
+
       if (Trials.findOne({_id: trialId}).startFrameId == this._id) {
-        return "startFrame";
+        return "startFrame"; // ???
       }
       return "";
     },
-
   });
 
   Template.FrameItem.onRendered(function() {
+    // FIXME: decide what to do to position frame items
     // position the frame item
-
     var $frame = this.$('.frame-preview-item');
     var position = Frames.findOne($frame.attr('id')).position;
     var frameIndex = this.data.index;
@@ -321,25 +240,25 @@ if (Meteor.isClient) {
       });
     }
 
-    // All frames are rendered for the first time
-    if (isLastFrame && this.parent().mustInitialize) {
-      Session.set("allFramesReady", true);
+    // All frames are rendered for the first time so
+    // the workspace should be initialized
+    if (isLastFrame && doInitializeWorkspace) {
+      allFramesReady.set(true);
 
     // A new frame has been added and rendered for the first time
     } else if (isLastFrame) {
-      var jspInstance = this.parent().jspInstance;
       jspInstance.draggable($frame, {
-          stop: function (e, ui) {
-            var frameId = ui.helper[0].id;
-            // var position = $('#' + ui.id).position();
+        stop: function (e, ui) {
+          var frameId = ui.helper[0].id;
 
-            //FIXME: THIS PROBABLY NEEDS TO BE IN %, not pixels
-            var position = ui.position;
-            Meteor.call("addFramePosition", frameId, position);
-          }
-        });
-      jspInstance.makeSource($frame, commonSrcSettings);
-      jspInstance.makeTarget($frame, commonTargetSettings);
+          //FIXME: THIS PROBABLY NEEDS TO BE IN %, not pixels
+          var position = ui.position;
+          Meteor.call("addFramePosition", frameId, position);
+        }
+      });
+
+      jspInstance.makeSource($frame, jsPlumbSettings.commonSrcSettings);
+      jspInstance.makeTarget($frame, jsPlumbSettings.commonTargetSettings);
     }
   });
 }

@@ -1,29 +1,51 @@
 if (Meteor.isClient) {
-  Template.ProjectEdit.onRendered(function() {
-    Session.set("currentView", "trialView");
+  ProjectEditSession = new ReactiveDict('ProjectEditSession');
+
+  Template.ProjectEdit.onCreated(function() {
     var projectId = this.data._id;
+    
     var firstBlock = Blocks.findOne({
       projectId: projectId,
       index: 0
     });
+
+    // Fail fast: debugging purpose
+    if (!(firstBlock)) {
+      console.log("ERR: firstBlock doesn't exist");
+      return false;
+    }
 
     var firstTrial = Trials.findOne({
       projectId: projectId,
       blockId: firstBlock._id,
       index: 0
     });
-    Session.set("projectId", projectId);
-    Session.set("blockId", firstBlock._id);
-    Session.set("trialId", firstTrial._id);
-    Session.set("frameId", null);
-    Session.set("pathId", null);
-    Session.set("elementId", null);
+
+    // Fail fast: debugging purpose
+    if (!(firstTrial)) {
+      console.log("ERR: firstTrial doesn't exist");
+      return false;
+    }
+
+    // List of all reactive vars used in this page
+    ProjectEditSession.set("projectId", projectId);
+    ProjectEditSession.set("blockId", firstBlock._id);
+    ProjectEditSession.set("trialId", firstTrial._id);
+    ProjectEditSession.set("frameId", undefined);
+    ProjectEditSession.set("pathId", undefined);
+    ProjectEditSession.set("elementId", undefined);
+    ProjectEditSession.set("currentView", TRIAL_VIEW);
+    ProjectEditSession.set("addText", undefined);
+    ProjectEditSession.set("addButton", undefined);
+    ProjectEditSession.set("addImage", undefined);
+    ProjectEditSession.set("shouldExpandToolbox", undefined);
+    ProjectEditSession.set("shouldExpandSideNav", undefined);
   });
 
   Template.ProjectEdit.helpers({
     project: function() {
       return this;
-    },
+    }
   });
 
   Template.ProjectPanel.events({
