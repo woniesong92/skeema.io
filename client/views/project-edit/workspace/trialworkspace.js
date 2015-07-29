@@ -94,12 +94,10 @@ if (Meteor.isClient) {
 
   // TODO: add comments
   Template.TrialWorkSpace.onRendered(function() {
+    var self = this;
     ProjectEditSession.set("pathId", null);
 
-    // FIXME: this should belong to SideNav and Toolbar
     _showSidebars();
-
-    var self = this;
 
     this.autorun(function() {
       var areAllFramesReady = allFramesReady.get();

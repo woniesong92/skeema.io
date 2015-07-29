@@ -19,7 +19,7 @@ if (Meteor.isClient) {
       eventParam: eventParam
     });
     Meteor.call("addPath", updatedPathInfo, function (err, data) {
-      // FIXME: for some reason, paths are created but not persisted?
+      console.log("ERR: path couldn't be added", err);
     });
   }
 

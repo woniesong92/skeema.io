@@ -9,9 +9,6 @@ Meteor.methods({
 
       // "normal" or "exit"
       "type": data["type"],
-      // User can place frame4 before frame3, so we need
-      // an index field
-      // FIXME: not sure how to deal with images yet
       "images": null,
       "createdAt": Date.now(),
       "position": null,

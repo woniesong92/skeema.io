@@ -10,9 +10,6 @@ Meteor.methods({
       "projectId": projectId,
       "blockId": blockId,
 
-      // NOT SURE WE NEED THIS
-      // "nextTrialId": null,
-
       "name": "New Trial",
 
       // starting frame
@@ -23,9 +20,6 @@ Meteor.methods({
 
       // number of times shown within its block
       "occurences": 1,
-
-      // FIXME: not sure if paths should be a collection
-      "paths": null,
 
       // Checkbox for save response
       "doSaveResponse": true,
@@ -45,8 +39,8 @@ Meteor.methods({
         return;
       }
 
-      //FIXME: WHAT TO DO WITH INDEX?
-       Meteor.call("addFrame", {
+      //FIXME: what should be the index of an EXIT frame?
+      Meteor.call("addFrame", {
         projectId: projectId,
         trialId: trialId,
         name: "Exit",
@@ -54,7 +48,7 @@ Meteor.methods({
         index: -1
       });
 
-       Meteor.call("addFrame", {
+      Meteor.call("addFrame", {
         projectId: projectId,
         trialId: trialId,
         name: "New Frame",
