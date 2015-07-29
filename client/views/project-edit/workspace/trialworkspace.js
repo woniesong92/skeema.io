@@ -88,10 +88,9 @@ if (Meteor.isClient) {
     $('.collasped-left-completely').removeClass("collasped-left-completely").addClass("expanded-left");
 
     var self = this;
-    
+
     this.autorun(function() {
-      var allFramesReady = self.allFramesReady.get();
-      if (allFramesReady) {
+      if (self.allFramesReady.get()) {
         var jspInstance = self.jspInstance;
         var $frames = $('.frame-preview-item');
         
@@ -165,7 +164,7 @@ if (Meteor.isClient) {
           });
         });
 
-        allFramesReady.set("allFramesReady", false);
+        self.allFramesReady.set("allFramesReady", false);
         self.mustInitialize = false;
       }
     });
@@ -238,7 +237,6 @@ if (Meteor.isClient) {
 
   Template.FrameItem.onRendered(function() {
     // position the frame item
-
     var $frame = this.$('.frame-preview-item');
     var position = Frames.findOne($frame.attr('id')).position;
     var frameIndex = this.data.index;
@@ -273,7 +271,8 @@ if (Meteor.isClient) {
 
     // All frames are rendered for the first time
     if (isLastFrame && this.parent().mustInitialize) {
-      Session.set("allFramesReady", true);
+      debugger
+      this.get('allFramesReady').set(true);
 
     // A new frame has been added and rendered for the first time
     } else if (isLastFrame) {

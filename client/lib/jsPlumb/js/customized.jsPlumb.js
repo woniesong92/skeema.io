@@ -20,7 +20,7 @@ if (Meteor.isClient) {
         cssClass: "aLabel"
       }]
     ],
-    Container: "frame-items-container"
+    Container: ".frame-items-container"
   };
   var commonAnchor = "Continuous";
   var commonStrokeStyle = {

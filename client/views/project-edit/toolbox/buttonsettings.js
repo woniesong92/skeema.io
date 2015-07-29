@@ -24,7 +24,6 @@ if (Meteor.isClient) {
     //   $('#' + elementId).text(newcontent);
     // },
     'change.color #button-text-colorpicker': function(e, template) { 
-      // debugger
       var newcolor = $('#button-text-colorpicker').val().trim();
       var elementId = Session.get("elementId");
       $('#' + elementId).css('color', newcolor + ' !important');
@@ -55,8 +54,7 @@ if (Meteor.isClient) {
       });
     },
 
-    'change #button-fontsize': function (e, template) { 
-
+    'change #button-fontsize': function (e, template) {
       //FIXME: NEED TO VERTICAL ALIGN BUTTON TEXT
       var newsize = $('#button-fontsize').val().trim();
       var newheight = parseFloat(newsize) * 2;
