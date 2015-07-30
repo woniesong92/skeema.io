@@ -12,9 +12,9 @@
       <li class="{{#if isFrameView}}active{{/if}} frame-breadcrumb">{{frame.name}}</li>
     </ol>
   </div>
-  <div class='block-items panel-group'>
+  <ul class='block-items panel-group'>
     {{#each blocks}}
-      <div class="block-item panel panel-default">
+      <li class="block-item panel panel-default">
         <div class="panel-heading">
           <i class="fa fa-fw fa-folder"></i>
           <i class="fa fa-fw fa-folder-open"></i>
@@ -40,8 +40,8 @@
           <!-- not using an icon looks better IMO -->
           <!-- <i class="fa fa-plus fa-fw"></i> -->
           
-      </div>
+      </li>
     {{/each}}
     <a class="add-block btn btn-default">+ ADD BLOCK</a>
-  </div>
+  </ul>
 </template>

@@ -206,7 +206,6 @@ if (Meteor.isClient) {
         });
         return false;
       }
-      debugger
       var trialId = this._id;
       Meteor.call("deleteTrials", [trialId], function(err){
         if (err) {
