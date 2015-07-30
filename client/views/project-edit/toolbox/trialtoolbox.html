@@ -6,7 +6,7 @@
 <template name="TrialSettings">
   <div class="container trial-states-saving-row grey darken-2 white-text">
     <div class="row">
-      <div class="col-xs-12">
+      <div class="col-xs-12 trial-name-container">
           <label for="trialname">TRIAL NAME</label>
           <input value="{{ trial.name }}" id="trialname" type="text">
       </div>
@@ -34,12 +34,16 @@
       <input value="{{ trial.occurences }}" id="occurences" type="number" step="1" min="1">
     </div>
 
-    <div clas="row">
-      <div class="btn-container toolbox-btn-container">
-        <button class="brown lighten-3 light-brown-btn white-text btn make-trial-duplicate toolbox-btn">
-          Duplicate Trial
-        </button>
-      </div>
+    <div class="btn-container toolbox-btn-container">
+      <button class="brown lighten-3 light-brown-btn white-text btn make-trial-duplicate toolbox-btn">
+        Duplicate Trial
+      </button>
+    </div>
+
+    <div class="btn-container toolbox-btn-container">
+      <button class="white-text btn make-frame-duplicate toolbox-btn">
+        Duplicate Frame
+      </button>
     </div>
 
     <div class="btn-container toolbox-btn-container">
