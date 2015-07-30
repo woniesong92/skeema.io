@@ -253,7 +253,7 @@ if (Meteor.isClient) {
         });
 
         // dynamically register a click event
-        $('body').one("click", function (e) {
+        $('body').one("click", '.element-item', function (e) {
           var selector = e.target.id;
 
           // FIXME: the user should only choose valid elements
