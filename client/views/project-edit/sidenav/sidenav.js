@@ -180,6 +180,11 @@ if (Meteor.isClient) {
       });
     },
 
+    "click li.trial-item": function (e, template) {
+      $('.active-background').removeClass('active-background');
+      $(e.currentTarget).addClass("active-background");
+    },
+
     "click .trial-edit-link": function (e, template) {
       e.stopPropagation();
     },
@@ -206,6 +211,7 @@ if (Meteor.isClient) {
         });
         return false;
       }
+
       var trialId = this._id;
       Meteor.call("deleteTrials", [trialId], function(err){
         if (err) {
