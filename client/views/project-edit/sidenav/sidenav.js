@@ -29,7 +29,7 @@ if (Meteor.isClient) {
       cancel: ".add-block, .add-trial",
       items: "> li",
       update: function (e, ui) {
-        $('.trial-item').each(function (idx, el) {
+        $(this).find('.trial-item').each(function (idx, el) {
           var context = Blaze.getData(el);
           var trialId = context._id;
           Meteor.call("changeTrialIndex", trialId, idx);
@@ -195,7 +195,6 @@ if (Meteor.isClient) {
 
     "click .trial-delete-link": function (e, template) {
       e.stopPropagation();
-      debugger
       var numTrials = Trials.find({blockId: this.blockId}).count();
       if (numTrials <= 1) {
         Utils.toast("<center>EACH BLOCK MUST HAVE AT LEAST ONE TRIAL</center>", {
@@ -207,9 +206,20 @@ if (Meteor.isClient) {
         });
         return false;
       }
-
+      debugger
       var trialId = this._id;
-      Meteor.call("deleteTrials", [trialId]);
+      Meteor.call("deleteTrials", [trialId], function(err){
+        if (err) {
+          console.log(err);
+          return false;
+        }
+          var $trialsItems = $(e.target).parents('.block-item').find('.trial-item');
+         $trialsItems.each(function (idx, el) {
+          var context = Blaze.getData(el);
+          var trialId = context._id;
+          Meteor.call("changeTrialIndex", trialId, idx);
+        });
+      });
     },
 
     "click .block-breadcrumb": function (e, template) {
