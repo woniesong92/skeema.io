@@ -365,11 +365,17 @@ if (Meteor.isClient) {
     "click .element-item": function (e, template) {
       var elementId = e.currentTarget.id;
       ProjectEditSession.set("elementId", elementId);
+      debugger
+      if (!($('#' + elementId).is('.ui-draggable-dragging'))) {
+        $('#' + elementId).draggable( "option", "disabled", true );
+        $('#' + elementId).attr('contenteditable','true');
+      }
     },
 
     "blur .element-item[contenteditable='true']": function (e, template) {
       var elementId = e.currentTarget.id;
-
+      $('#' + elementId).draggable( 'option', 'disabled', false);
+      $('#' + elementId).attr('contenteditable','false');
       // Save html automatically
       var currentHTML = $('#' + elementId).prop('outerHTML');
       if (Elements.findOne({_id: elementId}).html != currentHTML) {
