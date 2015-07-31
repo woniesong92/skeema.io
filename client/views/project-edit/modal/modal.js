@@ -39,7 +39,9 @@ if (Meteor.isClient) {
       eventParam: eventParam
     });
     Meteor.call("addPath", updatedPathInfo, function (err, data) {
-      console.log("ERR: path couldn't be added", err);
+      if (err) {
+        console.log("ERR: path couldn't be added", err);
+      }
     });
   }
 
@@ -68,6 +70,7 @@ if (Meteor.isClient) {
   Template.Modal.onRendered(function() {
     $("#modal").on("show.bs.modal", function() {
       $('#modal .default-option').prop("selected", true);
+      $('#key').prop('disabled', false);
       $('#modal .show').removeClass('show');
       ProjectEditSession.set("pathInfo", null);
     });
@@ -99,9 +102,21 @@ if (Meteor.isClient) {
     },
 
     'keyup #key': function (e, template) {
-      var key = $.trim($('#key').val());
+      var key;
+
+      if (e.keyCode === 32) {
+        key = "space";
+        $('#key').val(key);
+      } else if (e.keyCode === 13) {
+        key = "enter";
+        $('#key').val(key);
+      }
+
+      key = $.trim($('#key').val());
+
       if (key.length > 0) {
         $('.create-path-btn').removeClass('disabled');
+        $('#key').prop('disabled', 'disabled');
       } else {
         $('.create-path-btn').addClass('disabled');
       }

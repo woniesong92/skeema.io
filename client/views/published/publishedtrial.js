@@ -76,7 +76,9 @@ if (Meteor.isClient) {
           'if ("'+path.eventType+'" === "keypress") {' +
             '$(window).keypress(function(e) {' +
               'var code = e.keyCode || e.which;' +
-                'if (code === '+path.eventParam.charCodeAt(0)+') {' +
+                'if ((code === '+path.eventParam.charCodeAt(0)+') ||' +
+                  '(code === 13 && "' + path.eventParam + '"=== "enter") ||' +
+                  '(code === 32 && "' + path.eventParam + '"=== "space")) {' +
                   'if (' + isTargetExit + ') {' +
                     nextStep +
                   '} else {' +
