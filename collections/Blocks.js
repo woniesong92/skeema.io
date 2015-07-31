@@ -56,12 +56,10 @@ Meteor.methods({
     // forward
     if (blockIds.length === 1) {
       var block = Blocks.findOne(blockIds[0]);
-      var blockIdx = blockIds[0].index;
+      var blockIdx = block.index;
       var blocks = Blocks.find({projectId: block.projectId}).fetch();
       _.each(blocks, function (b) {
         if (b.index > blockIdx) {
-          //FIXME: deleting a block will break preview project
-          //I think this is not working correctly...
           Blocks.update(b._id, { $set: {'index': b.index-1 }});
         }
       });
@@ -79,11 +77,12 @@ Meteor.methods({
     });
   },
 
-  makeBlockDuplicate: function (blockId) {
+  makeBlockDuplicate: function (blockId, projectId) {
     var block = Blocks.findOne({_id: blockId});
     var trials = Trials.find({
       blockId: blockId
     }).fetch();
+    block.index = Blocks.find({projectId: projectId}).count();
 
     var oldBlockId = blockId;
     delete block._id;

@@ -62,7 +62,8 @@ if (Meteor.isClient) {
 
     'click .make-trial-duplicate': function (e, template) {
       var trialId = ProjectEditSession.get("trialId");
-      Meteor.call("makeTrialDuplicate", trialId);
+      var blockId = ProjectEditSession.get("blockId");
+      Meteor.call("makeTrialDuplicate", trialId, blockId);
     }
   });
 

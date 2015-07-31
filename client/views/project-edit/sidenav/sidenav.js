@@ -176,7 +176,8 @@ if (Meteor.isClient) {
 
     "click .block-copy-link": function (e, template) {
       var blockId = this._id;
-      Meteor.call("makeBlockDuplicate", blockId);
+      var projectId = this.projectId;
+      Meteor.call("makeBlockDuplicate", blockId, projectId);
     },
 
     "click .add-trial": function (e, template) {
@@ -239,7 +240,8 @@ if (Meteor.isClient) {
 
     "click .trial-copy-link": function (e, template) {
       var trialId = this._id;
-      Meteor.call("makeTrialDuplicate", trialId);
+      var blockId = this.blockId;
+      Meteor.call("makeTrialDuplicate", trialId, blockId);
     },
 
     "click .block-breadcrumb": function (e, template) {

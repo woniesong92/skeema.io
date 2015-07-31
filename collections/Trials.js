@@ -138,6 +138,13 @@ Meteor.methods({
     }).fetch();
 
     var allFramesInsertedDeferred = $.Deferred();
+
+    var numFramesAdded = 0;
+    var numFrames = frames.length;
+
+    trial.name = trial.name + " Copy";
+    trial.index = Trials.find({blockId: blockId}).count();
+
     allFramesInsertedDeferred.then(function() {
       // copy paths when all the frames have been inserted
       _.each(paths, function (path) {
@@ -145,11 +152,6 @@ Meteor.methods({
         Paths.insert(path);
       });
     });
-
-    var numFramesAdded = 0;
-    var numFrames = frames.length;
-
-    trial.name = trial.name + " Copy";
 
     if (blockId) {
       trial.blockId = blockId;
