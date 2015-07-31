@@ -45,8 +45,6 @@ if (Meteor.isClient) {
       // Either session change or end-of-experiment alert
       var nextStep;
 
-      debugger
-
       if (isLastTrial) {
         var nextBlockIndex = Blocks.findOne({_id: currentTrial.blockId}).index + 1;
         var nextBlock = Blocks.findOne({index: nextBlockIndex});
@@ -88,6 +86,23 @@ if (Meteor.isClient) {
                   '}' +
                 '}' +
               '});' +
+
+          '} else if ("'+path.eventType+'" === "otherKeypress") {' +
+            '$(window).keypress(function(e) {' +
+              'var code = e.keyCode || e.which;' +
+                'if (!((code === '+path.eventParam.charCodeAt(0)+') ||' +
+                  '(code === 13 && "' + path.eventParam + '"=== "enter") ||' +
+                  '(code === 32 && "' + path.eventParam + '"=== "space"))) {' +
+                  'if (' + isTargetExit + ') {' +
+                    nextStep +
+                  '} else {' +
+                    '$(".frame-container[data-frameId=\''+ sourceId +'\']").hide();' +
+                    '$(".frame-container[data-frameId=\''+ targetId +'\']").show();' +
+                    '$(".frame-container[data-frameId=\''+ targetId +'\']").trigger("frameActivated");' +
+                  '}' +
+                '}' +
+              '});' +
+
           '} else if ("'+path.eventType+'" === "time") {' +
             'var startClock = function() {' +
               'setTimeout(function() {' +
