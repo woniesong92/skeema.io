@@ -185,7 +185,7 @@ if (Meteor.isClient) {
     frames: function() {
       var trialId = ProjectEditSession.get('trialId');
       Template.instance().trialId = trialId;
-      return Frames.find({trialId: trialId});
+      return Frames.find({trialId: trialId}, {sort: {"index": 1}});
     },
   });
 

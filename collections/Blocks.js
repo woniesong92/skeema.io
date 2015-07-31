@@ -60,6 +60,8 @@ Meteor.methods({
       var blocks = Blocks.find({projectId: block.projectId}).fetch();
       _.each(blocks, function (b) {
         if (b.index > blockIdx) {
+          //FIXME: deleting a block will break preview project
+          //I think this is not working correctly...
           Blocks.update(b._id, { $set: {'index': b.index-1 }});
         }
       });

@@ -39,25 +39,22 @@ Meteor.methods({
         return;
       }
 
-      //FIXME: what should be the index of an EXIT frame?
-      Meteor.call("addFrame", {
-        projectId: projectId,
-        trialId: trialId,
-        name: "Exit",
-        type: "exit",
-        index: -1
-      });
-
       Meteor.call("addFrame", {
         projectId: projectId,
         trialId: trialId,
         name: "New Frame",
         type: "normal",
-        index: 0
       }, function (err, frameId) {
         Trials.update(trialId, {
           $set: {'startFrameId': frameId}
         });
+      });
+
+      Meteor.call("addFrame", {
+        projectId: projectId,
+        trialId: trialId,
+        name: "Exit",
+        type: "exit"
       });
 
     });

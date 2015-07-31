@@ -29,23 +29,21 @@
         <select class="form-control" id="event-picker">
           <option class="default-option" value="" disabled selected>Choose an event type</option>
           <option value="keypress">Keypress</option>
-          <option value="otherKeypress">Other-key-press</option>
           <option id="click-option" value="click">Click</option>
           <option value="time">Time</option>
         </select>
       </div>
 
       <div class="form-group key-options">
-        <label class="control-label col-sm-6" for="key">Key Pressed</label>
-        <div class="col-sm-2">
-          <input class="form-control" value="" id="key" type="text" placeholder="ex. a" minlength="1" maxlength="1">
+        <label class="control-label col-sm-3 col-sm-offset-2" for="key">Key Pressed</label>
+        <div class="col-sm-3">
+          <select class="form-control keypress-type-picker">
+            <option value="is-keypress">is</option>
+            <option value="other-keypress">is not</option>
+          </select>
         </div>
-      </div>
-
-      <div class="form-group other-key-options">
-        <label class="control-label col-sm-6" for="key">Key Pressed Other Than</label>
-        <div class="col-sm-2">
-          <input class="form-control" value="" id="other-key" type="text" placeholder="ex. a" minlength="1" maxlength="1">
+        <div class="col-sm-3">
+          <input class="form-control" value="" id="key" type="text" placeholder="ex. a" minlength="1" maxlength="1">
         </div>
       </div>
 

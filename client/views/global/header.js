@@ -1,6 +1,7 @@
 Template.Header.events({
   'click .project-preview-btn': function (event, template) {
     var projectId = this._id;
+
     var block = Blocks.findOne({
       projectId: projectId,
       index: 0

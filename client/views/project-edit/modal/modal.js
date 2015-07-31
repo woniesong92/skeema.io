@@ -87,8 +87,6 @@ if (Meteor.isClient) {
 
       if (pickedevent === "keypress") {
         $('.key-options').addClass('show');
-      } else if (pickedevent === "otherKeypress") {
-        $('.other-key-options').addClass('show');
       } else if (pickedevent === "time") {
         $('.time-options').addClass('show');
       } else { // click
@@ -124,28 +122,6 @@ if (Meteor.isClient) {
       }
     },
 
-    'keyup #other-key': function (e, template) {
-      var key;
-      var $otherKey = $('#other-key');
-
-      if (e.keyCode === 32) {
-        key = "space";
-        $otherKey.val(key);
-      } else if (e.keyCode === 13) {
-        key = "enter";
-        $otherKey.val(key);
-      }
-
-      key = $.trim($otherKey.val());
-
-      if (key.length > 0) {
-        $('.create-path-btn').removeClass('disabled');
-        $('#key').prop('disabled', 'disabled');
-      } else {
-        $('.create-path-btn').addClass('disabled');
-      }
-    },
-
     'change #duration': function (e, template) {
       _onDurationChange();
     },
@@ -160,6 +136,10 @@ if (Meteor.isClient) {
       var pathInfo = template.pathInfo;
 
       if (eventType === 'keypress') {
+        var keyEventType = $('.keypress-type-picker').val();
+        if (keyEventType === 'other-keypress') {
+          eventType = "otherKeypress";
+        }
         eventParam = $.trim($('#key').val());
         _addPath(pathInfo, eventType, eventParam);
 
