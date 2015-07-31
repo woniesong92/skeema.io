@@ -30,6 +30,7 @@ if (Meteor.isClient) {
           offset: {from: 'bottom', amount: 97},
           width: 400,
         });
+      Session.set("deletedPathIds", [pathInfo._id]);
       return false;
     }
 
