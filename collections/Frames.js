@@ -58,4 +58,24 @@ Meteor.methods({
     Meteor.call("deletePaths", pathIds);
   },
 
+  makeFrameDuplicate: function (trialId, frameId) {
+    var frame = Frames.findOne({_id: frameId});
+    frame.name = frame.name + " Copy";
+    var oldFrameId = frame._id;
+    delete frame._id;
+        
+    Frames.insert(frame, function (err, newFrameId) {
+      // copy elements
+      var elements = Elements.find({
+        frameId: oldFrameId
+      }).fetch();
+      _.each(elements, function (element) {
+        element.frameId = newFrameId;
+        delete element._id;
+        Elements.insert(element);
+      });
+
+      debugger;
+    });
+  }
 });

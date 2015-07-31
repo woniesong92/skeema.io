@@ -205,6 +205,14 @@ if (Meteor.isClient) {
     },
   });
 
+  Template.FrameItem.events({
+    "click .frame-copy-btn": function (e, template) {
+      var trialId = this.trialId;
+      var frameId = this._id;
+      Meteor.call("makeFrameDuplicate", trialId, frameId);
+    }
+  })
+
   Template.FrameItem.onRendered(function() {
     // FIXME: decide what to do to position frame items
     // position the frame item
