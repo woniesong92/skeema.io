@@ -27,7 +27,7 @@
         </div>
         <ul class='trial-items list-group'>
           {{#each trials _id}}
-            <li class='trial-item list-group-item'>
+            <li class='trial-item {{#if isActiveTrial}}active-background{{/if}} list-group-item'>
               <i class="fa fa-fw fa-file-o"></i>
               <a href='#' class='trial-item-link'>{{name}}</a>
               <a href='#' class='trial-delete-link'>

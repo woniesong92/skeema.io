@@ -174,5 +174,6 @@ Meteor.startup(function() {
       var elementId = ProjectEditSession.get("elementId");
       return $('#' + elementId).text();
     });
+
   }
 });

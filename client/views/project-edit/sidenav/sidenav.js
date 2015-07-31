@@ -81,6 +81,10 @@ if (Meteor.isClient) {
       return Trials.find({blockId: blockId}, {sort: {index: 1}});
     },
 
+    isActiveTrial: function (trialId) {
+      return ProjectEditSession.get("trialId") == this._id;
+    },
+
     // blockName: function (){
     //   var blockId = ProjectEditSession.get('blockId');
     //   if (blockId){
@@ -180,10 +184,10 @@ if (Meteor.isClient) {
       });
     },
 
-    "click li.trial-item": function (e, template) {
-      $('.active-background').removeClass('active-background');
-      $(e.currentTarget).addClass("active-background");
-    },
+    // "click li.trial-item": function (e, template) {
+    //   $('.active-background').removeClass('active-background');
+    //   $(e.currentTarget).addClass("active-background");
+    // },
 
     "click .trial-edit-link": function (e, template) {
       e.stopPropagation();
