@@ -196,6 +196,7 @@ if (Meteor.isClient) {
     "mouseover .trial-item-link": function (e, template) {
       $('.sidenav-container').find('.show-inline-block').removeClass('show-inline-block');
       $(e.target).parent().find('.trial-delete-link').addClass('show-inline-block');
+      $(e.target).parent().find('.trial-copy-link').addClass('show-inline-block');
     },
 
     "mouseleave .trial-item": function (e, template) {
@@ -229,6 +230,11 @@ if (Meteor.isClient) {
           Meteor.call("changeTrialIndex", trialId, idx);
         });
       });
+    },
+
+    "click .trial-copy-link": function (e, template) {
+      var trialId = this._id;
+      Meteor.call("makeTrialDuplicate", trialId);
     },
 
     "click .block-breadcrumb": function (e, template) {
