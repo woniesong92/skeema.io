@@ -166,7 +166,7 @@ if (Meteor.isClient) {
       var frameId = this._id;
 
       if (trial.startFrameId === frameId) {
-        Utils.toast("You cannot delete a start frame.");
+        Utils.toast("YOU CANNOT DELETE A START FRAME", {type: "danger"});
         return false;
       }
 

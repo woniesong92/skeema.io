@@ -14,6 +14,25 @@ if (Meteor.isClient) {
   }
 
   var _addPath = function (pathInfo, eventType, eventParam) {
+    var alreadyExisting = Paths.findOne({
+      trialId: pathInfo.trialId,
+      sourceId: pathInfo.sourceId,
+      targetId: pathInfo.targetId,
+      eventType: eventType,
+      eventParam: eventParam,
+    });
+
+    if (alreadyExisting){
+      Utils.toast("<center>THIS PATH ALREADY EXISTS</center>", {
+          type: "danger",
+          ele: '.workspace-container',
+          align: 'center',
+          offset: {from: 'bottom', amount: 97},
+          width: 400,
+        });
+      return false;
+    }
+
     var updatedPathInfo = _.extend(pathInfo, {
       eventType: eventType,
       eventParam: eventParam
