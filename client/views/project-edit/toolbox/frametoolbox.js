@@ -3,7 +3,7 @@ if (Meteor.isClient) {
   Template.FrameToolBox.helpers({
     "uploaded_files": function(){
       return S3.collection.find();
-    }
+    },
   });
 
   Template.FrameSettings.helpers({
@@ -20,9 +20,11 @@ if (Meteor.isClient) {
   });
 
   Template.FrameToolBox.onRendered(function() {
+
     ProjectEditSession.set("addText", undefined);
     ProjectEditSession.set("addImage", undefined);
     ProjectEditSession.set("addButton", undefined);
+
   });
 
   Template.FrameToolBox.events({

@@ -1,4 +1,9 @@
 if (Meteor.isClient) {
+
+  Template.ButtonSettings.helpers({
+    
+  });
+
   Template.ButtonSettings.onRendered(function() {
     $('#button-text-colorpicker').colorpicker({
       displayIndicator: false
@@ -6,6 +11,17 @@ if (Meteor.isClient) {
 
     $('#button-bg-colorpicker').colorpicker({
       displayIndicator: false
+    });
+
+    this.autorun(function() {
+      var elementId = ProjectEditSession.get("elementId");
+      if (elementId){
+        var elementId = ProjectEditSession.get("elementId");
+        var bgcolor =  $("#" + elementId).css("background-color");
+        var color = $("#" + elementId).css("color");
+        $(".bg-color-panel .evo-pointer.evo-colorind").css("background-color", bgcolor);
+        $(".text-color-panel .evo-pointer.evo-colorind").css("background-color", color);
+      }
     });
   });
 

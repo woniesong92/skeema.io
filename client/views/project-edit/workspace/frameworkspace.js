@@ -325,12 +325,14 @@ if (Meteor.isClient) {
     $('.frame-workspace-container').resizable();
 
     this.autorun(function() {
+
       var addText = ProjectEditSession.get("addText");
       var addButton = ProjectEditSession.get("addButton");
       var addImage = ProjectEditSession.get("addImage");
       if (addText || addButton || addImage) {
         $('.frame-workspace-container').css('cursor', 'copy');
       }
+
     });
   });
 
@@ -365,7 +367,7 @@ if (Meteor.isClient) {
     "click .element-item": function (e, template) {
       var elementId = e.currentTarget.id;
       ProjectEditSession.set("elementId", elementId);
-      debugger
+      // debugger
       if (!($('#' + elementId).is('.ui-draggable-dragging'))) {
         $('#' + elementId).draggable( "option", "disabled", true );
         $('#' + elementId).attr('contenteditable','true');
