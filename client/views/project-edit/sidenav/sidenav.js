@@ -174,6 +174,11 @@ if (Meteor.isClient) {
       Meteor.call("deleteBlocks", [blockId]);
     },
 
+    "click .block-copy-link": function (e, template) {
+      var blockId = this._id;
+      Meteor.call("makeBlockDuplicate", blockId);
+    },
+
     "click .add-trial": function (e, template) {
       e.stopPropagation();
       var projectId = this.projectId;

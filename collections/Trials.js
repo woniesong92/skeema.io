@@ -125,10 +125,11 @@ Meteor.methods({
     })
   },
 
-  makeTrialDuplicate: function (trialId) {
+  makeTrialDuplicate: function (trialId, blockId) {
     // making a trial duplicate gets trikcy with
     // so many children and children of children
     var trial = Trials.findOne(trialId);
+    var oldStartFrameId = trial.startFrameId;
     var frames = Frames.find({
       trialId: trialId
     }).fetch();
@@ -149,6 +150,11 @@ Meteor.methods({
     var numFrames = frames.length;
 
     trial.name = trial.name + " Copy";
+
+    if (blockId) {
+      trial.blockId = blockId;
+    }
+
     delete trial._id;
     Trials.insert(trial, function (err, newTrialId) {
       _.each(frames, function (frame) {
@@ -157,6 +163,12 @@ Meteor.methods({
         delete frame._id;
         
         Frames.insert(frame, function (err, newFrameId) {
+          
+          // check if it should be a start frame
+          if (oldFrameId === oldStartFrameId) {
+            Meteor.call("setTrialStart", newTrialId, newFrameId);
+          }
+
           // update paths
           _.each(paths, function (path) {
             if (path.sourceId === oldFrameId) {

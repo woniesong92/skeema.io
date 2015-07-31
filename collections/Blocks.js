@@ -77,5 +77,21 @@ Meteor.methods({
         function (trial) { return trial._id; });
       Meteor.call("deleteTrials", trialIds);
     });
+  },
+
+  makeBlockDuplicate: function (blockId) {
+    var block = Blocks.findOne({_id: blockId});
+    var trials = Trials.find({
+      blockId: blockId
+    }).fetch();
+
+    var oldBlockId = blockId;
+    delete block._id;
+
+    Blocks.insert(block, function (err, newBlockId) {
+      _.each(trials, function (trial) {
+        Meteor.call("makeTrialDuplicate", trial._id, newBlockId);
+      });
+    });
   }
 });
